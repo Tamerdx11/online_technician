@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "251763925269",
+    "project_id": "online-technician-849da",
+    "storage_bucket": "online-technician-849da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251763925269:android:1f88031ce233b22159091c",
+        "android_client_info": {
+          "package_name": "com.online_technician.online_technician"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251763925269-vcb33nocvill7iv6geopr2rhnosj1krj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.online_technician.online_technician",
+            "certificate_hash": "6374a9897b9d567bf5d294ebc762353ca177f168"
+          }
+        },
+        {
+          "client_id": "251763925269-ong5kffc56q24c5r8814uet30lre937s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJY83guOIn4l6HfqkpMVMtlf3D1g3_ojE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251763925269-ong5kffc56q24c5r8814uet30lre937s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251763925269-pgntt0ad2ilghv84csf1qlfkgqcfcan5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.onlinetechnician.onlineTechnician"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
