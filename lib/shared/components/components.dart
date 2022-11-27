@@ -256,7 +256,6 @@ Widget buildPostItem(PostModel model, context, index) => Padding(
   ),
 );
 
-
 ///----------------------------------- build one search item --- items builder------/// need to be customize ***********
 
 Widget buildSearchResultItem(data, context) =>InkWell(

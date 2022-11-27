@@ -27,7 +27,8 @@ class TechnicianModel extends UserModel{
             coverImage: coverImage,
             hasProfession: true,
             location: location,
-            profession:profession) ;
+            profession:profession,
+  );
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(

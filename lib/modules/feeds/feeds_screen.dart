@@ -43,5 +43,4 @@ class FeedsScreen extends StatelessWidget {
       },
     );
   }
-
 }
