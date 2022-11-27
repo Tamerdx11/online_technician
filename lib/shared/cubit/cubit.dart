@@ -21,6 +21,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get data of user who logged in ----------
 
   UserModel? model;
+
   void getUserData() {
     emit(AppGetUserLoadingState());
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
