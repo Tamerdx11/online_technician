@@ -9,8 +9,8 @@ import 'package:online_technician/shared/cubit/states.dart';
 // ignore: must_be_immutable
 class ChatDetailsScreen extends StatelessWidget {
   UserModel userModel;
-
   ChatDetailsScreen({
+    super.key,
     required this.userModel,
   });
 
@@ -21,7 +21,7 @@ class ChatDetailsScreen extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(
-          receiverId: userModel.uId,
+          receiverId: userModel.uId.toString(),
         );
 
         return BlocConsumer<AppCubit, AppState>(
@@ -38,7 +38,7 @@ class ChatDetailsScreen extends StatelessWidget {
                         '${userModel.userImage}',
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15.0,
                     ),
                     Text(
@@ -56,17 +56,16 @@ class ChatDetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index)
-                          {
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
                             var message = AppCubit.get(context).messages[index];
 
-                            if(AppCubit.get(context).model!.uId == message.senderId)
+                            if (AppCubit.get(context).model!.uId == message.senderId) {
                               return buildMyMessage(message);
-
+                            }
                             return buildMessage(message);
                           },
-                          separatorBuilder: (context, index) => SizedBox(
+                          separatorBuilder: (context, index) => const SizedBox(
                             height: 15.0,
                           ),
                           itemCount: AppCubit.get(context).messages.length,
@@ -92,7 +91,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                 ),
                                 child: TextFormField(
                                   controller: messageController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'type your message here ...',
                                   ),
@@ -106,13 +105,13 @@ class ChatDetailsScreen extends StatelessWidget {
                                 onPressed: () {
                                   ///**** send message
                                   AppCubit.get(context).sendMessage(
-                                    receiverId: userModel.uId,
+                                    receiverId: userModel.uId.toString(),
                                     dateTime: DateTime.now().toString(),
                                     text: messageController.text,
                                   );
                                 },
                                 minWidth: 1.0,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.send_sharp,
                                   size: 16.0,
                                   color: Colors.white,
@@ -125,7 +124,7 @@ class ChatDetailsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                fallback: (context) => Center(
+                fallback: (context) => const Center(
                   child: CircularProgressIndicator(),
                 ),
               ),
@@ -135,60 +134,61 @@ class ChatDetailsScreen extends StatelessWidget {
       },
     );
   }
+
   ///******E2***
   Widget buildMessage(MessageModel model) => Align(
-    alignment: AlignmentDirectional.centerStart,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadiusDirectional.only(
-          bottomEnd: Radius.circular(
-            10.0,
+        alignment: AlignmentDirectional.centerStart,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: const BorderRadiusDirectional.only(
+              bottomEnd: Radius.circular(
+                10.0,
+              ),
+              topStart: Radius.circular(
+                10.0,
+              ),
+              topEnd: Radius.circular(
+                10.0,
+              ),
+            ),
           ),
-          topStart: Radius.circular(
-            10.0,
+          padding: const EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
           ),
-          topEnd: Radius.circular(
-            10.0,
+          child: Text(
+            '${model.text}',
           ),
         ),
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: 10.0,
-      ),
-      child: Text(
-        '${model.text}',
-      ),
-    ),
-  );
+      );
 
   Widget buildMyMessage(MessageModel model) => Align(
-    alignment: AlignmentDirectional.centerEnd,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(
-          .2,
+        alignment: AlignmentDirectional.centerEnd,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue.withOpacity(
+              .2,
+            ),
+            borderRadius: const BorderRadiusDirectional.only(
+              bottomStart: Radius.circular(
+                10.0,
+              ),
+              topStart: Radius.circular(
+                10.0,
+              ),
+              topEnd: Radius.circular(
+                10.0,
+              ),
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
+          ),
+          child: Text(
+            '${model.text}',
+          ),
         ),
-        borderRadius: BorderRadiusDirectional.only(
-          bottomStart: Radius.circular(
-            10.0,
-          ),
-          topStart: Radius.circular(
-            10.0,
-          ),
-          topEnd: Radius.circular(
-            10.0,
-          ),
-        ),
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: 10.0,
-      ),
-      child: Text(
-        '${model.text}',
-      ),
-    ),
-  );
+      );
 }

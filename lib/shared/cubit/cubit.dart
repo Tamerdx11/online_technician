@@ -406,8 +406,8 @@ class AppCubit extends Cubit<AppState> {
     if (idCardImage != null) {
       uploadIdCardImage();
     }
-    if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == true) {
+    if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == true)
+    {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -433,8 +433,9 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
-        hasProfession == true) {
+    }
+    else if (CacheHelper.getData(key: 'hasProfession') == false && hasProfession == true)
+    {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -443,7 +444,7 @@ class AppCubit extends Cubit<AppState> {
         email: model!.email,
         bio: bio,
         nationalId: nationalId,
-        idCardPhoto: uploadedIdCardImage ?? model?.idCardPhoto,
+        idCardPhoto: uploadedIdCardImage,
         location: location,
         profession: profession,
         userImage: uploadedProfileImage ?? model?.userImage,
@@ -461,8 +462,9 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
-        hasProfession == false) {
+    }
+    else if (CacheHelper.getData(key: 'hasProfession') == false && hasProfession == false)
+    {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
@@ -490,8 +492,9 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == false) {
+    }
+    else if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == false)
+    {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
