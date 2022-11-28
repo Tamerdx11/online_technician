@@ -93,3 +93,15 @@ class AppGetSearchSuccessState extends AppState{}
 
 class AppGetSearchErrorState extends AppState{}
 
+class AppChangeCheckboxState extends AppState{}
+
+class AppIdCardImagePickedSuccessState extends AppState{}
+
+class AppIdCardImagePickedErrorState extends AppState{}
+
+class AppUploadIdCardImageErrorState extends AppState{}
+
+class AppTechnicianUpdateLoadingState extends AppState{}
+
+class AppTechnicianUpdateErrorState extends AppState{}
+

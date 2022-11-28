@@ -1,6 +1,6 @@
 import 'package:online_technician/models/user.dart';
 
-class TechnicianModel extends UserModel{
+class TechnicianModel extends UserModel {
   String? bio;
   String? nationalId;
   String? idCardPhoto;
@@ -19,16 +19,16 @@ class TechnicianModel extends UserModel{
     this.nationalId,
     this.idCardPhoto,
   }) : super(
-            name: name,
-            uId: uId,
-            userImage: userImage,
-            phone: phone,
-            email: email,
-            coverImage: coverImage,
-            hasProfession: true,
-            location: location,
-            profession:profession,
-  );
+          name: name,
+          uId: uId,
+          userImage: userImage,
+          phone: phone,
+          email: email,
+          coverImage: coverImage,
+          hasProfession: true,
+          location: location,
+          profession: profession,
+        );
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(
@@ -40,8 +40,7 @@ class TechnicianModel extends UserModel{
             coverImage: json['coverImage'],
             hasProfession: json['hasProfession'],
             location: json['location'],
-            profession: json['profession'])
-  {
+            profession: json['profession']) {
     bio = json['bio'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class AppRegisterCubit extends Cubit<AppRegisterState> {
   AppRegisterCubit() : super(AppRegisterInitialState());
@@ -44,12 +45,12 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         userRegister(
-            name: name,
-            location: location,
-            password: password,
-            phone: phone,
-            userImage: value,
-            email: email,
+          name: name,
+          location: location,
+          password: password,
+          phone: phone,
+          userImage: value,
+          email: email,
         );
       }).catchError((error) {
         emit(AppUploadProfileImageErrorState());
@@ -99,22 +100,25 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     required String uId,
   }) {
     UserModel model = UserModel(
-        name: name,
-        email: email,
-        phone: phone,
-        uId: uId,
-        location: location,
-        userImage: userImage,
-        hasProfession: false,
-        profession: 'user',
-        coverImage:
-            'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740');
+      name: name,
+      email: email,
+      phone: phone,
+      uId: uId,
+      location: location,
+      userImage: userImage,
+      hasProfession: false,
+      profession: 'user',
+      coverImage:
+          'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
+    );
 
     FirebaseFirestore.instance
         .collection("users")
         .doc(uId)
         .set(model.toMap())
         .then((value) {
+      CacheHelper.savaData(key: 'uId', value: uId.toString());
+      CacheHelper.savaData(key: 'hasProfession', value: false);
       emit(AppCreateUserSuccessState());
     }).catchError((error) {
       emit(AppCreateUserErrorState(error));
