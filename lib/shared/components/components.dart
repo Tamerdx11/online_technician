@@ -87,7 +87,7 @@ PreferredSizeWidget defaultAppBar({
   Color? textColor,
 })=>AppBar(
   backgroundColor: color,
-  title: Text(title,style: TextStyle(color: textColor),),
+  title: Text(title,style: TextStyle(color: textColor,fontSize: 17.0),),
   actions: actions,
   titleSpacing: 10.0,
   leading: IconButton(

@@ -38,13 +38,13 @@ class UserModel extends PersonModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'phone': phone,//
-      'email': email,//
-      'coverImage': coverImage,///
-      'hasProfession': hasProfession,///
-      'name': name,//
-      'uId': uId,///
-      'userImage': userImage,//
+      'phone': phone,
+      'email': email,
+      'coverImage': coverImage,
+      'hasProfession': hasProfession,
+      'name': name,
+      'uId': uId,
+      'userImage': userImage,
       'location': location,
       'profession': profession,
     };

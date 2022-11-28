@@ -6,30 +6,50 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/post.dart';
+import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
 import 'package:online_technician/modules/new-post/new_post_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
   static AppCubit get(context) => BlocProvider.of(context);
   final storageRef = firebase_storage.FirebaseStorage.instance.ref();
 
-  ///---------- get data of user who logged in ----------
+  ///---------- get person data ----------
 
-  UserModel? model;
+  var model;
 
   void getUserData() {
-    emit(AppGetUserLoadingState());
-    FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
-      model = UserModel.fromJson(value.data());
-      emit(AppGetUserSuccessState());
-    }).catchError((error) {
-      emit(AppGetUserErrorState(error.toString()));
-    });
+    if (CacheHelper.getData(key: 'hasProfession') == true) {
+      emit(AppGetUserLoadingState());
+      FirebaseFirestore.instance
+          .collection('technicians')
+          .doc(uId)
+          .get()
+          .then((value) {
+        model = TechnicianModel.fromJson(value.data());
+        emit(AppGetUserSuccessState());
+      }).catchError((error) {
+        emit(AppGetUserErrorState(error.toString()));
+      });
+    } else {
+      emit(AppGetUserLoadingState());
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .get()
+          .then((value) {
+        model = UserModel.fromJson(value.data());
+        emit(AppGetUserSuccessState());
+      }).catchError((error) {
+        emit(AppGetUserErrorState(error.toString()));
+      });
+    }
   }
 
   ///---------- main layout navigation ----------
@@ -42,132 +62,13 @@ class AppCubit extends Cubit<AppState> {
   ];
 
   void changeButtonNav(int index) {
-      currentIndex = index;
-      emit(AppChangeButtonNavState());
-  }
-
-  // void changeButtonNav(int index) {
-  //   if(index == 1) {
-  //     getUsers();
-  //   }
-  //   if (index == 2) {
-  //     emit(AppNewPostState());
-  //   } else {
-  //     currentIndex = index;
-  //     emit(AppChangeButtonNavState());
-  //   }
-  // }
-
-  /// ------------get imageProfile-------------
-
-  final picker = ImagePicker();
-  File? profileImage;
-  Future<void> getProfileImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      profileImage = File(pickedFile.path.toString());
-      emit(AppProfileImagePickedSuccessState());
-    } else {
-      emit(AppProfileImagePickedErrorState());
-    }
-  }
-
-  /// ------------get background image-------------
-
-  File? coverImage;
-  Future<void> getCoverImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      coverImage = File(pickedFile.path);
-      emit(AppCoverImagePickedSuccessState());
-    } else {
-      emit(AppCoverImagePickedErrorState());
-    }
-  }
-
-  /// ----------upload profile image----------
-
-  void uploadProfileImage({
-    required String name,
-    required String phone,
-    required String bio,
-  }) {
-    emit(AppUserUpdateLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child(
-        'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
-        .putFile(profileImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        updateUserdata( userImage: value);
-      }).catchError((error) {
-        emit(AppUploadProfileImageErrorState());
-      });
-    }).catchError((error) {
-      emit(AppUploadProfileImageErrorState());
-    });
-  }
-
-  ///----------upload cover image----------
-
-  void uploadCoverImage({
-    required String name,
-    required String phone,
-    required String bio,
-  }) {
-    emit(AppUserUpdateLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
-        .putFile(coverImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        updateUserdata( coverImage: value);
-      }).catchError((error) {
-        emit(AppUploadCoverImageErrorState());
-      });
-    }).catchError((error) {
-      emit(AppUploadCoverImageErrorState());
-    });
-  }
-
-  ///----------  update user data ----------
-
-  void updateUserdata({
-    String? name,
-    String? phone,
-    String? email,
-    String? location,
-    String? profession,
-    String? userImage,
-    String? coverImage,
-  }) {
-    emit(AppUserUpdateLoadingState());
-    UserModel newModel = UserModel(
-      name: name?? model!.name,
-      phone: phone?? model!.phone,
-      email: email?? model!.email,
-      location: location?? model?.location,
-      profession: profession ?? model?.profession,
-      userImage: userImage ?? model?.userImage,
-      coverImage: coverImage ?? model?.coverImage,
-      uId: uId,
-      hasProfession: false,
-    );
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .update(newModel.toMap())
-        .then((value) {
-      getUserData();
-    }).catchError((error) {
-      emit(AppUserUpdateErrorState());
-    });
+    currentIndex = index;
+    emit(AppChangeButtonNavState());
   }
 
   ///---------- create post ----------
 
+  final picker = ImagePicker();
   File? postImage = null;
 
   void removePostImage() {
@@ -175,8 +76,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppRemovePostImageState());
   }
 
-  Future<void> getPostImage() async
-  {
+  Future<void> getPostImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
@@ -224,7 +124,7 @@ class AppCubit extends Cubit<AppState> {
       uId: model?.uId.toString(),
       postText: text,
       dateTime: dateTime,
-      postImages: postImages?? [],
+      postImages: postImages ?? [],
     );
 
     FirebaseFirestore.instance
@@ -237,7 +137,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- get posts ----------
+  ///---------- get posts & likes ----------
 
   List<PostModel> posts = [];
   List<String> postId = [];
@@ -246,16 +146,12 @@ class AppCubit extends Cubit<AppState> {
   void getPosts() {
     FirebaseFirestore.instance.collection('posts').get().then((value) {
       value.docs.forEach((element) {
-        element.reference
-            .collection('likes')
-            .get()
-            .then((value) {
+        element.reference.collection('likes').get().then((value) {
           likes.add(value.docs.length);
           postId.add(element.id);
           posts.add(PostModel.fromJson(element.data()));
           emit(AppGetPostsSuccessState());
-        })
-            .catchError((error) {});
+        }).catchError((error) {});
       });
       emit(AppGetPostsSuccessState());
     }).catchError((error) {
@@ -263,7 +159,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- like post ----------
+  ///---------- add like post ----------
 
   void likePost(String postId) {
     FirebaseFirestore.instance
@@ -282,20 +178,18 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get all users ----------
 
-  ///*********** E1
-  List<UserModel> users=[] ;
+  List<UserModel> users = [];
 
   void getUsers() {
-    users=[];
+    users = [];
     FirebaseFirestore.instance.collection('users').get().then((value) {
-      value.docs.forEach((element) {
-        if(element.data()['uId']!=model!.uId)
+      for (var element in value.docs) {
+        if (element.data()['uId'] != model?.uId) {
           users.add(UserModel.fromJson(element.data()));
-      });
-
+        }
+      }
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
-      print(error.toString());
       emit(AppGetAllUsersErrorState(error.toString()));
     });
   }
@@ -303,12 +197,11 @@ class AppCubit extends Cubit<AppState> {
   ///---------- send message ----------
 
   void sendMessage({
-    required String? receiverId,
-    required String? dateTime,
-    required String? text,
-  })
-  {
-    MessageModel messageModel =MessageModel(
+    required String receiverId,
+    required String dateTime,
+    required String text,
+  }) {
+    MessageModel messageModel = MessageModel(
       receiverId: receiverId,
       dateTime: dateTime,
       text: text,
@@ -324,8 +217,7 @@ class AppCubit extends Cubit<AppState> {
         .add(messageModel.toMap())
         .then((value) {
       emit(AppSendMessageSuccessState());
-    })
-        .catchError((error) {
+    }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
 
@@ -338,17 +230,15 @@ class AppCubit extends Cubit<AppState> {
         .add(messageModel.toMap())
         .then((value) {
       emit(AppSendMessageSuccessState());
-    })
-        .catchError((error) {
+    }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
   }
 
-///---------- get messages ----------
+  ///---------- get all messages ----------
 
-  List<MessageModel> messages =[];
-  void getMessages({required String? receiverId})
-  {
+  List<MessageModel> messages = [];
+  void getMessages({required String receiverId}) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(model!.uId)
@@ -357,22 +247,19 @@ class AppCubit extends Cubit<AppState> {
         .collection('messages')
         .orderBy('dateTime')
         .snapshots()
-        .listen((event)
-    {
-      messages =[];
-      event.docs.forEach((element){
+        .listen((event) {
+      messages = [];
+      event.docs.forEach((element) {
         messages.add(MessageModel.fromJson(element.data()));
-
       });
       emit(AppGetMessageSuccessState());
     });
   }
 
-  ///---------- get search results ---------////////// getSearchData @ need to be customized ********
+  ///---------- get search results ---------////////// ******************--- search ---
 
   List<dynamic> search = [];
-  void getSearchData(String value)
-  {
+  void getSearchData(String value) {
     emit(AppLoadingState());
     // DioHelper.getData(
     //   url: 'v2/everything',
@@ -388,4 +275,251 @@ class AppCubit extends Cubit<AppState> {
     // });
   }
 
+  ///------------ has profession change ---------------
+
+  bool hasProfession = CacheHelper.getData(key: 'hasProfession');
+
+  void checkboxChange(value) {
+    hasProfession = value;
+    emit(AppChangeCheckboxState());
+  }
+
+  /// ------------ pick id_card_image from gallery ----------
+
+  File? idCardImage = null;
+  Future<void> getIdCardImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      idCardImage = File(pickedFile.path.toString());
+      emit(AppIdCardImagePickedSuccessState());
+    } else {
+      emit(AppIdCardImagePickedErrorState());
+    }
+  }
+
+  /// ------------pick imageProfile-------------
+
+  File? profileImage = null;
+
+  Future<void> getProfileImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      profileImage = File(pickedFile.path.toString());
+      emit(AppProfileImagePickedSuccessState());
+    } else {
+      emit(AppProfileImagePickedErrorState());
+    }
+  }
+
+  /// ------------pick background image-------------
+
+  File? coverImage = null;
+  Future<void> getCoverImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      coverImage = File(pickedFile.path);
+      emit(AppCoverImagePickedSuccessState());
+    } else {
+      emit(AppCoverImagePickedErrorState());
+    }
+  }
+
+  /// ---------- upload id card image ----------/// upload images /////////////////
+
+  String? uploadedIdCardImage;
+  void uploadIdCardImage() {
+    emit(AppUserUpdateLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(
+            'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
+        .putFile(idCardImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        uploadedIdCardImage = value;
+      }).catchError((error) {
+        emit(AppUploadIdCardImageErrorState());
+      });
+    }).catchError((error) {
+      emit(AppUploadIdCardImageErrorState());
+    });
+  }
+
+  /// ----------upload profile image----------
+
+  String? uploadedProfileImage;
+  void uploadProfileImage() {
+    emit(AppUserUpdateLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(
+            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+        .putFile(profileImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        uploadedProfileImage = value;
+      }).catchError((error) {
+        emit(AppUploadProfileImageErrorState());
+      });
+    }).catchError((error) {
+      emit(AppUploadProfileImageErrorState());
+    });
+  }
+
+  ///----------upload cover image----------
+
+  String? uploadedCoverImage;
+  void uploadCoverImage() {
+    emit(AppUserUpdateLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
+        .putFile(coverImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        uploadedCoverImage = value;
+      }).catchError((error) {
+        emit(AppUploadCoverImageErrorState());
+      });
+    }).catchError((error) {
+      emit(AppUploadCoverImageErrorState());
+    });
+  }
+
+  ///----------  update profile data ----------//
+
+  void updateProfileDate({
+    String? name,
+    String? phone,
+    String? location,
+    String? profession,
+    String? bio,
+    String? nationalId,
+    required BuildContext context,
+  }) {
+    if (profileImage != null) {
+      uploadProfileImage();
+    }
+    if (coverImage != null) {
+      uploadCoverImage();
+    }
+    if (idCardImage != null) {
+      uploadIdCardImage();
+    }
+    if (CacheHelper.getData(key: 'hasProfession') == true &&
+        hasProfession == true) {
+      emit(AppTechnicianUpdateLoadingState());
+      TechnicianModel newModel = TechnicianModel(
+        name: name,
+        uId: model!.uId,
+        phone: phone,
+        email: model!.email,
+        bio: bio,
+        nationalId: nationalId,
+        idCardPhoto: uploadedIdCardImage,
+        location: location,
+        profession: profession,
+        userImage: uploadedProfileImage,
+        coverImage: uploadedProfileImage,
+        hasProfession: true,
+      );
+      FirebaseFirestore.instance
+          .collection('technicians')
+          .doc(uId)
+          .update(newModel.toMap())
+          .then((value) {
+        getUserData();
+        Navigator.pop(context);
+      }).catchError((error) {
+        emit(AppTechnicianUpdateErrorState());
+      });
+    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
+        hasProfession == true) {
+      emit(AppTechnicianUpdateLoadingState());
+      TechnicianModel newModel = TechnicianModel(
+        name: name,
+        uId: model!.uId,
+        phone: phone,
+        email: model!.email,
+        bio: bio,
+        nationalId: nationalId,
+        idCardPhoto: uploadedIdCardImage ?? model?.idCardPhoto,
+        location: location,
+        profession: profession,
+        userImage: uploadedProfileImage ?? model?.userImage,
+        coverImage: uploadedProfileImage ?? model?.coverImage,
+        hasProfession: true,
+      );
+      FirebaseFirestore.instance
+          .collection('technicians')
+          .doc(uId)
+          .set(newModel.toMap())
+          .then((value) {
+        CacheHelper.setData(key: 'hasProfession', value: true);
+        getUserData();
+        Navigator.pop(context);
+      }).catchError((error) {
+        emit(AppTechnicianUpdateErrorState());
+      });
+    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
+        hasProfession == false) {
+      emit(AppUserUpdateLoadingState());
+      UserModel newModel = UserModel(
+        name: name,
+        phone: phone,
+        email: model!.email,
+        location: location,
+        profession: 'user',
+        userImage: uploadedProfileImage!.isEmpty
+            ? model?.userImage
+            : uploadedProfileImage,
+        coverImage: uploadedCoverImage!.isEmpty
+            ? model?.coverImage
+            : uploadedCoverImage,
+        uId: uId,
+        hasProfession: false,
+      );
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .update(newModel.toMap())
+          .then((value) {
+        getUserData();
+        Navigator.pop(context);
+      }).catchError((error) {
+        emit(AppUserUpdateErrorState());
+      });
+    } else if (CacheHelper.getData(key: 'hasProfession') == true &&
+        hasProfession == false) {
+      emit(AppUserUpdateLoadingState());
+      UserModel newModel = UserModel(
+        name: name,
+        phone: phone,
+        email: model!.email,
+        location: location,
+        profession: 'user',
+        userImage: uploadedProfileImage!.isEmpty
+            ? model?.userImage
+            : uploadedProfileImage,
+        coverImage: uploadedCoverImage!.isEmpty
+            ? model?.coverImage
+            : uploadedCoverImage,
+        uId: uId,
+        hasProfession: false,
+      );
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .update(newModel.toMap())
+          .then((value) {
+        CacheHelper.setData(key: 'hasProfession', value: false);
+        getUserData();
+        Navigator.pop(context);
+      }).catchError((error) {
+        emit(AppUserUpdateErrorState());
+      });
+    }
+  }
 }

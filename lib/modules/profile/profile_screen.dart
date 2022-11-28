@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:online_technician/modules/edit-profile/edit_profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
@@ -24,7 +25,9 @@ class ProfileScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    navigateTo(context, EditProfileScreen());
+                  },
                   child: const Text(
                     'Edit Profile',
                     style: TextStyle(
@@ -64,8 +67,10 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 50.0),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          Expanded(
                             child: CircleAvatar(
                               radius: 66.0,
                               backgroundColor: Colors.white,
@@ -79,21 +84,19 @@ class ProfileScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.only(top: 30.0),
                             height: 125.0,
-                            child: Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      '${userModel.name}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22.0,
-                                        color: Colors.black,
-                                      ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(30.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${userModel.name}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.0,
+                                      color: Colors.black,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -105,33 +108,37 @@ class ProfileScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      userModel.hasProfession?const SizedBox(width: 10.0,):const SizedBox(width: 60.0,),
                       Expanded(
-                        child: Text(
-                          '${userModel.profession}',
-                          style: userModel.hasProfession? const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0,
-                            color: Colors.black,
-                          ):const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        child: Text('Works as ${userModel.profession}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: Colors.grey,
+                            )),
                       ),
-                      userModel.hasProfession
-                          ? const Text(
-                        'Rated: 15.0*',
+                      const Text(
+                        '15.0',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
-                          color: Colors.orange,
+                          fontSize: 17.0,
+                          color: Colors.amberAccent,
                         ),
-                      )
-                          : const SizedBox(),
-                      userModel.hasProfession?const SizedBox(width: 20.0,):const SizedBox(width: 10.0,),
+                      ),
+                      const Icon(Icons.star_half_rounded,color: Colors.amberAccent,),
+                      const SizedBox(
+                        width: 30.0,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 80.0, vertical: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       InkWell(
                         onTap: () {},
                         child: Row(
@@ -155,20 +162,46 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        width: 15.0,
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.wechat_sharp,
-                          color: Colors.grey,
-                          size: 40.0,
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {},
+                        child: Row(
+                          children: const [
+                            Text(
+                              'Chat',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              Icons.wechat_sharp,
+                              color: Colors.grey,
+                              size: 40.0,
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
+                userModel!.hasProfession
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          overflow: TextOverflow.clip,
+                          '${userModel!.bio}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
