@@ -364,3 +364,17 @@ Widget searchResultsBuilder(data, context)=> ConditionalBuilder(
   ),
   fallback: (context) => const Center(child: CircularProgressIndicator()),
 );
+
+
+///****************** E2
+
+Widget myDivider() => Padding(
+  padding: const EdgeInsetsDirectional.only(
+    start: 20.0,
+  ),
+  child: Container(
+    width: double.infinity,
+    height: 1.0,
+    color: Colors.grey[300],
+  ),
+);

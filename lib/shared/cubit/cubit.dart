@@ -282,20 +282,20 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get all users ----------
 
-  List<UserModel> users = [];
+  ///*********** E1
+  List<UserModel> users=[] ;
 
-  void getUsers(){
-    users = [];
-    FirebaseFirestore.instance.collection('users')
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        if(element.data()['uId'] != model?.uId){
+  void getUsers() {
+    users=[];
+    FirebaseFirestore.instance.collection('users').get().then((value) {
+      value.docs.forEach((element) {
+        if(element.data()['uId']!=model!.uId)
           users.add(UserModel.fromJson(element.data()));
-        }
-      }
+      });
+
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
+      print(error.toString());
       emit(AppGetAllUsersErrorState(error.toString()));
     });
   }
@@ -303,9 +303,9 @@ class AppCubit extends Cubit<AppState> {
   ///---------- send message ----------
 
   void sendMessage({
-    required String receiverId,
-    required String dateTime,
-    required String text,
+    required String? receiverId,
+    required String? dateTime,
+    required String? text,
   })
   {
     MessageModel messageModel =MessageModel(
@@ -347,7 +347,7 @@ class AppCubit extends Cubit<AppState> {
 ///---------- get messages ----------
 
   List<MessageModel> messages =[];
-  void getMessages({required String receiverId})
+  void getMessages({required String? receiverId})
   {
     FirebaseFirestore.instance
         .collection('users')
