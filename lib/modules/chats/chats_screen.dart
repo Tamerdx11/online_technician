@@ -10,6 +10,8 @@ import '../chat_details/chat_details_screen.dart';
 ///E2
 
 class ChatsScreen extends StatelessWidget {
+  const ChatsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
@@ -17,21 +19,21 @@ class ChatsScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title:Center(child: Text('Chats')),
+            title:const Center(child: Text('Chats')),
             actions: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.search_sharp,),)
+              IconButton(onPressed: (){}, icon:const Icon(Icons.search_sharp,),)
             ],
           ),
           body: ConditionalBuilder(
             condition: AppCubit.get(context).users.isNotEmpty,
             builder: (context) => ListView.separated(
-              physics: BouncingScrollPhysics(),
+              physics:const  BouncingScrollPhysics(),
               itemBuilder: (context, index) => buildChatItem(AppCubit.get(context).users[index], context),
               separatorBuilder: (context, index) => myDivider(),
               itemCount: AppCubit.get(context).users.length,
 
             ),
-            fallback: (context) => Center(child: CircularProgressIndicator()),
+            fallback: (context) => const Center(child: CircularProgressIndicator()),
           ),
 
         );
@@ -59,12 +61,12 @@ class ChatsScreen extends StatelessWidget {
                 '${model.userImage}',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 15.0,
             ),
             Text(
               '${model.name}',
-              style: TextStyle(
+              style: const TextStyle(
                 height: 1.4,
               ),
             ),

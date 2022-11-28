@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
@@ -32,17 +33,18 @@ class EditProfileScreen extends StatelessWidget {
         nameController.text = userModel!.name.toString();
         phoneController.text = userModel.phone.toString();
         locationController.text = userModel.location.toString();
-        if(hasProfession == true){
-          print("-------------------------------has profession----------");
+        if(CacheHelper.getData(key: 'hasProfession') == true)
+        {
           bioController.text = userModel.bio;
           nationalIdController.text = userModel.nationalId;
           professionController.text = userModel.profession;
         }
 
         ImageProvider ib_card_image;
-        if (idCardImage == null) {
-          ib_card_image = NetworkImage('${userModel.idCardPhoto}');
-        } else {
+        if (idCardImage == null ) {
+          ib_card_image = NetworkImage('${userModel.userImage}');
+        } else
+        {
           ib_card_image = FileImage(idCardImage);
         }
 
