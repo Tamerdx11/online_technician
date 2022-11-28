@@ -152,6 +152,8 @@ class AppLayout extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     navigateTo(context, ChatsScreen());
+                    ///*****************
+                    AppCubit.get(context).getUsers();
                   },
                   icon: const Icon(Icons.mark_unread_chat_alt_rounded),
                 )
