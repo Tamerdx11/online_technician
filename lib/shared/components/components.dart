@@ -128,130 +128,170 @@ Color chooseToastColor(ToastState state) {
 
 ///---------------- build post item --------------
 
-Widget buildPostItem(PostModel model, context, index) => Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-  child: SizedBox(
-    width: double.infinity,
-    child: Card(
-      elevation: 3.0,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage: NetworkImage(model.userImage.toString()),
-                ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              model.name.toString(),
-                              style:const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                height: 1.4,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 5.0,
-                            ),
-                            const Icon(
-                              Icons.verified,
-                              color: Colors.blue,
-                              size: 14.0,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          model.dateTime.toString(),
-                          style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10.0,
-                              height: 1.4),
-                        ),
-                      ],
-                    )),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_horiz,
-                    size: 15.0,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Container(
-                width: double.infinity,
-                color: Colors.grey,
-                height: 1.0,
-              ),
-            ),
-            Text(
-              model.postText.toString(),
-              style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
+Widget buildPostItem(PostModel model,context,index)=>Card(
+  clipBehavior: Clip.antiAliasWithSaveLayer,
+  elevation: 5,
+  margin: const EdgeInsets.symmetric(horizontal: 8),
+  child: Padding(
+    padding: const EdgeInsets.all(10.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+      [
+        Row(
+          children:
+          [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage:  NetworkImage(
+                '${model.userImage}',
               ),
             ),
             const SizedBox(
-              height: 15.0,
+              width: 10,
             ),
-            if (model.postImages.toString().isNotEmpty)///there may be more than an image ------------
-              Container(
-                height: 150.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  image: DecorationImage(
-                    image: NetworkImage(model.postImages.toString()),
-                    fit: BoxFit.cover,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                [
+                  Row(
+                    children: [
+                      Text(
+                        '${model.name}',
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Icon(
+                        Icons.check_circle_rounded,
+                        color:Colors.black,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${model.dateTime}',
+                    style: Theme.of(context).textTheme.caption!.copyWith(
+                      height: 1.6,
+                    ),
+
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            IconButton(
+              onPressed: (){},
+              icon:const Icon(
+                Icons.more_horiz,
+              ),
+            ),
+
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+          ),
+          child: Container(
+            width: double.infinity,
+            height: 1,
+            color: Colors.grey[300],
+          ),
+        ),
+        Text(
+          '${model.postText}',
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
+        if(model.postImages!='')
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              top: 15,
+            ),
+            child: Container(
+              height: 400,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    '${model.postImages}',
+                  ),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        Row(
+          children:
+          [
+            Expanded(
+              child: InkWell(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                  ),
+                  child: Row(
+                    children:
+                    [
+                      const Icon(
+                        Icons.favorite_border,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      AppCubit.get(context).isLove?Text(
+                        '${AppCubit.get(context).likes[index]}',
+                        style: Theme.of(context).textTheme.caption,
+                      ):Text('${AppCubit.get(context).likes[index]}'),
+                    ],
                   ),
                 ),
-              ),///for one image
-            const SizedBox(
-              height: 10.0,
-            ),
-            InkWell(
-              onTap: () {
-                AppCubit.get(context).likePost(
-                    AppCubit.get(context).postId[index]);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.favorite_border,
-                      size: 18.0,
-                      color: Colors.redAccent,
-                    ),
-                    const SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      '${AppCubit.get(context).likes[index]}',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
-                ),
+                onTap: (){},
               ),
             ),
           ],
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 10,
+          ),
+          child: Container(
+            width: double.infinity,
+            height: 1,
+            color: Colors.grey[300],
+          ),
+        ),
+        InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+            [
+              Icon(
+                Icons.favorite_border,
+                color: Colors.red,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                'Love',
+                style: Theme.of(context).textTheme.caption,
+              ),
+
+            ],
+          ),
+          onTap: ()
+          {
+            AppCubit.get(context).isLove?AppCubit.get(context).likePost(AppCubit.get(context).postId[index]):AppCubit.get(context).unlikePost(AppCubit.get(context).postId[index]);
+            AppCubit.get(context).showLove();
+          },
+        ),
+      ],
     ),
   ),
 );

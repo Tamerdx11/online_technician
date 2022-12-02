@@ -72,10 +72,10 @@ class AppCubit extends Cubit<AppState> {
   ///---------- create post ----------
 
   final picker = ImagePicker();
-  File? postImage = null;
+  File? postImage =null ;
 
   void removePostImage() {
-    postImage = null;
+    postImage=null;
     emit(AppRemovePostImageState());
   }
 
@@ -83,13 +83,23 @@ class AppCubit extends Cubit<AppState> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      postImage = File(pickedFile.path);
+      postImage=File(pickedFile.path);
       emit(AppPostImagePickedSuccessState());
     } else {
       emit(AppPostImagePickedErrorState());
     }
   }
+  Future<void> getPostImageCamera() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
+    if (pickedFile != null) {
+      postImage=File(pickedFile.path);
+      emit(AppPostImagePickedSuccessState());
+    } else {
+      emit(AppPostImagePickedErrorState());
+    }
+  }
+  List<String>? postsImages;
   void uploadPostImage({
     required String text,
     required String dateTime,
@@ -104,7 +114,7 @@ class AppCubit extends Cubit<AppState> {
         createPost(
           text: text,
           dateTime: dateTime,
-          postImages: [value],
+          postImages:value,
         );
       }).catchError((error) {
         emit(AppCreatePostErrorState());
@@ -112,12 +122,13 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {
       emit(AppCreatePostErrorState());
     });
+
   }
 
   void createPost({
     required String text,
     required String dateTime,
-    List<String>? postImages,
+    String? postImages,
   }) {
     emit(AppCreatePostLoadingState());
     PostModel newPostModel = PostModel(
@@ -127,7 +138,7 @@ class AppCubit extends Cubit<AppState> {
       uId: model?.uId.toString(),
       postText: text,
       dateTime: dateTime,
-      postImages: postImages ?? [],
+      postImages: postImages ?? '',
     );
 
     FirebaseFirestore.instance
@@ -164,6 +175,10 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- add like post ----------
 
+  bool isLove = true;
+  void showLove(){
+    isLove = !isLove;
+  }
   void likePost(String postId) {
     FirebaseFirestore.instance
         .collection('posts')
@@ -173,6 +188,17 @@ class AppCubit extends Cubit<AppState> {
         .set({
       'like': true,
     }).then((value) {
+      emit(AppLikePostSuccessState());
+    }).catchError((error) {
+      emit(AppLikePostErrorState(error.toString()));
+    });
+  }
+  void unlikePost(String postId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .doc(model!.uId.toString()).delete().then((value) {
       emit(AppLikePostSuccessState());
     }).catchError((error) {
       emit(AppLikePostErrorState(error.toString()));
@@ -341,7 +367,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
+        'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
         .putFile(idCardImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -362,7 +388,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+        'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {

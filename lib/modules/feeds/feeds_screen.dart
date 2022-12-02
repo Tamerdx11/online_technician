@@ -17,30 +17,58 @@ class FeedsScreen extends StatelessWidget {
         var cubit = AppCubit.get(context);
 
         return ConditionalBuilder(
-          condition: true,///cubit.posts.isNotEmpty,
-          builder: (context) => SingleChildScrollView(
+
+          condition: cubit.posts.length > 0 && cubit.users != 'null',
+          builder: (context)=>SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
-              children: [
+              children:
+              [
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 20,
+                  margin: const EdgeInsets.all(9),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      const Image(
+                        width: double.infinity,
+                        image: NetworkImage('https://img.freepik.com/free-photo/closeup-portrait-cheerful-lovely-feminine-blond-girl-white-dress-taking-selfie-mobile-phone-make-kawaii-peace-sign-while-take-photo-capturing-spring-moment-pink-background_1258-100822.jpg?w=996&t=st=1667153210~exp=1667153810~hmac=63a5251d058785fe732d8df2473a3a12a4b7b2d7720ffa6b0cc654b06cd1564e'),
+                        fit: BoxFit.cover,
+                        height: 200,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'communicate with friends',
+                          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) =>
-                      buildPostItem(cubit.posts[index], context, index),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 5.0,
+                  itemBuilder: (context,index)=>buildPostItem(cubit.posts[index],context,index),
+                  separatorBuilder: (context,index)=>const SizedBox(
+                    height: 10,
                   ),
-                  itemCount: cubit.posts.length,
+                  itemCount:cubit.posts.length,
                 ),
                 const SizedBox(
-                  height: 100.0,
+                  height: 8,
                 ),
+
               ],
             ),
           ),
-          fallback: (context) =>
-              const Center(child: CircularProgressIndicator()),
+          fallback: (context)=>const Center(child: CircularProgressIndicator()),
         );
       },
     );
   }
 }
+
