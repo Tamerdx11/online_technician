@@ -54,6 +54,11 @@ dependencies:
   firebase_core_platform_interface: ^4.5.2
   firebase_messaging: ^14.0.4
   convex_bottom_bar: ^2.4.0
+  google_maps_flutter: ^2.2.1
+  location: ^4.4.0
+  flutter_polyline_points: ^1.0.0
+  haversine_distance: ^1.2.1
+
 
 dev_dependencies:
   flutter_test:

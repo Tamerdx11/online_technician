@@ -8,6 +8,8 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
+import '../modules/google_map/google_map.dart';
+
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
   AppLayout({Key? key}) : super(key: key);
@@ -159,6 +161,7 @@ class AppLayout extends StatelessWidget {
                 )
               else
                 const SizedBox(),
+
             ],
           ),
           body: cubit.screens[cubit.currentIndex],

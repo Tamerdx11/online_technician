@@ -7,6 +7,8 @@ import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 
+import '../google_map/google_map.dart';
+
 // ignore: must_be_immutable
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -53,7 +55,7 @@ class RegisterScreen extends StatelessWidget {
                   child: Form(
                     key: formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -180,6 +182,13 @@ class RegisterScreen extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.add_location_rounded),
                         ),
+                          IconButton(
+                            onPressed: () {
+                              navigateTo(context, GoogleMaps());
+                              ///*****************
+                            },
+                            icon: const Icon(Icons.maps_ugc_sharp),
+                          ),
                         const SizedBox(
                           height: 30.0,
                         ),

@@ -6,7 +6,9 @@ import 'package:online_technician/models/user.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 import '../chat_details/chat_details_screen.dart';
+import '../google_map2/GoogleMaps2.dart';
 ///E2
 
 class ChatsScreen extends StatelessWidget {
@@ -70,8 +72,22 @@ class ChatsScreen extends StatelessWidget {
                 height: 1.4,
               ),
             ),
+            const SizedBox(
+              width: 15.0,
+            ),
+            IconButton(
+              onPressed: () {
+                CacheHelper.savaData(key: 'latitude2', value: model.latitude);
+                CacheHelper.savaData(key: 'longitude2', value: model.longitude);
+                CacheHelper.savaData(key: 'name2', value: model.name);
+                navigateTo(context, GoogleMaps2());
+                ///*****************
+              },
+              icon: const Icon(Icons.maps_ugc_sharp),
+            ),
           ],
         ),
       ),
-    ),);
+    ),
+  );
 }

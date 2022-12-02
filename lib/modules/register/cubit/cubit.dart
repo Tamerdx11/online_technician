@@ -1,12 +1,17 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+
+import '../../../shared/components/constants.dart';
 
 class AppRegisterCubit extends Cubit<AppRegisterState> {
   AppRegisterCubit() : super(AppRegisterInitialState());
@@ -86,6 +91,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
           uId: value.user!.uid.toString());
     }).catchError((error) {
       emit(AppRegisterErrorState(error));
+      print(error.toString());
     });
   }
 
@@ -110,6 +116,8 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       profession: 'user',
       coverImage:
           'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
+      latitude:latitude.toString(),
+      longitude:longitude.toString(),
     );
 
     FirebaseFirestore.instance
@@ -130,4 +138,8 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     isPassword = !isPassword;
     emit(AppRegisterPasswordState());
   }
+
+
+
+
 }

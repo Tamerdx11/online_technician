@@ -20,7 +20,7 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
   final storageRef = firebase_storage.FirebaseStorage.instance.ref();
 
-  ///---------- get person data ----------
+  ///---------- get user or technican data ----------
 
   var model;
 
@@ -31,11 +31,14 @@ class AppCubit extends Cubit<AppState> {
           .collection('technicians')
           .doc(uId)
           .get()
-          .then((value) {
+          .then((value)  {
         model = TechnicianModel.fromJson(value.data());
+        CacheHelper.savaData(key: 'name1', value: model.name);
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         emit(AppGetUserErrorState(error.toString()));
+        print('**************************************************************////////////////////////////////');
+        print(error.toString());
       });
     } else {
       emit(AppGetUserLoadingState());
@@ -177,7 +180,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   ///---------- get all users ----------
-
   List<UserModel> users = [];
 
   void getUsers() {
@@ -191,15 +193,21 @@ class AppCubit extends Cubit<AppState> {
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
       emit(AppGetAllUsersErrorState(error.toString()));
+      print('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror');
+      print(error.toString());
     });
   }
+
+
+
+
 
   ///---------- send message ----------
 
   void sendMessage({
-    required String receiverId,
-    required String dateTime,
-    required String text,
+    required String? receiverId,
+    required String? dateTime,
+    required String? text,
   }) {
     MessageModel messageModel = MessageModel(
       receiverId: receiverId,
@@ -237,8 +245,9 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get all messages ----------
 
+  ///E2
   List<MessageModel> messages = [];
-  void getMessages({required String receiverId}) {
+  void getMessages({required String? receiverId}) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(model!.uId)
@@ -403,7 +412,8 @@ class AppCubit extends Cubit<AppState> {
     if (coverImage != null) {
       uploadCoverImage();
     }
-    if (idCardImage != null) {
+    if (idCardImage != null)
+    {
       uploadIdCardImage();
     }
     if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == true)
@@ -422,6 +432,8 @@ class AppCubit extends Cubit<AppState> {
         userImage: uploadedProfileImage,
         coverImage: uploadedProfileImage,
         hasProfession: true,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
       FirebaseFirestore.instance
           .collection('technicians')
@@ -450,6 +462,8 @@ class AppCubit extends Cubit<AppState> {
         userImage: uploadedProfileImage ?? model?.userImage,
         coverImage: uploadedProfileImage ?? model?.coverImage,
         hasProfession: true,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
       FirebaseFirestore.instance
           .collection('technicians')
@@ -480,6 +494,8 @@ class AppCubit extends Cubit<AppState> {
             : uploadedCoverImage,
         uId: uId,
         hasProfession: false,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
 
       FirebaseFirestore.instance
@@ -510,6 +526,8 @@ class AppCubit extends Cubit<AppState> {
             : uploadedCoverImage,
         uId: uId,
         hasProfession: false,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
 
       FirebaseFirestore.instance

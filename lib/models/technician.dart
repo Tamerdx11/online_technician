@@ -15,6 +15,8 @@ class TechnicianModel extends UserModel {
     bool? hasProfession,
     String? location,
     String? profession,
+    String? latitude,
+    String? longitude,
     this.bio,
     this.nationalId,
     this.idCardPhoto,
@@ -28,6 +30,8 @@ class TechnicianModel extends UserModel {
           hasProfession: true,
           location: location,
           profession: profession,
+          latitude:latitude,
+          longitude:longitude,
         );
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
@@ -40,7 +44,11 @@ class TechnicianModel extends UserModel {
             coverImage: json['coverImage'],
             hasProfession: json['hasProfession'],
             location: json['location'],
-            profession: json['profession']) {
+            profession: json['profession'],
+            latitude:json['latitude'],
+            longitude:json['longitude'],
+  )
+  {
     bio = json['bio'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];
@@ -61,6 +69,8 @@ class TechnicianModel extends UserModel {
       'userImage': userImage,
       'location': location,
       'profession': profession,
+      'latitude':latitude,
+      'longitude':longitude,
     };
   }
 }

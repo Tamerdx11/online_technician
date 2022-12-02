@@ -26,17 +26,19 @@ void main() async
 
   ///---------- messaging notification ----------
 
-  // var token = await FirebaseMessaging.instance.getToken();
-  // //.......app open...............
-  // FirebaseMessaging.onMessage.listen((event) {
-  //   print(event.data.toString());
-  // });
-  // //...........app open in background........
-  // FirebaseMessaging.onMessageOpenedApp.listen((event) {
-  //   print(event.data.toString());
-  // });
-  // //............app closed......
-  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+   var token = await FirebaseMessaging.instance.getToken();
+   print('***************************///////////////////////////////////////////////////');
+   print(token);
+   //.......app open...............
+   FirebaseMessaging.onMessage.listen((event) {
+     print(event.data.toString());
+   });
+   //...........app open in background........
+   FirebaseMessaging.onMessageOpenedApp.listen((event) {
+     print(event.data.toString());
+   });
+   //............app closed......
+   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   ///--------------------------------------------
 
@@ -67,9 +69,11 @@ void main() async
   {
     widget = OnBoardingScreen();
   }
+
 ///------------------------------------
   runApp(MyApp(isDark: isDark, widget: widget,));
 }
+
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
@@ -92,6 +96,7 @@ class MyApp extends StatelessWidget {
         listener:(context, state) {},
         builder: (context, state) {
           return MaterialApp(
+
             // theme: lightTheme,
             // darkTheme: darkTheme,
             // themeMode:AppCubit.get(context).isDark?ThemeMode.dark:ThemeMode.light,
