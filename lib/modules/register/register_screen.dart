@@ -25,6 +25,7 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<AppRegisterCubit, AppRegisterState>(
         listener: (context, state) {
           if (state is AppCreateUserSuccessState) {
+            // AppCubit.get(context).getUserData();
             navigateToAndFinish(context, AppLayout());
           }
         },
@@ -188,7 +189,7 @@ class RegisterScreen extends StatelessWidget {
                           builder: (context) => defaultButton(
                             function: () {
                               if (formKey.currentState!.validate()) {
-                                AppRegisterCubit.get(context).uploadProfileImageWithRegister(
+                                AppRegisterCubit.get(context).userRegister(
                                   location: locationController.text,
                                   name: usernameController.text,
                                   phone: phoneController.text,

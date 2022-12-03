@@ -4,6 +4,7 @@ class UserModel extends PersonModel {
   String? phone;
   String? email;
   String? coverImage;
+  String? token;
   bool hasProfession = false;
 
   UserModel({
@@ -14,6 +15,7 @@ class UserModel extends PersonModel {
     String? profession,
     this.phone,
     this.email,
+    this.token,
     this.coverImage,
     required this.hasProfession,
   }) : super(
@@ -34,6 +36,7 @@ class UserModel extends PersonModel {
     email = json['email'];
     coverImage = json['coverImage'];
     hasProfession = json['hasProfession'];
+    token = json['token'];
   }
 
   Map<String, dynamic> toMap() {
@@ -47,6 +50,7 @@ class UserModel extends PersonModel {
       'userImage': userImage,
       'location': location,
       'profession': profession,
+      'token':token,
     };
   }
 }

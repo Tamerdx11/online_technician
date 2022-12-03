@@ -108,6 +108,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                     receiverId: userModel.uId.toString(),
                                     dateTime: DateTime.now().toString(),
                                     text: messageController.text,
+                                      token:userModel.token.toString(),
                                   );
                                 },
                                 minWidth: 1.0,
@@ -191,4 +192,5 @@ class ChatDetailsScreen extends StatelessWidget {
           ),
         ),
       );
+
 }

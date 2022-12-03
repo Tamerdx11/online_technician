@@ -98,8 +98,6 @@ class EditProfileScreen extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                // if(state is AppUserUpdateLoadingState)
-                //   const LinearProgressIndicator(),
                 SizedBox(
                   height: 200,
                   child: Stack(
