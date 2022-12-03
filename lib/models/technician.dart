@@ -49,10 +49,9 @@ class TechnicianModel extends UserModel {
             profession: json['profession'],
             latitude:json['latitude'],
             longitude:json['longitude'],
+            token: json['token'],
   )
   {
-            profession: json['profession'],
-            token: json['token']) {
     bio = json['bio'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];

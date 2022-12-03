@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class AppRegisterCubit extends Cubit<AppRegisterState> {
@@ -29,13 +31,9 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
 
   /// ---------- upload profile image with profile registration ----------
 
-  void uploadProfileImageWithRegister({
-    required String name,
-    required String email,
-    required String password,
-    required String location,
-    required String phone,
-  }) {
+  String imageUrl ='';
+  void uploadProfileImageWithRegister()
+  {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
@@ -44,14 +42,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
-        userRegister(
-          name: name,
-          location: location,
-          password: password,
-          phone: phone,
-          userImage: value,
-          email: email,
-        );
+        imageUrl = value.toString();
       }).catchError((error) {
         emit(AppUploadProfileImageErrorState());
       });
@@ -66,10 +57,12 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     required String name,
     required String email,
     required String password,
-    required String userImage,
     required String location,
     required String phone,
   }) {
+    if(profileImage != null){
+      uploadProfileImageWithRegister();
+    }
     emit(AppRegisterLoadingState());
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -77,13 +70,20 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       password: password,
     )
         .then((value) {
-      createUser(
-          name: name,
-          email: email,
-          userImage: userImage,
-          location: location,
-          phone: phone,
-          uId: value.user!.uid.toString());
+      FirebaseMessaging.instance.getToken().then((token){
+        createUser(
+            name: name,
+            email: email,
+            userImage: imageUrl==''?'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919':imageUrl,
+            location: location,
+            token:token.toString(),
+            phone: phone,
+            uId: value.user!.uid.toString());
+        CacheHelper.savaData(key: 'token', value: token.toString());
+        CacheHelper.savaData(key: 'uId', value: value.user!.uid.toString());
+        CacheHelper.savaData(key: 'hasProfession', value: false);
+      }).catchError((error){});
+
     }).catchError((error) {
       emit(AppRegisterErrorState(error));
     });
@@ -97,6 +97,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     required String userImage,
     required String location,
     required String phone,
+    required String token,
     required String uId,
   }) {
     UserModel model = UserModel(
@@ -107,7 +108,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       location: location,
       userImage: userImage,
       hasProfession: false,
-      token: token.toString(),
+      token: token,
       latitude:latitude.toString(),
       longitude:longitude.toString(),
       profession: 'user',
