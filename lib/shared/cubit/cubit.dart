@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -15,7 +14,6 @@ import 'package:online_technician/modules/notification/notification_screen.dart'
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-import 'package:online_technician/shared/network/remote/dio_helper.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -25,6 +23,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get person data ----------
 
   var model;
+
   void getUserData() {
     if (CacheHelper.getData(key: 'hasProfession') == true) {
       emit(AppGetUserLoadingState());
@@ -34,6 +33,7 @@ class AppCubit extends Cubit<AppState> {
           .get()
           .then((value) {
         model = TechnicianModel.fromJson(value.data());
+        CacheHelper.savaData(key: 'name1', value: model.name);
 
         FirebaseMessaging.instance.getToken().then((token) {
           if (model.token.toString() != token.toString()) {
@@ -64,6 +64,8 @@ class AppCubit extends Cubit<AppState> {
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         emit(AppGetUserErrorState(error.toString()));
+        print('**************************************************************////////////////////////////////');
+        print(error.toString());
       });
     } else {
       emit(AppGetUserLoadingState());
@@ -118,7 +120,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppChangeButtonNavState());
   }
 
-  ///-------------------- create post ------------------
+  ///---------- create post ----------
 
   final picker = ImagePicker();
   File? postImage = null;
@@ -138,7 +140,17 @@ class AppCubit extends Cubit<AppState> {
       emit(AppPostImagePickedErrorState());
     }
   }
+  Future<void> getPostImageCamera() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
+    if (pickedFile != null) {
+      postImage=File(pickedFile.path);
+      emit(AppPostImagePickedSuccessState());
+    } else {
+      emit(AppPostImagePickedErrorState());
+    }
+  }
+  List<String>? postsImages;
   void uploadPostImage({
     required String text,
     required String dateTime,
@@ -153,7 +165,7 @@ class AppCubit extends Cubit<AppState> {
         createPost(
           text: text,
           dateTime: dateTime,
-          postImages: [value],
+          postImages:value,
         );
       }).catchError((error) {
         emit(AppCreatePostErrorState());
@@ -166,7 +178,7 @@ class AppCubit extends Cubit<AppState> {
   void createPost({
     required String text,
     required String dateTime,
-    List<String>? postImages,
+    String? postImages,
   }) {
     emit(AppCreatePostLoadingState());
     PostModel newPostModel = PostModel(
@@ -176,7 +188,7 @@ class AppCubit extends Cubit<AppState> {
       uId: model?.uId.toString(),
       postText: text,
       dateTime: dateTime,
-      postImages: postImages ?? [],
+      postImages: postImages ?? '',
     );
 
     FirebaseFirestore.instance
@@ -189,7 +201,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///------------------ get posts & likes ----------------
+  ///---------- get posts & likes ----------
 
   List<PostModel> posts = [];
   List<String> postId = [];
@@ -213,6 +225,10 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- add like post ----------
 
+  bool isLove = true;
+  void showLove(){
+    isLove = !isLove;
+  }
   void likePost(String postId) {
     FirebaseFirestore.instance
         .collection('posts')
@@ -222,6 +238,17 @@ class AppCubit extends Cubit<AppState> {
         .set({
       'like': true,
     }).then((value) {
+      emit(AppLikePostSuccessState());
+    }).catchError((error) {
+      emit(AppLikePostErrorState(error.toString()));
+    });
+  }
+  void unlikePost(String postId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .doc(model!.uId.toString()).delete().then((value) {
       emit(AppLikePostSuccessState());
     }).catchError((error) {
       emit(AppLikePostErrorState(error.toString()));
@@ -243,6 +270,8 @@ class AppCubit extends Cubit<AppState> {
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
       emit(AppGetAllUsersErrorState(error.toString()));
+      print('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror');
+      print(error.toString());
     });
   }
 
@@ -250,9 +279,9 @@ class AppCubit extends Cubit<AppState> {
 
   void sendMessage({
     required String token,
-    required String receiverId,
-    required String dateTime,
-    required String text,
+    required String? receiverId,
+    required String? dateTime,
+    required String? text,
   }) {
     MessageModel messageModel = MessageModel(
       receiverId: receiverId,
@@ -293,8 +322,9 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get all messages ----------
 
+  ///E2
   List<MessageModel> messages = [];
-  void getMessages({required String receiverId}) {
+  void getMessages({required String? receiverId}) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(model!.uId)
@@ -388,7 +418,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
+        'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
         .putFile(idCardImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -409,7 +439,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+        'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -462,8 +492,8 @@ class AppCubit extends Cubit<AppState> {
     if (idCardImage != null) {
       uploadIdCardImage();
     }
-    if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == true) {
+    if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == true)
+    {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -479,6 +509,8 @@ class AppCubit extends Cubit<AppState> {
         userImage: uploadedProfileImage,
         coverImage: uploadedProfileImage,
         hasProfession: true,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
       FirebaseFirestore.instance
           .collection('technicians')
@@ -490,8 +522,9 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
-        hasProfession == true) {
+    }
+    else if (CacheHelper.getData(key: 'hasProfession') == false && hasProfession == true)
+    {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -507,6 +540,8 @@ class AppCubit extends Cubit<AppState> {
         userImage: uploadedProfileImage ?? model?.userImage,
         coverImage: uploadedProfileImage ?? model?.coverImage,
         hasProfession: true,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
       FirebaseFirestore.instance
           .collection('technicians')
@@ -537,6 +572,8 @@ class AppCubit extends Cubit<AppState> {
             : uploadedCoverImage,
         uId: uId,
         hasProfession: false,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
 
       FirebaseFirestore.instance
@@ -549,8 +586,9 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == false) {
+    }
+    else if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == false)
+    {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
@@ -567,6 +605,8 @@ class AppCubit extends Cubit<AppState> {
             : uploadedCoverImage,
         uId: uId,
         hasProfession: false,
+        latitude: model.latitude,
+        longitude: model.longitude,
       );
 
       FirebaseFirestore.instance

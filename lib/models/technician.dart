@@ -15,6 +15,8 @@ class TechnicianModel extends UserModel {
     bool? hasProfession,
     String? location,
     String? profession,
+    String? latitude,
+    String? longitude,
     String? token,
     this.bio,
     this.nationalId,
@@ -29,6 +31,8 @@ class TechnicianModel extends UserModel {
           hasProfession: true,
           location: location,
           profession: profession,
+          latitude:latitude,
+          longitude:longitude,
           token: token,
         );
 
@@ -42,6 +46,11 @@ class TechnicianModel extends UserModel {
             coverImage: json['coverImage'],
             hasProfession: json['hasProfession'],
             location: json['location'],
+            profession: json['profession'],
+            latitude:json['latitude'],
+            longitude:json['longitude'],
+  )
+  {
             profession: json['profession'],
             token: json['token']) {
     bio = json['bio'];
@@ -64,6 +73,8 @@ class TechnicianModel extends UserModel {
       'userImage': userImage,
       'location': location,
       'profession': profession,
+      'latitude':latitude,
+      'longitude':longitude,
       'token':token,
     };
   }

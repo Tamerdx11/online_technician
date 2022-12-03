@@ -6,6 +6,8 @@ class UserModel extends PersonModel {
   String? coverImage;
   String? token;
   bool hasProfession = false;
+  String? latitude;
+  String? longitude;
 
   UserModel({
     String? name,
@@ -18,6 +20,8 @@ class UserModel extends PersonModel {
     this.token,
     this.coverImage,
     required this.hasProfession,
+    this.latitude,
+    this.longitude,
   }) : super(
             name: name,
             uId: uId,
@@ -35,6 +39,8 @@ class UserModel extends PersonModel {
     phone = json['phone'];
     email = json['email'];
     coverImage = json['coverImage'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
     hasProfession = json['hasProfession'];
     token = json['token'];
   }
@@ -50,6 +56,8 @@ class UserModel extends PersonModel {
       'userImage': userImage,
       'location': location,
       'profession': profession,
+      'latitude':latitude,
+      'longitude':longitude,
       'token':token,
     };
   }

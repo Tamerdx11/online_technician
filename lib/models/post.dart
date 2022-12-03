@@ -2,7 +2,7 @@ import 'package:online_technician/models/person.dart';
 
 class PostModel extends PersonModel {
   String? postText;
-  List<String>? postImages;
+  String? postImages;
   String? dateTime;
 
   PostModel({
