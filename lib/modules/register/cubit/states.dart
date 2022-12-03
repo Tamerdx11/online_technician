@@ -29,3 +29,7 @@ class AppUserUpdateLoadingState extends AppRegisterState{}
 class AppUploadProfileImageSuccessState extends AppRegisterState{}
 
 class AppUploadProfileImageErrorState extends AppRegisterState{}
+
+class AppGetTokenSuccessState extends AppRegisterState{}
+
+class AppGetTokenErrorState extends AppRegisterState{}

@@ -45,8 +45,6 @@ class AppCommentPostErrorState extends AppState{
 
 class AppChangeButtonNavState extends AppState{}
 
-class AppNewPostState extends AppState{}
-
 class AppProfileImagePickedSuccessState extends AppState{}
 
 class AppProfileImagePickedErrorState extends AppState{}

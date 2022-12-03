@@ -37,7 +37,7 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Goole maps'),
+        title:const Text('Google maps'),
       ),
       body:  Stack(
         alignment: Alignment.center,
@@ -90,15 +90,22 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
       ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: ()  {
-            setState(() {
-              v=true;
-            });
-            print('**********************dddddddddddddddddddddddddddd*****************ddddddddddddd*****************');
-            double dis =distance.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
-            print(dis);
-          },
-          child: Icon(Icons.directions),
+        onPressed: () async {
+          GoogleMapController controller = await _controller.future;
+          setState(()  {
+            v=true;
+            controller.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target: LatLng(from.latitude, from.longitude),
+                  zoom: 10,
+                )
+            ));
+          });
+          print('*******dddddddddddddddddddddddddddd*****ddddddddddddd******');
+          double dis =distance.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
+          print(dis);
+        },
+        child: Icon(Icons.directions),
       ),
     );
   }

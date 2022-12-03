@@ -1,10 +1,12 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:online_technician/layout/home_layout.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
+import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 
@@ -23,7 +25,7 @@ class LoginScreen extends StatelessWidget {
       create: (context) => AppLoginCubit(),
       child: BlocConsumer<AppLoginCubit, AppLoginState>(
         listener: (context, state) {
-          ///----- show login error -----
+          ///----- login error -----
           if(state is AppLoginErrorState)
           {
             showToast(text: state.error, state: ToastState.ERROR);
@@ -34,7 +36,8 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.savaData(
                 key: 'uId',
                 value: state.uid).then((value) {
-              navigateToAndFinish(context, Container());/// main layout
+              AppCubit.get(context).getUserData();
+              navigateToAndFinish(context, AppLayout());
             });
           }
         },

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -14,13 +15,14 @@ import 'package:online_technician/modules/notification/notification_screen.dart'
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/network/remote/dio_helper.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
   static AppCubit get(context) => BlocProvider.of(context);
   final storageRef = firebase_storage.FirebaseStorage.instance.ref();
 
-  ///---------- get user or technican data ----------
+  ///---------- get person data ----------
 
   var model;
 
@@ -31,9 +33,36 @@ class AppCubit extends Cubit<AppState> {
           .collection('technicians')
           .doc(uId)
           .get()
-          .then((value)  {
+          .then((value) {
         model = TechnicianModel.fromJson(value.data());
         CacheHelper.savaData(key: 'name1', value: model.name);
+
+        FirebaseMessaging.instance.getToken().then((token) {
+          if (model.token.toString() != token.toString()) {
+            TechnicianModel newModel = TechnicianModel(
+              name: model.name,
+              uId: model!.uId,
+              phone: model.phone,
+              email: model!.email,
+              bio: model.bio,
+              nationalId: model.nationalId,
+              idCardPhoto: model!.idCardPhoto,
+              location: model.location,
+              profession: model.profession,
+              token: token,
+              userImage: model.userImage,
+              coverImage: model.coverImage,
+              hasProfession: true,
+            );
+            FirebaseFirestore.instance
+                .collection('technicians')
+                .doc(uId.toString())
+                .update(newModel.toMap())
+                .then((value) {})
+                .catchError((error) {});
+          }
+        });
+
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         emit(AppGetUserErrorState(error.toString()));
@@ -44,10 +73,34 @@ class AppCubit extends Cubit<AppState> {
       emit(AppGetUserLoadingState());
       FirebaseFirestore.instance
           .collection('users')
-          .doc(uId)
+          .doc(uId.toString())
           .get()
           .then((value) {
         model = UserModel.fromJson(value.data());
+
+        FirebaseMessaging.instance.getToken().then((token) {
+          if (model.token.toString() != token.toString()) {
+            UserModel newModel = UserModel(
+              name: model.name,
+              phone: model.phone,
+              email: model!.email,
+              location: model.location,
+              profession: 'user',
+              token: token,
+              userImage: model.userImage,
+              coverImage: model?.coverImage,
+              uId: model.uId,
+              hasProfession: false,
+            );
+
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(model.uId.toString())
+                .update(newModel.toMap())
+                .then((value) {})
+                .catchError((error) {});
+          }
+        });
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         emit(AppGetUserErrorState(error.toString()));
@@ -72,10 +125,10 @@ class AppCubit extends Cubit<AppState> {
   ///---------- create post ----------
 
   final picker = ImagePicker();
-  File? postImage =null ;
+  File? postImage = null;
 
   void removePostImage() {
-    postImage=null;
+    postImage = null;
     emit(AppRemovePostImageState());
   }
 
@@ -83,7 +136,7 @@ class AppCubit extends Cubit<AppState> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      postImage=File(pickedFile.path);
+      postImage = File(pickedFile.path);
       emit(AppPostImagePickedSuccessState());
     } else {
       emit(AppPostImagePickedErrorState());
@@ -122,7 +175,6 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {
       emit(AppCreatePostErrorState());
     });
-
   }
 
   void createPost({
@@ -206,6 +258,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   ///---------- get all users ----------
+
   List<UserModel> users = [];
 
   void getUsers() {
@@ -224,13 +277,10 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-
-
-
-
   ///---------- send message ----------
 
   void sendMessage({
+    required String token,
     required String? receiverId,
     required String? dateTime,
     required String? text,
@@ -250,6 +300,9 @@ class AppCubit extends Cubit<AppState> {
         .collection('messages')
         .add(messageModel.toMap())
         .then((value) {
+      DioHelper.sendFcmMessage(title: model.name, message: text, token: token)
+          .then((value) {})
+          .catchError((error) {});
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
@@ -438,8 +491,7 @@ class AppCubit extends Cubit<AppState> {
     if (coverImage != null) {
       uploadCoverImage();
     }
-    if (idCardImage != null)
-    {
+    if (idCardImage != null) {
       uploadIdCardImage();
     }
     if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == true)
@@ -454,6 +506,7 @@ class AppCubit extends Cubit<AppState> {
         nationalId: nationalId,
         idCardPhoto: uploadedIdCardImage,
         location: location,
+        token: model.token,
         profession: profession,
         userImage: uploadedProfileImage,
         coverImage: uploadedProfileImage,
@@ -481,6 +534,7 @@ class AppCubit extends Cubit<AppState> {
         phone: phone,
         email: model!.email,
         bio: bio,
+        token: model.token,
         nationalId: nationalId,
         idCardPhoto: uploadedIdCardImage,
         location: location,
@@ -502,9 +556,8 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    }
-    else if (CacheHelper.getData(key: 'hasProfession') == false && hasProfession == false)
-    {
+    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
+        hasProfession == false) {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
@@ -512,6 +565,7 @@ class AppCubit extends Cubit<AppState> {
         email: model!.email,
         location: location,
         profession: 'user',
+        token: model.token,
         userImage: uploadedProfileImage!.isEmpty
             ? model?.userImage
             : uploadedProfileImage,
@@ -544,6 +598,7 @@ class AppCubit extends Cubit<AppState> {
         email: model!.email,
         location: location,
         profession: 'user',
+        token: model.token,
         userImage: uploadedProfileImage!.isEmpty
             ? model?.userImage
             : uploadedProfileImage,
