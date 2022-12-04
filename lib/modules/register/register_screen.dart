@@ -27,7 +27,7 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<AppRegisterCubit, AppRegisterState>(
         listener: (context, state) {
           if (state is AppCreateUserSuccessState) {
-            // AppCubit.get(context).getUserData();
+            AppCubit.get(context).getUserData();
             navigateToAndFinish(context, AppLayout());
           }
         },

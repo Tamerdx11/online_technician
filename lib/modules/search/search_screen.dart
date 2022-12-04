@@ -15,7 +15,6 @@ class SearchScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
-
         var data = AppCubit.get(context).search; ///search data
 
         return Scaffold(
@@ -35,13 +34,10 @@ class SearchScreen extends StatelessWidget {
                       return null;
                     },
                     controller: searchController,
-                    onSubmitted: (value) {
-
-                    },
                     onchange: (value) {
                       AppCubit.get(context).getSearchData(value);
                     },
-                    label: "Search",
+                    label: "Search...",
                     prefixIcon: const Icon(Icons.search),
                   ),
                 ),

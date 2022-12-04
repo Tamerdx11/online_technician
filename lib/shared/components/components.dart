@@ -298,94 +298,89 @@ Widget buildPostItem(PostModel model,context,index)=>Card(
 
 ///----------------------------------- build one search item --- items builder------/// need to be customize ***********
 
-Widget buildSearchResultItem(data, context) =>InkWell(
-  onTap: () {},
-  child:   Padding(
-    padding: const EdgeInsets.all(20.0),
-    child: Row(
-
+Widget buildSearchResultItem(data, context) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5.0),
+  child:   Card(
+    child:   Row(
       children: [
-
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 36.5,
+            backgroundColor: Colors.black.withOpacity(0.5),
+            child: CircleAvatar(
+              radius: 35.0,
+              backgroundImage: NetworkImage(data['userImage'].toString()),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8.0,),
+        Column(
+          children: [
+            Text(
+              data['name'].toString(),
+              style:const TextStyle(
+                fontSize: 16.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 7.0,),
+            Text(
+              data['profession'].toString(),
+              style:const TextStyle(
+                color: Colors.grey,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
         Container(
-
-          width: 120.0,
-
-          height: 120.0,
-
           decoration: BoxDecoration(
-
-            borderRadius: BorderRadius.circular(10.0),
-
-            image: DecorationImage(
-
-              image: NetworkImage(data['urlToImage'].toString()),
-
-              fit: BoxFit.cover,
-
-            ),
-
+            color: Colors.blue.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(20.0),
           ),
-
-        ),
-
-        const SizedBox(
-
-          width: 20.0,
-
-        ),
-
-        Expanded(
-
-          child: SizedBox(
-
-            height: 120.0,
-
-            child: Column(
-
-              mainAxisAlignment: MainAxisAlignment.start,
-
-              crossAxisAlignment: CrossAxisAlignment.start,
-
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Row(
               children: [
-
-                Expanded(
-
-                  child: Text(
-
-                    data['title'].toString(),
-
-                    maxLines: 3,
-
-                    overflow: TextOverflow.ellipsis,
-
-                    style: Theme.of(context).textTheme.bodyText1,
-
-                  ),
-
-                ),
-
                 Text(
-
-                  data['publishedAt'].toString(),
-
-                  style: const TextStyle(
-
-                    color: Colors.grey,
-
+                  data['location'].toString(),
+                  style:const TextStyle(
+                    color: Colors.indigo,
+                    fontWeight: FontWeight.bold,
+                    height: 1.4,
                   ),
-
                 ),
-
+                const SizedBox(width: 3.0,),
+                const Icon(
+                  Icons.my_location_sharp,
+                  size: 30.0,
+                  color: Colors.indigo,
+                ),
               ],
-
             ),
-
           ),
-
         ),
-
+        const SizedBox(width: 5.0,),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.green.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child:const Padding(
+            padding:  EdgeInsets.all(4.0),
+            child: Icon(
+             Icons.whatsapp,
+             size: 30.0,
+             color: Colors.indigo,
+                ),
+          ),
+        ),
+        const SizedBox(width: 4.0,),
       ],
-
     ),
   ),
 );
@@ -395,11 +390,7 @@ Widget searchResultsBuilder(data, context)=> ConditionalBuilder(
   builder: (context) => ListView.separated(
     physics: const BouncingScrollPhysics(),
     itemBuilder: (context, index) => buildSearchResultItem(data[index], context),
-    separatorBuilder: (context, index) =>  Container(
-      width: double.infinity,
-      height: 1.0,
-      color: Colors.black12,
-    ),
+    separatorBuilder: (context, index) =>  const SizedBox(height: 10.0,),
     itemCount: data.length,
   ),
   fallback: (context) => const Center(child: CircularProgressIndicator()),

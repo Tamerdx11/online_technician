@@ -78,14 +78,16 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
             location: location,
             token:token.toString(),
             phone: phone,
-            uId: value.user!.uid.toString());
-        CacheHelper.savaData(key: 'token', value: token.toString());
+            uId: value.user!.uid.toString()
+        );
+        uId = value.user!.uid.toString();
         CacheHelper.savaData(key: 'uId', value: value.user!.uid.toString());
-        CacheHelper.savaData(key: 'hasProfession', value: false);
+        CacheHelper.savaData(key: 'token', value: token.toString());
       }).catchError((error){});
 
     }).catchError((error) {
       emit(AppRegisterErrorState(error));
+      print(error.toString());
     });
   }
 
@@ -121,7 +123,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
         .doc(uId)
         .set(model.toMap())
         .then((value) {
-      CacheHelper.savaData(key: 'uId', value: uId.toString());
       CacheHelper.savaData(key: 'hasProfession', value: false);
       emit(AppCreateUserSuccessState());
     }).catchError((error) {

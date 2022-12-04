@@ -39,35 +39,17 @@ class AppCubit extends Cubit<AppState> {
 
         FirebaseMessaging.instance.getToken().then((token) {
           if (model.token.toString() != token.toString()) {
-            TechnicianModel newModel = TechnicianModel(
-              name: model.name,
-              uId: model!.uId,
-              phone: model.phone,
-              email: model!.email,
-              bio: model.bio,
-              nationalId: model.nationalId,
-              idCardPhoto: model!.idCardPhoto,
-              location: model.location,
-              profession: model.profession,
-              token: token,
-              userImage: model.userImage,
-              coverImage: model.coverImage,
-              hasProfession: true,
-            );
             FirebaseFirestore.instance
                 .collection('technicians')
                 .doc(uId.toString())
-                .update(newModel.toMap())
+                .update({'token': token.toString()})
                 .then((value) {})
                 .catchError((error) {});
           }
         });
-
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         emit(AppGetUserErrorState(error.toString()));
-        print('**************************************************************////////////////////////////////');
-        print(error.toString());
       });
     } else {
       emit(AppGetUserLoadingState());
@@ -77,26 +59,12 @@ class AppCubit extends Cubit<AppState> {
           .get()
           .then((value) {
         model = UserModel.fromJson(value.data());
-
         FirebaseMessaging.instance.getToken().then((token) {
           if (model.token.toString() != token.toString()) {
-            UserModel newModel = UserModel(
-              name: model.name,
-              phone: model.phone,
-              email: model!.email,
-              location: model.location,
-              profession: 'user',
-              token: token,
-              userImage: model.userImage,
-              coverImage: model?.coverImage,
-              uId: model.uId,
-              hasProfession: false,
-            );
-
             FirebaseFirestore.instance
                 .collection('users')
                 .doc(model.uId.toString())
-                .update(newModel.toMap())
+                .update({'token': token.toString()})
                 .then((value) {})
                 .catchError((error) {});
           }
@@ -142,16 +110,18 @@ class AppCubit extends Cubit<AppState> {
       emit(AppPostImagePickedErrorState());
     }
   }
+
   Future<void> getPostImageCamera() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      postImage=File(pickedFile.path);
+      postImage = File(pickedFile.path);
       emit(AppPostImagePickedSuccessState());
     } else {
       emit(AppPostImagePickedErrorState());
     }
   }
+
   List<String>? postsImages;
   void uploadPostImage({
     required String text,
@@ -167,7 +137,7 @@ class AppCubit extends Cubit<AppState> {
         createPost(
           text: text,
           dateTime: dateTime,
-          postImages:value,
+          postImages: value,
         );
       }).catchError((error) {
         emit(AppCreatePostErrorState());
@@ -228,9 +198,10 @@ class AppCubit extends Cubit<AppState> {
   ///---------- add like post ----------
 
   bool isLove = true;
-  void showLove(){
+  void showLove() {
     isLove = !isLove;
   }
+
   void likePost(String postId) {
     FirebaseFirestore.instance
         .collection('posts')
@@ -245,12 +216,15 @@ class AppCubit extends Cubit<AppState> {
       emit(AppLikePostErrorState(error.toString()));
     });
   }
+
   void unlikePost(String postId) {
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
         .collection('likes')
-        .doc(model!.uId.toString()).delete().then((value) {
+        .doc(model!.uId.toString())
+        .delete()
+        .then((value) {
       emit(AppLikePostSuccessState());
     }).catchError((error) {
       emit(AppLikePostErrorState(error.toString()));
@@ -272,8 +246,6 @@ class AppCubit extends Cubit<AppState> {
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
       emit(AppGetAllUsersErrorState(error.toString()));
-      print('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrror');
-      print(error.toString());
     });
   }
 
@@ -344,23 +316,23 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- get search results ---------////////// ******************--- search ---
+  ///---------- get search results ---------
 
   List<dynamic> search = [];
   void getSearchData(String value) {
     emit(AppLoadingState());
-    // DioHelper.getData(
-    //   url: 'v2/everything',
-    //   query: {
-    //     'q':value,
-    //     'apikey':'83c8070b8cc9458d862845f16c3b0130'
-    //   },
-    // ).then((value) {
-    //   search = value.data['articles'];
-    //   emit(AppGetSearchSuccessState());
-    // }).catchError((error){
-    //   emit(AppGetSearchErrorState());
-    // });
+    FirebaseFirestore.instance
+        .collection('technicians')
+        .where('name', isEqualTo: value)
+        .get()
+        .then((value) {
+          search =[];
+          value.docs.forEach((element) {
+            search.add(element.data());
+            emit(AppLoadingState());
+          });
+    })
+        .catchError((error) {});
   }
 
   ///------------ has profession change ---------------
@@ -420,7 +392,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-        'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
+            'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
         .putFile(idCardImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -441,7 +413,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-        'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -494,8 +466,8 @@ class AppCubit extends Cubit<AppState> {
     if (idCardImage != null) {
       uploadIdCardImage();
     }
-    if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == true)
-    {
+    if (CacheHelper.getData(key: 'hasProfession') == true &&
+        hasProfession == true) {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -524,9 +496,8 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    }
-    else if (CacheHelper.getData(key: 'hasProfession') == false && hasProfession == true)
-    {
+    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
+        hasProfession == true) {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -588,9 +559,8 @@ class AppCubit extends Cubit<AppState> {
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
       });
-    }
-    else if (CacheHelper.getData(key: 'hasProfession') == true && hasProfession == false)
-    {
+    } else if (CacheHelper.getData(key: 'hasProfession') == true &&
+        hasProfession == false) {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,

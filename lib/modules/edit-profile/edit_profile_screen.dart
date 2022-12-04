@@ -233,7 +233,7 @@ class EditProfileScreen extends StatelessWidget {
                         AppCubit.get(context).checkboxChange(value);
                       }),
                 ),
-                if (hasProfession)
+                if (hasProfession == true)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -250,7 +250,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession)
+                if (hasProfession == true)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -267,7 +267,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession)
+                if (hasProfession == true)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -284,7 +284,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession)
+                if (hasProfession == true)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Row(
