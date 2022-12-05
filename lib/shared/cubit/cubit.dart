@@ -35,8 +35,6 @@ class AppCubit extends Cubit<AppState> {
           .get()
           .then((value) {
         model = TechnicianModel.fromJson(value.data());
-        CacheHelper.savaData(key: 'name1', value: model.name);
-
         FirebaseMessaging.instance.getToken().then((token) {
           if (model.token.toString() != token.toString()) {
             FirebaseFirestore.instance
@@ -234,11 +232,14 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get all users ----------
 
   List<UserModel> users = [];
-
+  List<UserModel> myuser = [];
   void getUsers() {
     users = [];
     FirebaseFirestore.instance.collection('users').get().then((value) {
       for (var element in value.docs) {
+        if (element.data()['uId'] == model?.uId) {
+          myuser.add(UserModel.fromJson(element.data()));
+        }
         if (element.data()['uId'] != model?.uId) {
           users.add(UserModel.fromJson(element.data()));
         }
@@ -246,6 +247,7 @@ class AppCubit extends Cubit<AppState> {
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {
       emit(AppGetAllUsersErrorState(error.toString()));
+      print(error.toString());
     });
   }
 

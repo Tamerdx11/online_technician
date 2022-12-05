@@ -25,10 +25,10 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
   bool v=false;
   Set<Marker> _markers = {};
   Completer<GoogleMapController> _controller = Completer();
-  LatLng from=LatLng(CacheHelper.getData(key: 'latitude1') , CacheHelper.getData(key: 'longitude1'));
+  LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'latitude1')));
   LatLng to=LatLng(double.parse(CacheHelper.getData(key: 'latitude2')) , double.parse(CacheHelper.getData(key: 'longitude2')));
   static final CameraPosition _initialCameraPosition =  CameraPosition(
-    target: LatLng(CacheHelper.getData(key: 'latitude1') , CacheHelper.getData(key: 'longitude1')),
+    target: LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'latitude1'))),
     zoom: 14.4746,
   );
   LatLng currentLocation = _initialCameraPosition.target;

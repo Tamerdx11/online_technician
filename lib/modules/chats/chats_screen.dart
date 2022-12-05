@@ -30,7 +30,7 @@ class ChatsScreen extends StatelessWidget {
             condition: AppCubit.get(context).users.isNotEmpty,
             builder: (context) => ListView.separated(
               physics:const  BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildChatItem(AppCubit.get(context).users[index], context),
+              itemBuilder: (context, index) => buildChatItem(AppCubit.get(context).users[index], AppCubit.get(context).myuser[0],context),
               separatorBuilder: (context, index) => myDivider(),
               itemCount: AppCubit.get(context).users.length,
 
@@ -43,7 +43,7 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(UserModel model, context) => Material(
+  Widget buildChatItem(UserModel model,UserModel mymodel, context) => Material(
     child: InkWell(
       onTap: () {
         navigateTo(
@@ -80,6 +80,9 @@ class ChatsScreen extends StatelessWidget {
                 CacheHelper.savaData(key: 'latitude2', value: model.latitude);
                 CacheHelper.savaData(key: 'longitude2', value: model.longitude);
                 CacheHelper.savaData(key: 'name2', value: model.name);
+                CacheHelper.savaData(key: 'latitude1', value: mymodel.latitude);
+                CacheHelper.savaData(key: 'longitude1', value: mymodel.longitude);
+                CacheHelper.savaData(key: 'name1', value: mymodel.name);
                 navigateTo(context, GoogleMaps2());
                 ///*****************
               },

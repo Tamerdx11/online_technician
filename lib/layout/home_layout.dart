@@ -26,7 +26,6 @@ class AppLayout extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = AppCubit.get(context);
-
         return Scaffold(
           drawer: cubit.currentIndex == 0
               ? Drawer(
@@ -39,7 +38,7 @@ class AppLayout extends StatelessWidget {
                       DrawerHeader(
                         curve: Curves.easeInOut,
                         decoration: const BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.blue,
                           // borderRadius: BorderRadius.only(
                           //   topRight: Radius.circular(30.0),
                           //   topLeft: Radius.circular(30.0),
@@ -115,7 +114,7 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.blue,
             title: cubit.currentIndex != 0
                 ? Text(
                     titles[cubit.currentIndex],
