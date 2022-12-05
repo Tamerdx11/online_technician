@@ -244,10 +244,10 @@ Widget buildPostItem(PostModel model,context,index)=>Card(
                       const SizedBox(
                         width: 5,
                       ),
-                      AppCubit.get(context).isLove?Text(
-                        '${AppCubit.get(context).likes[index]}',
-                        style: Theme.of(context).textTheme.caption,
-                      ):Text('${AppCubit.get(context).likes[index]}'),
+                      // AppCubit.get(context).isLove?Text(
+                      //   '${AppCubit.get(context).likes[index]}',
+                      //   style: Theme.of(context).textTheme.caption,
+                      // ):Text('${AppCubit.get(context).likes[index]}'),
                     ],
                   ),
                 ),
@@ -287,8 +287,8 @@ Widget buildPostItem(PostModel model,context,index)=>Card(
           ),
           onTap: ()
           {
-            AppCubit.get(context).isLove?AppCubit.get(context).likePost(AppCubit.get(context).postId[index]):AppCubit.get(context).unlikePost(AppCubit.get(context).postId[index]);
-            AppCubit.get(context).showLove();
+            // AppCubit.get(context).isLove?AppCubit.get(context).likePost(AppCubit.get(context).postId[index]):AppCubit.get(context).unlikePost(AppCubit.get(context).postId[index]);
+            // AppCubit.get(context).showLove();
           },
         ),
       ],
@@ -401,7 +401,7 @@ Widget searchResultsBuilder(data, context)=> ConditionalBuilder(
 
 Widget myDivider() => Padding(
   padding: const EdgeInsetsDirectional.only(
-    start: 20.0,
+    end: 30.0,
   ),
   child: Container(
     width: double.infinity,
