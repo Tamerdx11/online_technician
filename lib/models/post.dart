@@ -2,8 +2,9 @@ import 'package:online_technician/models/person.dart';
 
 class PostModel extends PersonModel {
   String? postText;
-  String? postImages;
+  Map? postImages;
   String? dateTime;
+  Map? likes;
 
   PostModel({
     String? name,
@@ -13,6 +14,7 @@ class PostModel extends PersonModel {
     this.postText,
     this.postImages,
     this.dateTime,
+    this.likes
   }) : super(name: name, uId: uId, userImage: userImage, location: location);
 
   PostModel.fromJson(Map<String, dynamic>? json)
@@ -25,6 +27,7 @@ class PostModel extends PersonModel {
     postText = json['postText'];
     postImages = json['postImages'];
     dateTime = json['dateTime'];
+    likes = json['likes'];
   }
 
   Map<String, dynamic> toMap() {
@@ -36,6 +39,7 @@ class PostModel extends PersonModel {
       'uId': uId,
       'userImage': userImage,
       'location': location,
+      'likes': likes,
     };
   }
 }

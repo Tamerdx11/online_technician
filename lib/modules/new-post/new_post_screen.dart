@@ -55,16 +55,15 @@ class NewPostScreen extends StatelessWidget {
                       child: defaultButton(
                         function: ()
                         {
-                          var now = DateTime.now();
                           if (AppCubit.get(context).postImage==null) {
                             AppCubit.get(context).createPost(
                               text: textController.text,
-                              dateTime: now.toString(),
+                              dateTime: '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
                             );
                           } else {
                             AppCubit.get(context).uploadPostImage(
                               text:textController.text,
-                              dateTime: now.toString(),
+                              dateTime: '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
                             );
                           }
                         },

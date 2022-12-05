@@ -158,7 +158,8 @@ class AppCubit extends Cubit<AppState> {
       uId: model?.uId.toString(),
       postText: text,
       dateTime: dateTime,
-      postImages: postImages ?? '',
+      postImages: {},
+      likes: {},
     );
 
     FirebaseFirestore.instance
@@ -171,62 +172,28 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- get posts & likes ----------
-
-  List<PostModel> posts = [];
-  List<String> postId = [];
-  List<int> likes = [];
-
-  void getPosts() {
-    FirebaseFirestore.instance.collection('posts').get().then((value) {
-      value.docs.forEach((element) {
-        element.reference.collection('likes').get().then((value) {
-          likes.add(value.docs.length);
-          postId.add(element.id);
-          posts.add(PostModel.fromJson(element.data()));
-          emit(AppGetPostsSuccessState());
-        }).catchError((error) {});
-      });
-      emit(AppGetPostsSuccessState());
-    }).catchError((error) {
-      emit(AppGetPostsErrorState(error.toString()));
-    });
-  }
-
   ///---------- add like post ----------
 
-  bool isLove = true;
-  void showLove() {
-    isLove = !isLove;
-  }
-
-  void likePost(String postId) {
+  void likeChange({required String postId, required String key}) {
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
-        .collection('likes')
-        .doc(model!.uId.toString())
-        .set({
-      'like': true,
-    }).then((value) {
-      emit(AppLikePostSuccessState());
-    }).catchError((error) {
-      emit(AppLikePostErrorState(error.toString()));
-    });
-  }
-
-  void unlikePost(String postId) {
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('likes')
-        .doc(model!.uId.toString())
-        .delete()
+        .get()
         .then((value) {
-      emit(AppLikePostSuccessState());
-    }).catchError((error) {
-      emit(AppLikePostErrorState(error.toString()));
-    });
+      Map? likes = PostModel.fromJson(value.data()).likes;
+      if (likes![key] == true) {
+        likes[key] = false;
+      } else {
+        likes[key] = true;
+      }
+
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .update({'likes': likes})
+          .then((value) {})
+          .catchError((error) {});
+    }).catchError((error) {});
   }
 
   ///---------- get all users ----------
@@ -328,13 +295,12 @@ class AppCubit extends Cubit<AppState> {
         .where('name', isEqualTo: value)
         .get()
         .then((value) {
-          search =[];
-          value.docs.forEach((element) {
-            search.add(element.data());
-            emit(AppLoadingState());
-          });
-    })
-        .catchError((error) {});
+      search = [];
+      value.docs.forEach((element) {
+        search.add(element.data());
+        emit(AppLoadingState());
+      });
+    }).catchError((error) {});
   }
 
   ///------------ has profession change ---------------
@@ -593,6 +559,28 @@ class AppCubit extends Cubit<AppState> {
         Navigator.pop(context);
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
+      });
+    }
+  }
+
+  getDataForPerson({required String? uId, required bool? isTechnician}) {
+    if (isTechnician == true) {
+      FirebaseFirestore.instance
+          .collection('technicians')
+          .doc(uId)
+          .get()
+          .then((value) {
+        return TechnicianModel.fromJson(value.data());
+      }).catchError((error) {});
+    } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .get()
+          .then((value) {
+        return UserModel.fromJson(value.data());
+      }).catchError((error) {
+        print(error.toString());
       });
     }
   }
