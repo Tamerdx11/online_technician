@@ -10,7 +10,8 @@ import 'package:online_technician/models/post.dart';
 import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
-import 'package:online_technician/modules/new-post/new_post_screen.dart';
+import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
+import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
@@ -77,10 +78,26 @@ class AppCubit extends Cubit<AppState> {
   ///---------- main layout navigation ----------
 
   int currentIndex = 0;
-  List<Widget> screens = [
+  List<Widget> screenss = [
     FeedsScreen(),
     NotificationScreen(),
-    NewPostScreen(),
+    SentRequestsScreen(),
+    ReceivedRequestsScreen(),
+  ];
+  List<BottomNavigationBarItem> bottomItems = const[
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home_filled),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.notification_add_rounded),
+      label: "notification",),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.hail),
+      label: "Sent",),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.handyman_sharp),
+      label: "Received",),
   ];
 
   void changeButtonNav(int index) {
@@ -88,13 +105,20 @@ class AppCubit extends Cubit<AppState> {
     emit(AppChangeButtonNavState());
   }
 
+  var curr_index = 0;
+  void changeCarousel(var index){
+
+    curr_index = index;
+     emit(AppChangeCarouselDotState());
+  }
+
   ///---------- create post ----------
 
   final picker = ImagePicker();
-  File? postImage = null;
+  List<File> postImageFile =[];
 
-  void removePostImage() {
-    postImage = null;
+  void removePostImage({required int index}) {
+    postImageFile.removeAt(index);
     emit(AppRemovePostImageState());
   }
 
@@ -102,9 +126,10 @@ class AppCubit extends Cubit<AppState> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      postImage = File(pickedFile.path);
+      postImageFile.add(File(pickedFile.path));
       emit(AppPostImagePickedSuccessState());
-    } else {
+    } else
+    {
       emit(AppPostImagePickedErrorState());
     }
   }
@@ -113,63 +138,73 @@ class AppCubit extends Cubit<AppState> {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      postImage = File(pickedFile.path);
+      postImageFile.add(File(pickedFile.path));
       emit(AppPostImagePickedSuccessState());
     } else {
       emit(AppPostImagePickedErrorState());
     }
   }
-
-  List<String>? postsImages;
+  int i = 0;
+ int j =0;
+  Map postsImagesMap ={};
   void uploadPostImage({
+    required BuildContext context,
     required String text,
     required String dateTime,
   }) {
+    i = 0;
     emit(AppCreatePostLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
-        .putFile(postImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        createPost(
-          text: text,
-          dateTime: dateTime,
-          postImages: value,
-        );
+    postImageFile.forEach((element) {
+      firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('posts/${Uri.file(element.path).pathSegments.last}')
+          .putFile(element).whenComplete((){ })
+          .then((value) {
+        value.ref.getDownloadURL().then((value) {
+          postsImagesMap['$i'] = value.toString();
+          i++;
+          if(postsImagesMap.length == postImageFile.length ) {
+            createPost(context: context, text: text, dateTime: dateTime);
+          }
+        }).catchError((error) {
+          emit(AppCreatePostErrorState());
+        });
       }).catchError((error) {
         emit(AppCreatePostErrorState());
       });
-    }).catchError((error) {
-      emit(AppCreatePostErrorState());
     });
   }
 
   void createPost({
+    required BuildContext context,
     required String text,
     required String dateTime,
-    String? postImages,
   }) {
-    emit(AppCreatePostLoadingState());
-    PostModel newPostModel = PostModel(
-      name: model!.name,
-      userImage: model?.userImage,
-      location: model?.location,
-      uId: model?.uId.toString(),
-      postText: text,
-      dateTime: dateTime,
-      postImages: {},
-      likes: {},
-    );
+          emit(AppCreatePostLoadingState());
+          PostModel newPostModel = PostModel(
+            name: model!.name,
+            userImage: model?.userImage,
+            location: model?.location,
+            uId: model?.uId.toString(),
+            postText: text,
+            dateTime: dateTime,
+            postImages: postsImagesMap,
+            likes: {},
+          );
 
-    FirebaseFirestore.instance
-        .collection('posts')
-        .add(newPostModel.toMap())
-        .then((value) {
-      emit(AppCreatePostSuccessState());
-    }).catchError((error) {
-      emit(AppUserUpdateErrorState());
-    });
+          FirebaseFirestore.instance
+              .collection('posts')
+              .add(newPostModel.toMap())
+              .then((value) {
+            emit(AppCreatePostSuccessState());
+            postImageFile.clear();
+            postsImagesMap.clear();
+            Navigator.pop(context);
+          }).catchError((error) {
+            emit(AppUserUpdateErrorState());
+          });
+
+
   }
 
   ///---------- add like post ----------

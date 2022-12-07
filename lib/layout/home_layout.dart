@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/modules/chats/chats_screen.dart';
+import 'package:online_technician/modules/new-post/new_post_screen.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/modules/search/search_screen.dart';
 import 'package:online_technician/modules/settings/settings_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
-
-import '../modules/google_map/google_map.dart';
 
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
@@ -17,7 +16,8 @@ class AppLayout extends StatelessWidget {
   List<String> titles = [
     'Home',
     'Notification',
-    'New Post',
+    'Your Sent Requests',
+    'New Received Requests',
   ];
 
   @override
@@ -39,10 +39,6 @@ class AppLayout extends StatelessWidget {
                         curve: Curves.easeInOut,
                         decoration: const BoxDecoration(
                           color: Colors.blue,
-                          // borderRadius: BorderRadius.only(
-                          //   topRight: Radius.circular(30.0),
-                          //   topLeft: Radius.circular(30.0),
-                          // ),
                         ),
                         child: Column(
                           children: [
@@ -114,7 +110,7 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.purple.withOpacity(0.65),
             title: cubit.currentIndex != 0
                 ? Text(
                     titles[cubit.currentIndex],
@@ -142,48 +138,38 @@ class AppLayout extends StatelessWidget {
                     navigateTo(context, SearchScreen());
                   },
                   icon: const Icon(Icons.search_rounded),
-                )
-              else
-                const SizedBox(),
+                ),
+              const SizedBox(width: 3.0,),
               if (cubit.currentIndex == 0)
                 IconButton(
                   onPressed: () {
-                    navigateTo(context, ChatsScreen());
-                    ///*****************
+                    navigateTo(context, const ChatsScreen());
                     AppCubit.get(context).getUsers();
                   },
                   icon: const Icon(Icons.mark_unread_chat_alt_rounded),
-                )
-              else
-                const SizedBox(),
-
+                ),
+              const SizedBox(width: 5.0,),
             ],
           ),
-          body: cubit.screens[cubit.currentIndex],
+          floatingActionButton: cubit.currentIndex == 0
+              ? FloatingActionButton(
+                  onPressed: () {
+                    navigateTo(context, NewPostScreen());
+                  },
+                  backgroundColor: Colors.blue.withOpacity(0.6),
+                  child: const Icon(Icons.add_photo_alternate_outlined),
+                )
+              : null,
           bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Colors.redAccent.withOpacity(0.65),
+            type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {
               cubit.changeButtonNav(index);
             },
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.notification_add_rounded),
-                  label: "notification"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.add_box), label: "add post"),
-            ],
+            items: cubit.bottomItems,
           ),
-          floatingActionButton: cubit.currentIndex == 4
-              ? FloatingActionButton(
-                  onPressed: () {
-                    navigateTo(context, Container());
-                  },
-                  backgroundColor: Colors.teal.withOpacity(0.6),
-                  child: const Icon(Icons.edit_note_sharp),
-                )
-              : Row(),
+          body: cubit.screenss[cubit.currentIndex],
         );
       },
     );

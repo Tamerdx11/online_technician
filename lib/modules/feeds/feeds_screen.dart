@@ -1,16 +1,16 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online_technician/layout/home_layout.dart';
-import 'package:online_technician/models/technician.dart';
-import 'package:online_technician/models/user.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
 class FeedsScreen extends StatelessWidget {
-  const FeedsScreen({Key? key}) : super(key: key);
+  FeedsScreen({Key? key}) : super(key: key);
+  final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -184,30 +184,29 @@ class FeedsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.subtitle2,
                                   ),
                                 ),
-                                if (snapshot.data!.docs[index]
-                                        .data()['postImages']
-                                        .length !=
-                                    0)
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                      top: 15,
-                                    ),
-                                    child: Container(
-                                      height: 400,
-                                      width: double.infinity,
+                                if(snapshot.data!.docs[index].data()['postImages'].isNotEmpty)
+                                  CarouselSlider.builder(
+                                    itemCount: snapshot.data!.docs[index].data()['postImages'].length,
+                                    itemBuilder: (BuildContext context, int itemIndex,
+                                        int pageViewIndex) => Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(4.0),
                                         image: DecorationImage(
-                                          image: NetworkImage(
-                                            snapshot.data!.docs[index]
-                                                .data()['postImages']
-                                                .toString(),
-                                          ),
-                                          fit: BoxFit.contain,
+                                          image: NetworkImage(snapshot.data!.docs[index].data()['postImages']['$itemIndex'].toString(),),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
+                                    options: CarouselOptions(
+                                      enlargeCenterPage: true,
+                                       viewportFraction: 0.85,
+                                      autoPlay: false,
+                                      aspectRatio: 1.0,
+                                      height: 300,
+                                      enableInfiniteScroll: false,
+                                    ),
                                   ),
+                                const SizedBox(height: 5.0,),
                                 Row(
                                   children: [
                                     Expanded(
