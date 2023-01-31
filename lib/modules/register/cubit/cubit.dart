@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,9 +30,8 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
 
   /// ---------- upload profile image with profile registration ----------
 
-  String imageUrl ='';
-  void uploadProfileImageWithRegister()
-  {
+  String imageUrl = '';
+  void uploadProfileImageWithRegister() {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
@@ -60,35 +58,25 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     required String location,
     required String phone,
   }) {
-    if(profileImage != null){
+    if (profileImage != null) {
       uploadProfileImageWithRegister();
     }
     emit(AppRegisterLoadingState());
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    )
-        .then((value) {
-      FirebaseMessaging.instance.getToken().then((token){
+      FirebaseMessaging.instance.getToken().then((token) {
         createUser(
             name: name,
             email: email,
-            userImage: imageUrl==''?'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919':imageUrl,
+            userImage: imageUrl == ''
+                ? 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919'
+                : imageUrl,
             location: location,
-            token:token.toString(),
+            token: token.toString(),
             phone: phone,
-            uId: value.user!.uid.toString()
-        );
-        uId = value.user!.uid.toString();
-        CacheHelper.savaData(key: 'uId', value: value.user!.uid.toString());
+            uId: uId,);
+        CacheHelper.savaData(key: 'uId', value: uId.toString());
         CacheHelper.savaData(key: 'token', value: token.toString());
-      }).catchError((error){});
+      }).catchError((error) {});
 
-    }).catchError((error) {
-      emit(AppRegisterErrorState(error));
-      print(error.toString());
-    });
   }
 
   ///---------- create user ----------
@@ -111,19 +99,19 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       userImage: userImage,
       hasProfession: false,
       token: token,
-      latitude:latitude.toString(),
-      longitude:longitude.toString(),
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
       profession: 'user',
       coverImage:
           'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
     );
 
     FirebaseFirestore.instance
-        .collection("users")
+        .collection("person")
         .doc(uId)
         .set(model.toMap())
         .then((value) {
-      CacheHelper.savaData(key: 'hasProfession', value: false);
+      CacheHelper.savaData(key: 'uId', value: uId);
       emit(AppCreateUserSuccessState());
     }).catchError((error) {
       emit(AppCreateUserErrorState(error));

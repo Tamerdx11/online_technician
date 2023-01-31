@@ -18,7 +18,6 @@ class MessageModel{
     text = json['text'];
   }
 
-  @override
   Map<String, dynamic> toMap(){
     return {
       'senderId':senderId,

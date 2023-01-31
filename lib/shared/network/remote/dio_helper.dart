@@ -45,31 +45,25 @@ class DioHelper {
     );
   }
 
-  static Future<Response> sendFcmMessage({String? title, String? message,String? token}) async {
-      var url = 'https://fcm.googleapis.com/fcm/send';
-      dio.options.headers = {
-        "Content-Type": "application/json",
-        "Authorization": "key=$serverToken",
-      };
-      var request = {
-        "to": '$token',
+  static Future<Response> sendFcmMessage(
+      {String? title, String? message, String? token}) async {
+    var url = 'https://fcm.googleapis.com/fcm/send';
+    dio.options.headers = {
+      "Content-Type": "application/json",
+      "Authorization": "key=$serverToken",
+    };
+    var request = {
+      "to": '$token',
+      "notification": {"title": title, "body": message, "sound": "default"},
+      "android": {
+        "priority": "HIGH",
         "notification": {
-          "title": title,
-          "body": message,
+          "notification_priority": "PRIORITY_MAX",
           "sound": "default"
-        },
-        "android":{
-          "priority":"HIGH",
-          "notification": {
-            "notification_priority": "PRIORITY_MAX",
-            "sound": "default"
-          }
-        },
-        "data": {
-          "click_action":"FLUTTER_NOTIFICATION_CLICK"
         }
-      };
-      return await dio.post(url, data: json.encode(request));
+      },
+      "data": {"click_action": "FLUTTER_NOTIFICATION_CLICK"}
+    };
+    return await dio.post(url, data: json.encode(request));
   }
-
 }

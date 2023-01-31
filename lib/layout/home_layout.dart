@@ -139,7 +139,9 @@ class AppLayout extends StatelessWidget {
                   },
                   icon: const Icon(Icons.search_rounded),
                 ),
-              const SizedBox(width: 3.0,),
+              const SizedBox(
+                width: 3.0,
+              ),
               if (cubit.currentIndex == 0)
                 IconButton(
                   onPressed: () {
@@ -148,7 +150,9 @@ class AppLayout extends StatelessWidget {
                   },
                   icon: const Icon(Icons.mark_unread_chat_alt_rounded),
                 ),
-              const SizedBox(width: 5.0,),
+              const SizedBox(
+                width: 5.0,
+              ),
             ],
           ),
           floatingActionButton: cubit.currentIndex == 0

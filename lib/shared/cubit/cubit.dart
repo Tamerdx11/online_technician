@@ -10,9 +10,11 @@ import 'package:online_technician/models/post.dart';
 import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
+import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
+import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
@@ -28,51 +30,32 @@ class AppCubit extends Cubit<AppState> {
   var model;
 
   void getUserData() {
-    if (CacheHelper.getData(key: 'hasProfession') == true) {
-      emit(AppGetUserLoadingState());
-      FirebaseFirestore.instance
-          .collection('technicians')
-          .doc(uId)
-          .get()
-          .then((value) {
-        model = TechnicianModel.fromJson(value.data());
-        FirebaseMessaging.instance.getToken().then((token) {
-          if (model.token.toString() != token.toString()) {
-            FirebaseFirestore.instance
-                .collection('technicians')
-                .doc(uId.toString())
-                .update({'token': token.toString()})
-                .then((value) {})
-                .catchError((error) {});
-          }
-        });
-        emit(AppGetUserSuccessState());
-      }).catchError((error) {
-        emit(AppGetUserErrorState(error.toString()));
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(uId)
+        .get().then((value) {
+        if(value.data()!['hasProfession'])
+        {
+          model = TechnicianModel.fromJson(value.data());
+          emit(AppGetUserSuccessState());
+        }
+        else {
+          model = UserModel.fromJson(value.data());
+          emit(AppGetUserSuccessState());
+        }
+      FirebaseMessaging.instance.getToken().then((token) {
+        if (model.token.toString() != token.toString()) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(model.uId.toString())
+              .update({'token': token.toString()})
+              .then((value) {})
+              .catchError((error) {});
+        }
       });
-    } else {
-      emit(AppGetUserLoadingState());
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId.toString())
-          .get()
-          .then((value) {
-        model = UserModel.fromJson(value.data());
-        FirebaseMessaging.instance.getToken().then((token) {
-          if (model.token.toString() != token.toString()) {
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(model.uId.toString())
-                .update({'token': token.toString()})
-                .then((value) {})
-                .catchError((error) {});
-          }
-        });
-        emit(AppGetUserSuccessState());
-      }).catchError((error) {
-        emit(AppGetUserErrorState(error.toString()));
-      });
-    }
+    }).catchError((error){
+      emit(AppGetUserErrorState(error.toString()));
+    });
   }
 
   ///---------- main layout navigation ----------
@@ -145,7 +128,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
   int i = 0;
- int j =0;
+  int j = 0;
   Map postsImagesMap ={};
   void uploadPostImage({
     required BuildContext context,
