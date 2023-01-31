@@ -28,7 +28,6 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get person data ----------
 
   var model;
-
   void getUserData() {
     FirebaseFirestore.instance
         .collection('person')
@@ -36,10 +35,12 @@ class AppCubit extends Cubit<AppState> {
         .get().then((value) {
         if(value.data()!['hasProfession'])
         {
+          CacheHelper.savaData(key: 'hasProfession', value: true);
           model = TechnicianModel.fromJson(value.data());
           emit(AppGetUserSuccessState());
         }
         else {
+          CacheHelper.savaData(key: 'hasProfession', value: false);
           model = UserModel.fromJson(value.data());
           emit(AppGetUserSuccessState());
         }
@@ -220,7 +221,7 @@ class AppCubit extends Cubit<AppState> {
   List<UserModel> myuser = [];
   void getUsers() {
     users = [];
-    FirebaseFirestore.instance.collection('users').get().then((value) {
+    FirebaseFirestore.instance.collection('person').get().then((value) {
       for (var element in value.docs) {
         if (element.data()['uId'] == model?.uId) {
           myuser.add(UserModel.fromJson(element.data()));
@@ -309,7 +310,7 @@ class AppCubit extends Cubit<AppState> {
   void getSearchData(String value) {
     emit(AppLoadingState());
     FirebaseFirestore.instance
-        .collection('technicians')
+        .collection('person')
         .where('name', isEqualTo: value)
         .get()
         .then((value) {
@@ -324,7 +325,6 @@ class AppCubit extends Cubit<AppState> {
   ///------------ has profession change ---------------
 
   bool hasProfession = CacheHelper.getData(key: 'hasProfession');
-
   void checkboxChange(value) {
     hasProfession = value;
     emit(AppChangeCheckboxState());
@@ -452,8 +452,9 @@ class AppCubit extends Cubit<AppState> {
     if (idCardImage != null) {
       uploadIdCardImage();
     }
-    if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == true) {
+
+    if (hasProfession == true)
+    {
       emit(AppTechnicianUpdateLoadingState());
       TechnicianModel newModel = TechnicianModel(
         name: name,
@@ -473,48 +474,18 @@ class AppCubit extends Cubit<AppState> {
         longitude: model.longitude,
       );
       FirebaseFirestore.instance
-          .collection('technicians')
-          .doc(uId)
-          .update(newModel.toMap())
-          .then((value) {
-        getUserData();
-        Navigator.pop(context);
-      }).catchError((error) {
-        emit(AppTechnicianUpdateErrorState());
-      });
-    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
-        hasProfession == true) {
-      emit(AppTechnicianUpdateLoadingState());
-      TechnicianModel newModel = TechnicianModel(
-        name: name,
-        uId: model!.uId,
-        phone: phone,
-        email: model!.email,
-        bio: bio,
-        token: model.token,
-        nationalId: nationalId,
-        idCardPhoto: uploadedIdCardImage,
-        location: location,
-        profession: profession,
-        userImage: uploadedProfileImage ?? model?.userImage,
-        coverImage: uploadedProfileImage ?? model?.coverImage,
-        hasProfession: true,
-        latitude: model.latitude,
-        longitude: model.longitude,
-      );
-      FirebaseFirestore.instance
-          .collection('technicians')
+          .collection('person')
           .doc(uId)
           .set(newModel.toMap())
           .then((value) {
-        CacheHelper.setData(key: 'hasProfession', value: true);
         getUserData();
         Navigator.pop(context);
       }).catchError((error) {
         emit(AppTechnicianUpdateErrorState());
       });
-    } else if (CacheHelper.getData(key: 'hasProfession') == false &&
-        hasProfession == false) {
+    }
+    else if (hasProfession == false)
+    {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
@@ -534,45 +505,11 @@ class AppCubit extends Cubit<AppState> {
         latitude: model.latitude,
         longitude: model.longitude,
       );
-
       FirebaseFirestore.instance
-          .collection('users')
+          .collection('person')
           .doc(uId)
-          .update(newModel.toMap())
+          .set(newModel.toMap())
           .then((value) {
-        getUserData();
-        Navigator.pop(context);
-      }).catchError((error) {
-        emit(AppUserUpdateErrorState());
-      });
-    } else if (CacheHelper.getData(key: 'hasProfession') == true &&
-        hasProfession == false) {
-      emit(AppUserUpdateLoadingState());
-      UserModel newModel = UserModel(
-        name: name,
-        phone: phone,
-        email: model!.email,
-        location: location,
-        profession: 'user',
-        token: model.token,
-        userImage: uploadedProfileImage!.isEmpty
-            ? model?.userImage
-            : uploadedProfileImage,
-        coverImage: uploadedCoverImage!.isEmpty
-            ? model?.coverImage
-            : uploadedCoverImage,
-        uId: uId,
-        hasProfession: false,
-        latitude: model.latitude,
-        longitude: model.longitude,
-      );
-
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .update(newModel.toMap())
-          .then((value) {
-        CacheHelper.setData(key: 'hasProfession', value: false);
         getUserData();
         Navigator.pop(context);
       }).catchError((error) {
@@ -581,25 +518,4 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  getDataForPerson({required String? uId, required bool? isTechnician}) {
-    if (isTechnician == true) {
-      FirebaseFirestore.instance
-          .collection('technicians')
-          .doc(uId)
-          .get()
-          .then((value) {
-        return TechnicianModel.fromJson(value.data());
-      }).catchError((error) {});
-    } else {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .get()
-          .then((value) {
-        return UserModel.fromJson(value.data());
-      }).catchError((error) {
-        print(error.toString());
-      });
-    }
-  }
 }

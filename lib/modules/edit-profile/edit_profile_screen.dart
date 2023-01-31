@@ -23,7 +23,7 @@ class EditProfileScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
-        bool? hasProfession = AppCubit.get(context).hasProfession;
+        bool hasProfession = AppCubit.get(context).hasProfession;
 
         var userModel = AppCubit.get(context).model;
         var profileImage = AppCubit.get(context).profileImage;
@@ -33,11 +33,11 @@ class EditProfileScreen extends StatelessWidget {
         nameController.text = userModel!.name.toString();
         phoneController.text = userModel.phone.toString();
         locationController.text = userModel.location.toString();
-        if(CacheHelper.getData(key: 'hasProfession') == true)
+        if(AppCubit.get(context).model.hasProfession)
         {
-          bioController.text = userModel.bio;
-          nationalIdController.text = userModel.nationalId;
-          professionController.text = userModel.profession;
+          bioController.text = userModel.bio??'';
+          nationalIdController.text = userModel.nationalId??'';
+          professionController.text = userModel.profession??'';
         }
 
         ImageProvider ib_card_image;
@@ -69,8 +69,7 @@ class EditProfileScreen extends StatelessWidget {
             title: "Edit Your Profile",
             actions: [
               TextButton(
-                onPressed: ()
-                {
+                onPressed: () {
                   AppCubit.get(context).updateProfileDate(
                     context: context,
                     name: nameController.text,
@@ -178,9 +177,7 @@ class EditProfileScreen extends StatelessWidget {
                         value.isEmpty ? "name must not be empty" : null,
                     controller: nameController,
                     keyboardType: TextInputType.name,
-                    onSubmitted: (value) {},
-                    onchange: (value) {},
-                    prefixIcon: const Icon(Icons.person_outline_rounded),
+                    prefixIcon: const Icon(Icons.drive_file_rename_outline),
                     label: 'Name',
                   ),
                 ),
@@ -194,9 +191,7 @@ class EditProfileScreen extends StatelessWidget {
                         value.isEmpty ? "phone number must not be empty" : null,
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
-                    onSubmitted: (value) {},
-                    onchange: (value) {},
-                    prefixIcon: const Icon(Icons.phonelink_ring),
+                    prefixIcon: const Icon(Icons.phone),
                     label: 'Phone',
                   ),
                 ),
@@ -207,12 +202,10 @@ class EditProfileScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: defaultFormText(
                     validate: (value) =>
-                        value.isEmpty ? "locaion must not be empty" : null,
+                        value.isEmpty ? "location must not be empty" : null,
                     controller: locationController,
                     keyboardType: TextInputType.name,
-                    onSubmitted: (value) {},
-                    onchange: (value) {},
-                    prefixIcon: const Icon(Icons.my_location_outlined),
+                    prefixIcon: const Icon(Icons.my_location),
                     label: 'location',
                   ),
                 ),
@@ -233,7 +226,7 @@ class EditProfileScreen extends StatelessWidget {
                         AppCubit.get(context).checkboxChange(value);
                       }),
                 ),
-                if (hasProfession == true)
+                if (hasProfession)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -241,8 +234,6 @@ class EditProfileScreen extends StatelessWidget {
                           value.isEmpty ? "bio must not be empty" : null,
                       controller: bioController,
                       keyboardType: TextInputType.name,
-                      onSubmitted: (value) {},
-                      onchange: (value) {},
                       prefixIcon: const Icon(Icons.info_outlined),
                       label: 'Bio',
                     ),
@@ -250,7 +241,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession == true)
+                if (hasProfession)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -258,8 +249,6 @@ class EditProfileScreen extends StatelessWidget {
                           value.isEmpty ? "ID must not be empty" : null,
                       controller: nationalIdController,
                       keyboardType: TextInputType.number,
-                      onSubmitted: (value) {},
-                      onchange: (value) {},
                       prefixIcon: const Icon(Icons.numbers),
                       label: 'national ID',
                     ),
@@ -267,7 +256,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession == true)
+                if (hasProfession)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: defaultFormText(
@@ -275,16 +264,14 @@ class EditProfileScreen extends StatelessWidget {
                       value.isEmpty ? "Profession must not be empty" : null,
                       controller: professionController,
                       keyboardType: TextInputType.text,
-                      onSubmitted: (value) {},
-                      onchange: (value) {},
-                      prefixIcon: const Icon(Icons.settings_suggest_outlined),
+                      prefixIcon: const Icon(Icons.precision_manufacturing),
                       label: 'Profession',
                     ),
                   ),
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (hasProfession == true)
+                if (hasProfession)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Row(
