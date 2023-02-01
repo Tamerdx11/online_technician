@@ -16,7 +16,6 @@ class RegisterScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
-  var emailController = TextEditingController();
   var phoneController = TextEditingController();
   var locationController = TextEditingController();
 
@@ -109,20 +108,6 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(
                           height: 30.0,
                         ),
-                        defaultFormText(
-                          validate: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'email is too short!';
-                            }
-                            return null;
-                          },
-                          controller: emailController,
-                          onSubmitted: (value) {},
-                          onchange: (value) {},
-                          label: 'Email Address',
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email),
-                        ),
                         const SizedBox(
                           height: 30.0,
                         ),
@@ -202,7 +187,6 @@ class RegisterScreen extends StatelessWidget {
                                   location: locationController.text,
                                   name: usernameController.text,
                                   phone: phoneController.text,
-                                  email: emailController.text,
                                   password: passwordController.text,
                                 );
                               }

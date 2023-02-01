@@ -10,11 +10,9 @@ import 'package:online_technician/models/post.dart';
 import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
-import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
-import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
@@ -460,8 +458,8 @@ class AppCubit extends Cubit<AppState> {
         name: name,
         uId: model!.uId,
         phone: phone,
-        email: model!.email,
         bio: bio,
+        chatList:model.chatList,
         nationalId: nationalId,
         idCardPhoto: uploadedIdCardImage,
         location: location,
@@ -490,16 +488,11 @@ class AppCubit extends Cubit<AppState> {
       UserModel newModel = UserModel(
         name: name,
         phone: phone,
-        email: model!.email,
         location: location,
-        profession: 'user',
         token: model.token,
-        userImage: uploadedProfileImage!.isEmpty
-            ? model?.userImage
-            : uploadedProfileImage,
-        coverImage: uploadedCoverImage!.isEmpty
-            ? model?.coverImage
-            : uploadedCoverImage,
+        chatList:model.chatList,
+        userImage: uploadedProfileImage ?? model?.userImage,
+        coverImage: uploadedCoverImage ?? model?.coverImage,
         uId: uId,
         hasProfession: false,
         latitude: model.latitude,

@@ -2,7 +2,6 @@ import 'package:online_technician/models/person.dart';
 
 class UserModel extends PersonModel {
   String? phone;
-  String? email;
   String? coverImage;
   String? token;
   bool hasProfession = false;
@@ -14,9 +13,8 @@ class UserModel extends PersonModel {
     String? uId,
     String? userImage,
     String? location,
-    String? profession,
+    Map? chatList,
     this.phone,
-    this.email,
     this.token,
     this.coverImage,
     required this.hasProfession,
@@ -25,19 +23,18 @@ class UserModel extends PersonModel {
   }) : super(
             name: name,
             uId: uId,
+            chatList: chatList,
             userImage: userImage,
-            location: location,
-            profession: profession);
+            location: location,);
 
   UserModel.fromJson(Map<String, dynamic>? json)
       : super(
             name: json!['name'],
+            chatList: json['chatList'],
             uId: json['uId'],
             location: json['location'],
-            userImage: json['userImage'],
-            profession: json['profession']) {
+            userImage: json['userImage'],) {
     phone = json['phone'];
-    email = json['email'];
     coverImage = json['coverImage'];
     latitude = json['latitude'];
     longitude = json['longitude'];
@@ -48,14 +45,13 @@ class UserModel extends PersonModel {
   Map<String, dynamic> toMap() {
     return {
       'phone': phone,
-      'email': email,
       'coverImage': coverImage,
       'hasProfession': hasProfession,
       'name': name,
       'uId': uId,
+      'chatList':chatList,
       'userImage': userImage,
       'location': location,
-      'profession': profession,
       'latitude':latitude,
       'longitude':longitude,
       'token':token,

@@ -3,14 +3,14 @@ class PersonModel{
   String? uId;
   String? userImage;
   String? location;
-  String? profession;
+  Map? chatList;
 
   PersonModel({
     this.name,
     this.userImage,
     this.uId,
     this.location,
-    this.profession,
+    this.chatList,
   });
 
 }

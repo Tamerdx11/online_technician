@@ -53,7 +53,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
 
   void userRegister({
     required String name,
-    required String email,
     required String password,
     required String location,
     required String phone,
@@ -65,7 +64,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       FirebaseMessaging.instance.getToken().then((token) {
         createUser(
             name: name,
-            email: email,
             userImage: imageUrl == ''
                 ? 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919'
                 : imageUrl,
@@ -83,7 +81,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
 
   void createUser({
     required String name,
-    required String email,
     required String userImage,
     required String location,
     required String phone,
@@ -92,16 +89,15 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
   }) {
     UserModel model = UserModel(
       name: name,
-      email: email,
       phone: phone,
       uId: uId,
+      chatList: {},
       location: location,
       userImage: userImage,
       hasProfession: false,
       token: token,
       latitude: latitude.toString(),
       longitude: longitude.toString(),
-      profession: 'user',
       coverImage:
           'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
     );

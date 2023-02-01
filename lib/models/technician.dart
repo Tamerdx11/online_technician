@@ -4,33 +4,33 @@ class TechnicianModel extends UserModel {
   String? bio;
   String? nationalId;
   String? idCardPhoto;
+  String? profession;
 
   TechnicianModel({
     String? name,
+    Map? chatList,
     String? uId,
     String? userImage,
     String? phone,
-    String? email,
     String? coverImage,
     bool? hasProfession,
     String? location,
-    String? profession,
     String? latitude,
     String? longitude,
     String? token,
     this.bio,
+    this.profession,
     this.nationalId,
     this.idCardPhoto,
   }) : super(
           name: name,
           uId: uId,
+          chatList: chatList,
           userImage: userImage,
           phone: phone,
-          email: email,
           coverImage: coverImage,
           hasProfession: true,
           location: location,
-          profession: profession,
           latitude:latitude,
           longitude:longitude,
           token: token,
@@ -39,20 +39,20 @@ class TechnicianModel extends UserModel {
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(
             name: json!['name'],
+            chatList: json['chatList'],
             uId: json['uId'],
             userImage: json['userImage'],
             phone: json['phone'],
-            email: json['email'],
             coverImage: json['coverImage'],
             hasProfession: json['hasProfession'],
             location: json['location'],
-            profession: json['profession'],
             latitude:json['latitude'],
             longitude:json['longitude'],
             token: json['token'],
   )
   {
     bio = json['bio'];
+    profession =json['profession'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];
   }
@@ -64,7 +64,7 @@ class TechnicianModel extends UserModel {
       'nationalId': nationalId,
       'idCardPhoto': idCardPhoto,
       'phone': phone,
-      'email': email,
+      'chatList':chatList,
       'coverImage': coverImage,
       'hasProfession': hasProfession,
       'name': name,

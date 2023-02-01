@@ -109,16 +109,16 @@ class ProfileScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const[
                       Expanded(
-                        child: Text('Works as ${userModel.profession}',
-                            style: const TextStyle(
+                        child: Text('profession',
+                            style:  TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.0,
                               color: Colors.grey,
                             )),
                       ),
-                      const Text(
+                      Text(
                         '15.0',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
