@@ -44,7 +44,6 @@ class FeedsScreen extends StatelessWidget {
                               (key, value) =>
                                   value == true ? trueLikes++ : trueLikes,
                             );
-
                         return Card(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           elevation: 2.0,

@@ -171,7 +171,6 @@ class RegisterScreen extends StatelessWidget {
                           IconButton(
                             onPressed: () {
                               navigateTo(context, GoogleMaps());
-                              ///*****************
                             },
                             icon: const Icon(Icons.maps_ugc_sharp),
                           ),

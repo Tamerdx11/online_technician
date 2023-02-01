@@ -8,6 +8,7 @@ import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class LoginScreen extends StatelessWidget {
                 navigateToAndFinish(context, RegisterScreen());
               }else{
                 AppCubit.get(context).getUserData();
+                CacheHelper.savaData(key: 'uId', value: state.uid.toString());
                 navigateToAndFinish(context, AppLayout());
               }
             }).catchError((error){

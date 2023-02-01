@@ -8,7 +8,7 @@ class TechnicianModel extends UserModel {
 
   TechnicianModel({
     String? name,
-    Map? chatList,
+    Map<String, dynamic>? chatList,
     String? uId,
     String? userImage,
     String? phone,

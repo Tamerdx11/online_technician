@@ -13,7 +13,7 @@ class UserModel extends PersonModel {
     String? uId,
     String? userImage,
     String? location,
-    Map? chatList,
+    Map<String, dynamic>? chatList,
     this.phone,
     this.token,
     this.coverImage,

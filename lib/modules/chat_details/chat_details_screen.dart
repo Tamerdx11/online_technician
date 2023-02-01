@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class ChatDetailsScreen extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(
-          receiverId: userModel.uId.toString(),
+          receiverId: userModel.uId,
         );
 
         return BlocConsumer<AppCubit, AppState>(
@@ -29,22 +30,40 @@ class ChatDetailsScreen extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    },
+                  icon:const Icon(Icons.keyboard_double_arrow_left_sharp,size: 35.0,),
+                ),
                 titleSpacing: 0.0,
-                title: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: NetworkImage(
-                        '${userModel.userImage}',
+                title: InkWell(
+                  onTap: () {},
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        radius: 22.5,
+                        backgroundColor: Colors.greenAccent,
+                        child: CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: NetworkImage(
+                            '${userModel.userImage}',
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 15.0,
-                    ),
-                    Text(
-                      '${userModel.name}',
-                    ),
-                  ],
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text(
+                        userModel.name.toString(),
+                        style:const TextStyle(
+                          fontSize: 16.0,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               body: ConditionalBuilder(
@@ -60,7 +79,8 @@ class ChatDetailsScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var message = AppCubit.get(context).messages[index];
 
-                            if (AppCubit.get(context).model!.uId == message.senderId) {
+                            if (AppCubit.get(context).model!.uId ==
+                                message.senderId) {
                               return buildMyMessage(message);
                             }
                             return buildMessage(message);
@@ -78,7 +98,7 @@ class ChatDetailsScreen extends StatelessWidget {
                             width: 1.0,
                           ),
                           borderRadius: BorderRadius.circular(
-                            15.0,
+                            22.0,
                           ),
                         ),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -93,7 +113,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                   controller: messageController,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: 'type your message here ...',
+                                    hintText: 'message...',
                                   ),
                                 ),
                               ),
@@ -103,19 +123,21 @@ class ChatDetailsScreen extends StatelessWidget {
                               color: Colors.blue,
                               child: MaterialButton(
                                 onPressed: () {
-                                  ///**** send message
                                   AppCubit.get(context).sendMessage(
+                                    name: userModel.name,
+                                    image: userModel.userImage,
+                                    chatList: userModel.chatList,
                                     receiverId: userModel.uId.toString(),
                                     dateTime: DateTime.now().toString(),
                                     text: messageController.text,
-                                      token:userModel.token.toString(),
+                                    token: userModel.token.toString(),
                                   );
                                   messageController.clear();
                                 },
                                 minWidth: 1.0,
                                 child: const Icon(
-                                  Icons.send_sharp,
-                                  size: 16.0,
+                                  Icons.send_rounded,
+                                  size: 25.0,
                                   color: Colors.white,
                                 ),
                               ),
@@ -137,7 +159,6 @@ class ChatDetailsScreen extends StatelessWidget {
     );
   }
 
-  ///******E2***
   Widget buildMessage(MessageModel model) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Container(
@@ -193,5 +214,4 @@ class ChatDetailsScreen extends StatelessWidget {
           ),
         ),
       );
-
 }

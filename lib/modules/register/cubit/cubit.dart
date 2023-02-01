@@ -107,7 +107,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
         .doc(uId)
         .set(model.toMap())
         .then((value) {
-      CacheHelper.savaData(key: 'uId', value: uId);
+      CacheHelper.savaData(key: 'uId', value: uId.toString());
       emit(AppCreateUserSuccessState());
     }).catchError((error) {
       emit(AppCreateUserErrorState(error));

@@ -1,15 +1,11 @@
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:conditional_builder/conditional_builder.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online_technician/models/user.dart';
 import 'package:online_technician/shared/components/components.dart';
+import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
-import 'package:online_technician/shared/network/local/cache_helper.dart';
-import '../chat_details/chat_details_screen.dart';
-import '../google_map2/GoogleMaps2.dart';
-///E2
 
 class ChatsScreen extends StatelessWidget {
   const ChatsScreen({super.key});
@@ -21,76 +17,90 @@ class ChatsScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title:const Center(child: Text('Chats')),
-            actions: [
-              IconButton(onPressed: (){}, icon:const Icon(Icons.search_sharp,),)
-            ],
-          ),
-          body: ConditionalBuilder(
-            condition: AppCubit.get(context).users.isNotEmpty,
-            builder: (context) => ListView.separated(
-              physics:const  BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildChatItem(AppCubit.get(context).users[index], AppCubit.get(context).myuser[0],context),
-              separatorBuilder: (context, index) => myDivider(),
-              itemCount: AppCubit.get(context).users.length,
-
+            title:Row(
+              children: const [
+                Spacer(),
+                Center(child: Text('المحادثات')),
+                SizedBox(width: 10.0,),
+              ],
             ),
-            fallback: (context) => const Center(child: CircularProgressIndicator()),
           ),
+          body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('person')
+                .doc(uId.toString())
+                .snapshots(),
+            builder:(context, snapshot){
+              if (snapshot.hasError) {
+                return const Center(child: Text('error 404'));
+              }
+              if(snapshot.hasData){
+                Map map = snapshot.data!.data()?['chatList'];
+                Map chatData = Map.fromEntries(
+                    map.entries.toList()..sort((e1, e2) => e1.value[1].compareTo(e2.value[1]))
+                );
 
+                return ListView.separated(
+                  physics:const  BouncingScrollPhysics(),
+                  itemBuilder: (context, index) => buildChatItem(chatData.keys.toList()[index],chatData,context),
+                  separatorBuilder: (context, index) => myDivider(),
+                  itemCount: chatData.length,
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            } ,
+          ),
         );
       },
     );
   }
 
-  Widget buildChatItem(UserModel model,UserModel mymodel, context) => Material(
+  Widget buildChatItem(String id, Map chatData, context) => Material(
     child: InkWell(
       onTap: () {
-        navigateTo(
-          context,
-          ChatDetailsScreen(
-            userModel: model,
-          ),
-        );
+        AppCubit.get(context).goToChatDetails(id, context);
       },
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
             CircleAvatar(
-              radius: 25.0,
+              radius: 30.0,
               backgroundImage: NetworkImage(
-                '${model.userImage}',
+                chatData[id][2].toString(),
               ),
             ),
             const SizedBox(
-              width: 15.0,
+              width: 13.0,
             ),
             Text(
-              '${model.name}',
+              chatData[id][3],
               style: const TextStyle(
+                overflow: TextOverflow.clip,
                 height: 1.4,
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0
               ),
             ),
-            const SizedBox(
-              width: 15.0,
+            const Spacer(),
+            Text(
+              chatData[id][0],
+              style: const TextStyle(
+                overflow: TextOverflow.clip,
+                height: 1.4,
+                fontSize: 15.0,
+                color: Colors.green,
+              ),
             ),
-            IconButton(
-              onPressed: () {
-                CacheHelper.savaData(key: 'latitude2', value: model.latitude);
-                CacheHelper.savaData(key: 'longitude2', value: model.longitude);
-                CacheHelper.savaData(key: 'name2', value: model.name);
-                CacheHelper.savaData(key: 'latitude1', value: mymodel.latitude);
-                CacheHelper.savaData(key: 'longitude1', value: mymodel.longitude);
-                CacheHelper.savaData(key: 'name1', value: mymodel.name);
-                navigateTo(context, GoogleMaps2());
-                ///*****************
-              },
-              icon: const Icon(Icons.maps_ugc_sharp),
-            ),
+            const SizedBox(width: 20.0,),
           ],
         ),
       ),
     ),
   );
 }
+
+
+
+
+

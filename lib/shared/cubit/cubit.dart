@@ -9,6 +9,7 @@ import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/post.dart';
 import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
+import 'package:online_technician/modules/chat_details/chat_details_screen.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
@@ -17,6 +18,8 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
+
+import '../components/components.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -45,7 +48,7 @@ class AppCubit extends Cubit<AppState> {
       FirebaseMessaging.instance.getToken().then((token) {
         if (model.token.toString() != token.toString()) {
           FirebaseFirestore.instance
-              .collection('users')
+              .collection('person')
               .doc(model.uId.toString())
               .update({'token': token.toString()})
               .then((value) {})
@@ -54,6 +57,20 @@ class AppCubit extends Cubit<AppState> {
       });
     }).catchError((error){
       emit(AppGetUserErrorState(error.toString()));
+    });
+  }
+
+  ///-----------get data for chat person----------
+
+  void goToChatDetails(String id, BuildContext context){
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(id.toString())
+        .get().then((value){
+          navigateTo(context, ChatDetailsScreen(
+            userModel: UserModel.fromJson(value.data()),),);
+    }).catchError((error){
+      print(error.toString());
     });
   }
 
@@ -237,7 +254,12 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- send message ----------
 
+  List<MessageModel> messages = [];
+  
   void sendMessage({
+    required String? image,
+    required String? name,
+    required Map<String, dynamic>? chatList,
     required String token,
     required String? receiverId,
     required String? dateTime,
@@ -251,7 +273,7 @@ class AppCubit extends Cubit<AppState> {
     );
 
     FirebaseFirestore.instance
-        .collection('users')
+        .collection('person')
         .doc(model!.uId)
         .collection('chats')
         .doc(receiverId)
@@ -265,9 +287,15 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
+    Map<String, dynamic>? mm = model.chatList;
+    mm?.addAll({receiverId.toString():[text,dateTime,image,name]});
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(model!.uId).update({'chatList': mm })
+        .then((value) {}).catchError((e){print(e.toString());});
 
     FirebaseFirestore.instance
-        .collection('users')
+        .collection('person')
         .doc(receiverId)
         .collection('chats')
         .doc(model!.uId)
@@ -278,15 +306,21 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
+
+    Map<String, dynamic>? m = chatList;
+    m?.addAll({model.uId.toString():[text,dateTime,model.userImage,model.name]});
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(receiverId).update({
+      'chatList': m })
+        .then((value) {}).catchError((e){print(e.toString());});
   }
 
   ///---------- get all messages ----------
-
-  ///E2
-  List<MessageModel> messages = [];
+  
   void getMessages({required String? receiverId}) {
     FirebaseFirestore.instance
-        .collection('users')
+        .collection('person')
         .doc(model!.uId)
         .collection('chats')
         .doc(receiverId)
@@ -490,7 +524,7 @@ class AppCubit extends Cubit<AppState> {
         phone: phone,
         location: location,
         token: model.token,
-        chatList:model.chatList,
+        chatList: model.chatList,
         userImage: uploadedProfileImage ?? model?.userImage,
         coverImage: uploadedCoverImage ?? model?.coverImage,
         uId: uId,

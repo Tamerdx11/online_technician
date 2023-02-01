@@ -3,7 +3,7 @@ class PersonModel{
   String? uId;
   String? userImage;
   String? location;
-  Map? chatList;
+  Map<String, dynamic>? chatList;
 
   PersonModel({
     this.name,
