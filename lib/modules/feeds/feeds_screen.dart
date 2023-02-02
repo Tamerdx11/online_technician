@@ -187,15 +187,36 @@ class FeedsScreen extends StatelessWidget {
                                   CarouselSlider.builder(
                                     itemCount: snapshot.data!.docs[index].data()['postImages'].length,
                                     itemBuilder: (BuildContext context, int itemIndex,
-                                        int pageViewIndex) => Container(
+                                        int pageViewIndex) => InkWell(
+                                          child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4.0),
-                                        image: DecorationImage(
-                                          image: NetworkImage(snapshot.data!.docs[index].data()['postImages']['$itemIndex'].toString(),),
-                                          fit: BoxFit.cover,
-                                        ),
+                                          borderRadius: BorderRadius.circular(4.0),
+                                          image: DecorationImage(
+                                            image: NetworkImage(snapshot.data!.docs[index].data()['postImages']['$itemIndex'].toString(),),
+                                            fit: BoxFit.cover,
+                                          ),
                                       ),
                                     ),
+                                      onTap: () async{
+                                            await showDialog(
+                                                context: context,
+                                              builder:(context)=>Dialog(
+                                                insetPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                                  insetAnimationCurve: Curves.easeInOut,
+                                                  insetAnimationDuration:const Duration(milliseconds: 1500),
+                                                  child: Container(
+                                                height: 400.0,
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(snapshot.data!.docs[index].data()['postImages']['$itemIndex'].toString(),),
+                                                        fit: BoxFit.cover
+                                                    ),
+                                                ),
+                                              )
+                                              ),
+                                            );
+                                      },
+                                        ),
                                     options: CarouselOptions(
                                       enlargeCenterPage: true,
                                        viewportFraction: 0.85,

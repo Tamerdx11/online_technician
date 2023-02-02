@@ -60,6 +60,7 @@ dependencies:
   haversine_distance: ^1.2.1
   carousel_slider: ^4.1.1
   dots_indicator: ^2.1.0
+  popup_banner: ^1.0.0
 
 dev_dependencies:
   flutter_test:
