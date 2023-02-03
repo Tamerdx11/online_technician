@@ -73,7 +73,7 @@ class AppLayout extends StatelessWidget {
                       ),
                       ListTile(
                         title: const Text(
-                          'Profile',
+                          'الملف الشخصي',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -81,12 +81,14 @@ class AppLayout extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          navigateTo(context, ProfileScreen());
+                          navigateTo(context, ProfileScreen(
+                            id: AppCubit.get(context).model.uId,
+                          ));
                         },
                       ),
                       ListTile(
                         title: const Text(
-                          'Settings',
+                          'الاعدادات',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -99,7 +101,7 @@ class AppLayout extends StatelessWidget {
                       ),
                       ListTile(
                         title: const Text(
-                          'Logout',
+                          'تسجيل الخروج',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,

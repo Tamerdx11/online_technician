@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
@@ -55,7 +56,7 @@ class FeedsScreen extends StatelessWidget {
                           return Card(
                             shape: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.black,
                                   width: .3,
                                 )),
@@ -175,15 +176,23 @@ class FeedsScreen extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
-                                              Text(
-                                                snapshot.data!.docs[index]
-                                                    .data()['name'],
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16,
+                                              InkWell(
+                                                child: Text(
+                                                  snapshot.data!.docs[index]
+                                                      .data()['name'],
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 16,
+                                                  ),
+                                                  textDirection:
+                                                      TextDirection.rtl,
                                                 ),
-                                                textDirection:
-                                                    TextDirection.rtl,
+                                                onTap: () {
+                                                  navigateTo(context, ProfileScreen(
+                                                    id: snapshot.data!.docs[index]
+                                                        .data()['uId'],
+                                                  ));
+                                                },
                                               ),
                                               Row(
                                                 mainAxisAlignment:
@@ -230,16 +239,24 @@ class FeedsScreen extends StatelessWidget {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      CircleAvatar(
-                                        radius: 21.5,
-                                        backgroundColor:
-                                            Colors.green.withOpacity(0.5),
+                                      InkWell(
                                         child: CircleAvatar(
-                                          radius: 20,
-                                          backgroundImage: NetworkImage(snapshot
-                                              .data!.docs[index]
-                                              .data()['userImage']),
+                                          radius: 21.5,
+                                          backgroundColor:
+                                              Colors.green.withOpacity(0.5),
+                                          child: CircleAvatar(
+                                            radius: 20,
+                                            backgroundImage: NetworkImage(snapshot
+                                                .data!.docs[index]
+                                                .data()['userImage']),
+                                          ),
                                         ),
+                                        onTap: (){
+                                          navigateTo(context, ProfileScreen(
+                                            id: snapshot.data!.docs[index]
+                                                .data()['uId'],
+                                          ));
+                                        },
                                       ),
                                     ],
                                   ),

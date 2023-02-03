@@ -20,7 +20,7 @@ class ChatsScreen extends StatelessWidget {
               centerTitle: true,
               backgroundColor: Colors.white,
               elevation: 0,
-              title: Text("المحادثات",
+              title: const Text("المحادثات",
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'NotoNaskhArabic',
@@ -46,7 +46,7 @@ class ChatsScreen extends StatelessWidget {
               if (snapshot.hasData) {
                 Map map = snapshot.data!.data()?['chatList'];
                 Map chatData = Map.fromEntries(map.entries.toList()
-                  ..sort((e1, e2) => e1.value[1].compareTo(e2.value[1])));
+                  ..sort((e1, e2) => e2.value[1].compareTo(e1.value[1])));
 
                 return ListView.separated(
                   physics: const BouncingScrollPhysics(),
@@ -78,7 +78,7 @@ class ChatsScreen extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.black,
                     width: .3,
                   )),
@@ -98,7 +98,7 @@ class ChatsScreen extends StatelessWidget {
                       textDirection: TextDirection.rtl,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   Text(
@@ -111,7 +111,7 @@ class ChatsScreen extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   CircleAvatar(

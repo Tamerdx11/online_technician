@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/user.dart';
+import 'package:online_technician/modules/profile/profile_screen.dart';
+import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
@@ -46,7 +48,11 @@ class ChatDetailsScreen extends StatelessWidget {
                 ),
                 titleSpacing: 0.0,
                 title: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    navigateTo(context, ProfileScreen(
+                      id: userModel.uId,
+                    ));
+                  },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

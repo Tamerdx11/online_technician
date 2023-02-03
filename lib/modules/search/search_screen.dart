@@ -310,7 +310,7 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 20,bottom: 10,left: 5),
+                        padding: const EdgeInsets.only(right: 10,bottom: 10,left: 5),
                         child: Container(
                           height: 45,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black),

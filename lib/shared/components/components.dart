@@ -2,6 +2,8 @@ import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_technician/models/post.dart';
+import 'package:online_technician/modules/profile/profile_screen.dart';
+import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 
 ///---------- customized button ----------
@@ -336,13 +338,20 @@ Widget buildSearchResultItem(data, context) => Padding(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                radius: 32.5,
-                backgroundColor: Colors.black.withOpacity(0.5),
+              child: InkWell(
                 child: CircleAvatar(
-                  radius: 35.0,
-                  backgroundImage: NetworkImage(data['userImage'].toString()),
+                  radius: 32.5,
+                  backgroundColor: Colors.black.withOpacity(0.5),
+                  child: CircleAvatar(
+                    radius: 35.0,
+                    backgroundImage: NetworkImage(data['userImage'].toString()),
+                  ),
                 ),
+                onTap: () {
+                  navigateTo(context, ProfileScreen(
+                    id: data['uId'].toString(),
+                  ));
+                },
               ),
             ),
             const SizedBox(
@@ -350,14 +359,21 @@ Widget buildSearchResultItem(data, context) => Padding(
             ),
             Column(
               children: [
-                Text(
-                  data['name'].toString(),
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    height: 1.4,
+                InkWell(
+                  child: Text(
+                    data['name'].toString(),
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      height: 1.4,
+                    ),
                   ),
+                  onTap: (){
+                    navigateTo(context, ProfileScreen(
+                      id: data['uId'].toString(),
+                    ));
+                  },
                 ),
                 const SizedBox(
                   height: 7.0,
@@ -400,16 +416,27 @@ Widget buildSearchResultItem(data, context) => Padding(
             const SizedBox(
               width: 0,
             ),
-            Container(
-              child: const Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Icon(
-                  Icons.whatsapp,
-                  size: 30.0,
-                  color: Colors.black,
+            data['uId'].toString()!=uId
+                ?Container(
+              child: InkWell(
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
+                  child: Icon(
+                    Icons.whatsapp,
+                    size: 30.0,
+                    color: Colors.black,
+                  ),
                 ),
+                onTap: () {
+                  ///go to chat
+                  AppCubit.get(context).goToChatDetails(
+                    data['uId'].toString(),
+                    context,
+                  );
+                },
               ),
-            ),
+            )
+                :const SizedBox(),
             const SizedBox(
               width: 6.0,
             ),
