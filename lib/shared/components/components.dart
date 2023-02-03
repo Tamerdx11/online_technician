@@ -7,22 +7,24 @@ import 'package:online_technician/shared/cubit/cubit.dart';
 ///---------- customized button ----------
 
 Widget defaultButton({
-  Color color = Colors.teal,
-  Color? textColor,
+  Color color = Colors.black,
   double width = double.infinity,
+  double size = 14,
   bool isUpperCase = true,
   required VoidCallback function,
   required String text,
 }) =>
     Container(
-      color: color,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(30), color: color),
       width: width,
       child: MaterialButton(
         onPressed: function,
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
           style: TextStyle(
-            color: textColor,
+            fontSize: size,
+            color: Colors.white,
           ),
         ),
       ),
@@ -39,7 +41,7 @@ Widget defaultFormText({
   TextInputType? keyboardType,
   VoidCallback? onTap,
   Icon? prefixIcon,
-  IconButton? suffixIcon,
+  Icon? suffixIcon,
   bool isClickable = true,
   bool isPassword = false,
 }) =>
@@ -51,13 +53,32 @@ Widget defaultFormText({
       onTap: onTap,
       enabled: isClickable,
       decoration: InputDecoration(
+        prefixIconColor: Colors.black,
+        suffixIconColor: Colors.black,
         labelText: label,
+        floatingLabelStyle: TextStyle(color: Colors.black),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        border: const OutlineInputBorder(),
+        hintTextDirection: TextDirection.rtl,
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              30,
+            ),
+            borderSide: BorderSide(color: Colors.black)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: Colors.black)),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              30,
+            ),
+            borderSide: BorderSide(color: Colors.black)),
       ),
       onFieldSubmitted: onSubmitted,
       onChanged: onchange,
+      cursorColor: Colors.black,
+      cursorHeight: 20,
+      textDirection: TextDirection.rtl,
     );
 
 ///---------- navigation ----------
@@ -88,17 +109,27 @@ PreferredSizeWidget defaultAppBar({
 }) =>
     AppBar(
       backgroundColor: color,
-      title: Text(
-        title,
-        style: TextStyle(color: textColor, fontSize: 17.0),
+      elevation: 0,
+      title: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'NotoNaskhArabic',
+              fontWeight: FontWeight.w600),
+        ),
       ),
       actions: actions,
       titleSpacing: 10.0,
+      centerTitle: true,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: const Icon(Icons.keyboard_double_arrow_left_rounded),
+        icon: const Icon(
+          Icons.arrow_back_rounded,
+          color: Colors.black,
+        ),
       ),
     );
 
@@ -233,12 +264,12 @@ Widget buildPostItem(PostModel model, context, index) => Card(
                         vertical: 5,
                       ),
                       child: Row(
-                        children: [
-                          const Icon(
+                        children: const [
+                          Icon(
                             Icons.favorite_border,
                             color: Colors.red,
                           ),
-                          const SizedBox(
+                          SizedBox(
                             width: 5,
                           ),
                           // AppCubit.get(context).isLove?Text(
@@ -295,12 +326,18 @@ Widget buildPostItem(PostModel model, context, index) => Card(
 Widget buildSearchResultItem(data, context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
       child: Card(
+        shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: .3,
+            )),
         child: Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                radius: 36.5,
+                radius: 32.5,
                 backgroundColor: Colors.black.withOpacity(0.5),
                 child: CircleAvatar(
                   radius: 35.0,
@@ -328,18 +365,15 @@ Widget buildSearchResultItem(data, context) => Padding(
                 Text(
                   data['profession'].toString(),
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black54,
                     height: 1.4,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
             const Spacer(),
             Container(
-              decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
               child: Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Row(
@@ -347,8 +381,7 @@ Widget buildSearchResultItem(data, context) => Padding(
                     Text(
                       data['location'].toString(),
                       style: const TextStyle(
-                        color: Colors.indigo,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                         height: 1.4,
                       ),
                     ),
@@ -356,33 +389,29 @@ Widget buildSearchResultItem(data, context) => Padding(
                       width: 3.0,
                     ),
                     const Icon(
-                      Icons.my_location_sharp,
+                      Icons.location_on_outlined,
                       size: 30.0,
-                      color: Colors.indigo,
+                      color: Colors.black,
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(
-              width: 5.0,
+              width: 0,
             ),
             Container(
-              decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
               child: const Padding(
                 padding: EdgeInsets.all(4.0),
                 child: Icon(
                   Icons.whatsapp,
                   size: 30.0,
-                  color: Colors.indigo,
+                  color: Colors.black,
                 ),
               ),
             ),
             const SizedBox(
-              width: 4.0,
+              width: 6.0,
             ),
           ],
         ),
@@ -400,7 +429,10 @@ Widget searchResultsBuilder(data, context) => ConditionalBuilder(
         ),
         itemCount: data.length,
       ),
-      fallback: (context) => const Center(child: CircularProgressIndicator()),
+      fallback: (context) => const Center(
+          child: CircularProgressIndicator(
+        color: Colors.black,
+      )),
     );
 
 ///****************** E2
@@ -415,3 +447,11 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
+final BoxDecoration PinOtpDeco = BoxDecoration(
+  color: Colors.black,
+  shape: BoxShape.circle,
+);
+final BoxDecoration PinOtpDeco1 = BoxDecoration(
+  color: Colors.red,
+  shape: BoxShape.circle,
+);

@@ -111,7 +111,7 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(
                           height: 30.0,
                         ),
-                        defaultFormText(
+                        /*defaultFormText(
                           isPassword: AppRegisterCubit.get(context).isPassword,
                           onchange: (value) {},
                           validate: (value) {
@@ -133,7 +133,7 @@ class RegisterScreen extends StatelessWidget {
                                 ? const Icon(Icons.visibility)
                                 : const Icon(Icons.visibility_off_outlined),
                           ),
-                        ),
+                        ),*/
                         const SizedBox(
                           height: 30.0,
                         ),
@@ -192,8 +192,7 @@ class RegisterScreen extends StatelessWidget {
                             },
                             text: 'Register',
                             isUpperCase: true,
-                            color: Colors.grey,
-                            textColor: Colors.white,
+
                           ),
                           fallback: (context) =>
                               const Center(child: CircularProgressIndicator()),

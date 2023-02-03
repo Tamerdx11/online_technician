@@ -92,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                                     '${userModel.name}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 22.0,
+                                      fontSize: 16.0,
                                       color: Colors.black,
                                     ),
                                   ),

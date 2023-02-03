@@ -32,8 +32,11 @@ class AppLoginCubit extends Cubit<AppLoginState> {
           },
           codeSent: (String verificationId, int? resendToken) {
             verify = verificationId;
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {},
+            },
+          codeAutoRetrievalTimeout: (String verificationId) {
+            verify = verificationId;
+            },
+          timeout: Duration(seconds: 3),
         )
         .then((value) {})
         .catchError((error) {

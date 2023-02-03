@@ -12,6 +12,8 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+import '../../shared/components/components.dart';
+
 class GoogleMaps2 extends StatefulWidget {
   const GoogleMaps2({Key? key}) : super(key: key);
 
@@ -33,18 +35,26 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
   );
   LatLng currentLocation = _initialCameraPosition.target;
   final HaversineDistance distance=new HaversineDistance(4,5,6,7);
+  bool ccc=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Google maps'),
-      ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title:Text("حساب المسافة",style: TextStyle(color: Colors.black,fontFamily: 'NotoNaskhArabic',fontWeight: FontWeight.w600)),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
+          )),
       body:  Stack(
         alignment: Alignment.center,
         children:[ GoogleMap(
           zoomControlsEnabled: false,
           markers: _markers,
-
           initialCameraPosition:_initialCameraPosition,
           onMapCreated: (GoogleMapController controller){
             _controller.complete(controller);
@@ -57,43 +67,74 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
             });
           },
         ),
-        if(v)
-          Positioned(
-            top: 20.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 6.0,
-                horizontal: 12.0,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.yellowAccent,
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 6.0,
-                  )
-                ],
-              ),
-              child: Text(
-                '${CacheHelper.getData(key: 'name2')} is ${CacheHelper.getData(key: 'dis')} KM away from you',
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
+          if(v)
+            Positioned(
+              top: 20.0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6.0,
+                  horizontal: 12.0,
                 ),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 2),
+                      blurRadius: 6.0,
+                    )
+                  ],
+                ),
+                child: RichText(
+                  text: TextSpan(
+                    text: '${CacheHelper.getData(key: 'name2')}',
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                    children: <TextSpan> [
+                      TextSpan(
+                        text: '${CacheHelper.getData(key: 'dis')} KM',
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: ' away from you',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+
+                  ),
+                ),
+
+                /*Text(
+                  '${CacheHelper.getData(key: 'name2')} is ${CacheHelper.getData(key: 'dis')} KM away from you',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),*/
               ),
             ),
-          ),
-
-
-      ],
+        ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
         onPressed: () async {
           GoogleMapController controller = await _controller.future;
           setState(()  {
             v=true;
+            ccc=true;
             controller.animateCamera(CameraUpdate.newCameraPosition(
                 CameraPosition(
                   target: LatLng(from.latitude, from.longitude),
@@ -105,21 +146,21 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
           double dis =distance.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
           print(dis);
         },
-        child: Icon(Icons.directions),
+        child: Icon(Icons.directions,color:ccc?Colors.red:Colors.black,size: 35),
       ),
     );
   }
   void _setMarker(LatLng _location)  {
     print('******************************************mapsmapsmapsmapsmapsmapsmaps******************************');
     Marker newMarker = Marker(
-        markerId: MarkerId(_location.toString()),
-        icon: BitmapDescriptor.defaultMarker,
-        // icon: _locationIcon,
-        position: _location,
-        infoWindow: InfoWindow(
-          title:c ? CacheHelper.getData(key: 'name1'):CacheHelper.getData(key: 'name2'),
-          //snippet: "${currentLocation.latitude}, ${currentLocation.longitude}"),
-        ),
+      markerId: MarkerId(_location.toString()),
+      icon: BitmapDescriptor.defaultMarker,
+      // icon: _locationIcon,
+      position: _location,
+      infoWindow: InfoWindow(
+        title:c ? CacheHelper.getData(key: 'name1'):CacheHelper.getData(key: 'name2'),
+        //snippet: "${currentLocation.latitude}, ${currentLocation.longitude}"),
+      ),
     );
     c=false;
     _markers.add(newMarker);

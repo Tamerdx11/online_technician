@@ -9,15 +9,17 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
+import '../shared/network/local/cache_helper.dart';
+
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
   AppLayout({Key? key}) : super(key: key);
 
   List<String> titles = [
-    'Home',
-    'Notification',
-    'Your Sent Requests',
-    'New Received Requests',
+    'الصفحة الرئيسية',
+    'الاشعارات',
+    'الطلبات المرسلة',
+    'الطلبات المستلمة',
   ];
 
   @override
@@ -30,15 +32,15 @@ class AppLayout extends StatelessWidget {
           drawer: cubit.currentIndex == 0
               ? Drawer(
                   backgroundColor: Colors.white,
-                  elevation: 20.0,
+                  elevation: 40,
                   width: 230.0,
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
                       DrawerHeader(
-                        curve: Curves.easeInOut,
+                        curve: Curves.bounceInOut,
                         decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.white70,
                         ),
                         child: Column(
                           children: [
@@ -64,6 +66,10 @@ class AppLayout extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      Container(
+                        height: .5,
+                        color: Colors.black,
                       ),
                       ListTile(
                         title: const Text(
@@ -110,13 +116,16 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.purple.withOpacity(0.65),
-            title: cubit.currentIndex != 0
-                ? Text(
-                    titles[cubit.currentIndex],
-                    style: const TextStyle(color: Colors.black),
-                  )
-                : null,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true,
+            title: Text(
+              titles[cubit.currentIndex],
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'NotoNaskhArabic',
+                  fontWeight: FontWeight.w600),
+            ),
             leading: cubit.currentIndex == 0
                 ? Builder(builder: (context) {
                     return IconButton(
@@ -137,7 +146,7 @@ class AppLayout extends StatelessWidget {
                   onPressed: () {
                     navigateTo(context, SearchScreen());
                   },
-                  icon: const Icon(Icons.search_rounded),
+                  icon: const Icon(Icons.search_rounded, color: Colors.black),
                 ),
               const SizedBox(
                 width: 3.0,
@@ -148,7 +157,8 @@ class AppLayout extends StatelessWidget {
                     navigateTo(context, const ChatsScreen());
                     AppCubit.get(context).getUsers();
                   },
-                  icon: const Icon(Icons.mark_unread_chat_alt_rounded),
+                  icon:
+                      const Icon(Icons.messenger_outline, color: Colors.black),
                 ),
               const SizedBox(
                 width: 5.0,
@@ -156,16 +166,25 @@ class AppLayout extends StatelessWidget {
             ],
           ),
           floatingActionButton: cubit.currentIndex == 0
-              ? FloatingActionButton(
-                  onPressed: () {
-                    navigateTo(context, NewPostScreen());
-                  },
-                  backgroundColor: Colors.blue.withOpacity(0.6),
-                  child: const Icon(Icons.add_photo_alternate_outlined),
+              ? Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 25,
+                    ),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        navigateTo(context, NewPostScreen());
+                      },
+                      backgroundColor: Colors.white,
+                      child: const Icon(Icons.post_add_outlined,
+                          color: Colors.black),
+                    ),
+                  ),
                 )
               : null,
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.redAccent.withOpacity(0.65),
+            selectedItemColor: Colors.black,
             type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {
