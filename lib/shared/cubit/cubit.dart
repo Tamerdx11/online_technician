@@ -29,6 +29,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get person data ----------
 
   var model;
+  List<UserModel> myuser = [];
   void getUserData() {
     FirebaseFirestore.instance
         .collection('person')
@@ -38,6 +39,7 @@ class AppCubit extends Cubit<AppState> {
         {
           CacheHelper.savaData(key: 'hasProfession', value: true);
           model = TechnicianModel.fromJson(value.data());
+          myuser.add(UserModel.fromJson(value.data()));
           emit(AppGetUserSuccessState());
         }
         else {
@@ -55,6 +57,7 @@ class AppCubit extends Cubit<AppState> {
               .catchError((error) {});
         }
       });
+
     }).catchError((error){
       emit(AppGetUserErrorState(error.toString()));
     });
@@ -71,6 +74,7 @@ class AppCubit extends Cubit<AppState> {
             userModel: UserModel.fromJson(value.data()),),);
     }).catchError((error){
       print(error.toString());
+
     });
   }
 
@@ -85,11 +89,11 @@ class AppCubit extends Cubit<AppState> {
   ];
   List<BottomNavigationBarItem> bottomItems = const[
     BottomNavigationBarItem(
-      icon: Icon(Icons.home_filled),
+      icon: Icon(Icons.home_sharp),
       label: "Home",
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.notification_add_rounded),
+      icon: Icon(Icons.notifications_active),
       label: "notification",),
     BottomNavigationBarItem(
       icon: Icon(Icons.hail),
@@ -229,11 +233,9 @@ class AppCubit extends Cubit<AppState> {
           .catchError((error) {});
     }).catchError((error) {});
   }
-
   ///---------- get all users ----------
 
   List<UserModel> users = [];
-  List<UserModel> myuser = [];
   void getUsers() {
     users = [];
     FirebaseFirestore.instance.collection('person').get().then((value) {
@@ -251,6 +253,28 @@ class AppCubit extends Cubit<AppState> {
       print(error.toString());
     });
   }
+
+  ///---------- get one users ----------
+  bool k=false;
+  List<UserModel> user = [];
+  Future<void> getUser(String id)async {
+    await FirebaseFirestore.instance.collection('person').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['uId'] == id) {
+          user.add(UserModel.fromJson(element.data()));
+          k=true;
+        }
+        if(k){
+          break;
+        }
+      }
+      emit(AppGetAllUsersSuccessState());
+    }).catchError((error) {
+      emit(AppGetAllUsersErrorState(error.toString()));
+      print(error.toString());
+    });
+  }
+
 
   ///---------- send message ----------
 
@@ -339,11 +363,11 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get search results ---------
 
   List<dynamic> search = [];
-  void getSearchData(String value) {
+  void getSearchData(String value,String nameORprofession) {
     emit(AppLoadingState());
     FirebaseFirestore.instance
         .collection('person')
-        .where('name', isEqualTo: value)
+        .where(nameORprofession, isEqualTo: value)
         .get()
         .then((value) {
       search = [];
@@ -353,6 +377,8 @@ class AppCubit extends Cubit<AppState> {
       });
     }).catchError((error) {});
   }
+
+
 
   ///------------ has profession change ---------------
 
@@ -466,11 +492,18 @@ class AppCubit extends Cubit<AppState> {
 
   ///----------  update profile data ----------//
 
+  String? professionvaluuu='نقاش';
+  void changevalue(String? value){
+    professionvaluuu=value;
+    print("///////////////////////////////////////////////////////////////////////////////");
+    print(professionvaluuu);
+    emit(change());
+  }
   void updateProfileDate({
     String? name,
     String? phone,
     String? location,
-    String? profession,
+    String? professionvaluuu,
     String? bio,
     String? nationalId,
     required BuildContext context,
@@ -498,7 +531,7 @@ class AppCubit extends Cubit<AppState> {
         idCardPhoto: uploadedIdCardImage,
         location: location,
         token: model.token,
-        profession: profession,
+        profession: professionvaluuu,
         userImage: uploadedProfileImage,
         coverImage: uploadedProfileImage,
         hasProfession: true,
@@ -538,11 +571,13 @@ class AppCubit extends Cubit<AppState> {
           .set(newModel.toMap())
           .then((value) {
         getUserData();
+        print(professionvaluuu);
         Navigator.pop(context);
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
       });
     }
   }
+
 
 }

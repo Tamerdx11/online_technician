@@ -21,17 +21,26 @@ class NewPostScreen extends StatelessWidget {
         var cubit = AppCubit.get(context).model;
 
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: Colors.blue.withOpacity(0.8),
-            title: const Text('New Post'),
-          ),
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              title:Text("اضافة بوست",style: TextStyle(color: Colors.black,fontFamily: 'NotoNaskhArabic',fontWeight: FontWeight.w600)),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
+              )),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
               child: Card(
-                elevation: 2.0,
+                elevation: 0,
+                shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: const BorderSide(color: Colors.black,width: .3,)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -44,48 +53,20 @@ class NewPostScreen extends StatelessWidget {
                         ),
                       Row(
                         children: [
-                          CircleAvatar(
-                            radius: 27,
-                            backgroundColor: Colors.green.withOpacity(0.5),
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundImage:
-                                  NetworkImage('${cubit?.userImage}'),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   '${cubit.name}',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.0,
+                                    fontWeight: FontWeight.w600,fontSize: 16,
                                   ),
+                                  textDirection: TextDirection.rtl,
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .caption!
-                                          .copyWith(
-                                            height: 1.6,
-                                          ),
-                                    ),
-                                    const SizedBox(
-                                      width: 7.0,
-                                    ),
-                                    const Icon(
-                                      Icons.location_on,
-                                      color: Colors.red,
-                                      size: 20.0,
-                                    ),
                                     Text(
                                       cubit?.location,
                                       style: Theme.of(context)
@@ -95,24 +76,44 @@ class NewPostScreen extends StatelessWidget {
                                             height: 1.6,
                                             fontWeight: FontWeight.bold,
                                           ),
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: Colors.black,
+                                      size: 20.0,
+                                    ),
+                                    const SizedBox(
+                                      width: 7.0,
+                                    ),
+                                    Text(
+                                      '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption!
+                                          .copyWith(
+                                        height: 1.6,
+                                      ),
+                                      textDirection: TextDirection.rtl,
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          CircleAvatar(
+                            radius: 27,
+                            backgroundColor: Colors.green.withOpacity(0.5),
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundImage:
+                              NetworkImage('${cubit?.userImage}'),
+                            ),
+                          ),
                         ],
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.all(5.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 1.0,
-                          color: Colors.grey[300],
-                        ),
                       ),
                       const SizedBox(
                         height: 15.0,
@@ -120,9 +121,11 @@ class NewPostScreen extends StatelessWidget {
                       TextFormField(
                         controller: textController,
                         decoration: const InputDecoration(
-                          hintText: "what is on your mind?...",
+                          hintText: "اكتب نبذة عن اعمالك...",
                           border: InputBorder.none,
+                          hintTextDirection: TextDirection.rtl,
                         ),
+                        textDirection: TextDirection.rtl,
                       ),
                       if(AppCubit.get(context).postImageFile.isNotEmpty)
                         TextButton(onPressed: () {
@@ -252,47 +255,35 @@ class NewPostScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Container(
                           width: double.infinity,
-                          height: 1.0,
-                          color: Colors.grey[300],
+                          height: .1,
+                          color: Colors.black,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                         child: Row(
                           children: [
-                            TextButton(
+                            IconButton(
                               onPressed: () {
                                 AppCubit.get(context).getPostImage();
                               },
-                              child: const Icon(
+                              icon: const Icon(
                                 Icons.add_photo_alternate_outlined,
                                 size: 25.0,
+                                color: Colors.black,
                               ),
                             ),
-                            Container(
-                              width: 1.2,
-                              height: 36.0,
-                              color: Colors.grey[300],
-                            ),
-                            TextButton(
+                            IconButton(
                               onPressed: () {
                                 AppCubit.get(context).getPostImageCamera();
                               },
-                              child: const Icon(Icons.add_a_photo_outlined,
-                                  size: 25.0),
-                            ),
-                            Container(
-                              width: 1.2,
-                              height: 36.0,
-                              color: Colors.grey[300],
+                              icon: const Icon(
+                                  Icons.add_a_photo_outlined,
+                                  size: 25.0,
+                                color: Colors.black,
+                              ),
                             ),
                             const Spacer(),
-                            Text('Share Us Now',
-                                style: TextStyle(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17.0,
-                                    letterSpacing: 0.8)),
                             const SizedBox(
                               width: 10.0,
                             ),
@@ -327,19 +318,13 @@ class NewPostScreen extends StatelessWidget {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  border: Border.all(
-                                      color: Colors.teal, width: 1.2),
-                                  color: Colors.green.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  color: Colors.black,
                                 ),
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 4.0, horizontal: 22.0),
-                                  child: Icon(
-                                    Icons.send_sharp,
-                                    size: 27.0,
-                                    color: Colors.green,
-                                  ),
+                                  child: Text('شارك اعمالك الان',textDirection: TextDirection.rtl,style: TextStyle(color: Colors.white,fontSize: 16)),
                                 ),
                               ),
                             ),
