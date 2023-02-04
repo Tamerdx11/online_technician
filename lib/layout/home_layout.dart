@@ -9,8 +9,6 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
-import '../shared/network/local/cache_helper.dart';
-
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
   AppLayout({Key? key}) : super(key: key);
@@ -40,14 +38,13 @@ class AppLayout extends StatelessWidget {
                       DrawerHeader(
                         curve: Curves.bounceInOut,
                         decoration: const BoxDecoration(
-                          color: Colors.white70,
+                          color: Colors.black12,
                         ),
                         child: Column(
                           children: [
                             CircleAvatar(
-                              radius: 48.0,
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              radius: 46.5,
+                              backgroundColor:Colors.greenAccent,
                               child: CircleAvatar(
                                 radius: 45.0,
                                 backgroundImage:
@@ -55,7 +52,7 @@ class AppLayout extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(
-                              height: 8.0,
+                              height: 10.0,
                             ),
                             Text(
                               '${cubit.model?.name}',
@@ -67,31 +64,40 @@ class AppLayout extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        height: .5,
-                        color: Colors.black,
-                      ),
                       ListTile(
-                        title: const Text(
-                          'الملف الشخصي',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
+                        title: const Center(
+                          child:  Text(
+                            'الملف الشخصي',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                            ),
                           ),
                         ),
                         onTap: () {
                           Navigator.pop(context);
                           navigateTo(context, ProfileScreen(
                             id: AppCubit.get(context).model.uId,
+                            name: AppCubit.get(context).model.name,
                           ));
                         },
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: Container(
+                          height: .5,
+                          width: double.infinity,
+                          color: Colors.grey,
+                        ),
+                      ),
                       ListTile(
-                        title: const Text(
-                          'الاعدادات',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
+                        title:const Center(
+                          child: Text(
+                            'الاعدادات',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                            ),
                           ),
                         ),
                         onTap: () {
@@ -99,12 +105,22 @@ class AppLayout extends StatelessWidget {
                           navigateTo(context, SettingsScreen());
                         },
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: Container(
+                          height: .5,
+                          width: double.infinity,
+                          color: Colors.grey,
+                        ),
+                      ),
                       ListTile(
-                        title: const Text(
-                          'تسجيل الخروج',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
+                        title: const Center(
+                          child: Text(
+                            'تسجيل الخروج',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                            ),
                           ),
                         ),
                         onTap: () {
@@ -119,7 +135,7 @@ class AppLayout extends StatelessWidget {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            elevation: 0,
+            elevation: 3.5,
             centerTitle: true,
             title: Text(
               titles[cubit.currentIndex],

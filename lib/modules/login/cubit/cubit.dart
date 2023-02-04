@@ -1,15 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online_technician/layout/home_layout.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
-import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
-import 'package:online_technician/shared/cubit/cubit.dart';
-import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class AppLoginCubit extends Cubit<AppLoginState> {
   AppLoginCubit() : super(AppLoginInitialState());
@@ -25,7 +19,7 @@ class AppLoginCubit extends Cubit<AppLoginState> {
         .verifyPhoneNumber(
           phoneNumber: '+2$phone',
           verificationCompleted: (PhoneAuthCredential credential) {
-            showToast(text: "تم ارسال الكود", state: ToastState.SUCCESS);
+            showToast(text: "تم ارسال الكود, يرجي فحص البريد الخاص بك", state: ToastState.SUCCESS);
           },
           verificationFailed: (FirebaseAuthException e) {
             emit(AppLoginErrorState(e.toString()));
@@ -36,7 +30,7 @@ class AppLoginCubit extends Cubit<AppLoginState> {
           codeAutoRetrievalTimeout: (String verificationId) {
             verify = verificationId;
             },
-          timeout: Duration(seconds: 3),
+          timeout: const Duration(seconds: 3),
         )
         .then((value) {})
         .catchError((error) {
@@ -46,7 +40,9 @@ class AppLoginCubit extends Cubit<AppLoginState> {
 
   void checkCode({
     required String id,
-  required String code}){
+  required String code,
+  })
+  {
     try {
       PhoneAuthCredential credential =
       PhoneAuthProvider.credential(
@@ -57,12 +53,10 @@ class AppLoginCubit extends Cubit<AppLoginState> {
         emit(AppLoginSuccessState(value.user!.uid.toString()));
       })
           .catchError((error) {
-        print('-------------------------------login error--------------------------');
-        print(error.toString());
+        showToast(text: "الكود غير صحيح", state: ToastState.ERROR);
       });
     } catch (e) {
-      print('-------------------------------login error with e--------------------------');
-      print(e.toString());
+      showToast(text: "حدث خطأ في التسجيل يرجي المحاولة لاحقا", state: ToastState.ERROR);
     }
   }
 

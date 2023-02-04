@@ -20,7 +20,7 @@ class ChatsScreen extends StatelessWidget {
               centerTitle: true,
               backgroundColor: Colors.white,
               elevation: 0,
-              title: const Text("المحادثات",
+              title:const Text("المحادثات",
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'NotoNaskhArabic',
@@ -75,38 +75,39 @@ class ChatsScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5.0),
             child: Card(
+              elevation: 5.0,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide:const BorderSide(
                     color: Colors.black,
                     width: .3,
-                  )),
+                  ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Expanded(
-                    child: Text(
-                      chatData[id][0],
-                      style: const TextStyle(
-                        height: 1.4,
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      textDirection: TextDirection.rtl,
+                  const SizedBox(width: 20.0,),
+                  Text(
+                    chatData[id][0],
+                    style: const TextStyle(
+                      height: 1.4,
+                      fontSize: 13.0,
+                      color: Colors.black45,
+                      fontWeight: FontWeight.w600
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textDirection: TextDirection.rtl,
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  const Spacer(),
                   Text(
                     chatData[id][3],
                     style: const TextStyle(
                         height: 1.4,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16.0),
+                        fontSize: 15.0,
+                    ),
                     textDirection: TextDirection.rtl,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -114,10 +115,17 @@ class ChatsScreen extends StatelessWidget {
                   const SizedBox(
                     width: 30,
                   ),
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(
-                      chatData[id][2].toString(),
+                  Padding(
+                    padding: const EdgeInsets.all(3.5),
+                    child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: Colors.greenAccent,
+                      child: CircleAvatar(
+                        radius: 29.1,
+                        backgroundImage: NetworkImage(
+                          chatData[id][2].toString(),
+                        ),
+                      ),
                     ),
                   ),
                 ],

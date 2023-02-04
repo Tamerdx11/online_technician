@@ -58,7 +58,7 @@ class ChatDetailsScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 22.5,
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.black45,
                         child: CircleAvatar(
                           radius: 20.0,
                           backgroundImage: NetworkImage(
@@ -73,7 +73,7 @@ class ChatDetailsScreen extends StatelessWidget {
                         userModel.name.toString(),
                         style: const TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black,
+                          color: Colors.black54,
                         ),
                       ),
                     ],

@@ -72,10 +72,7 @@ class AppCubit extends Cubit<AppState> {
         .get().then((value){
           navigateTo(context, ChatDetailsScreen(
             userModel: UserModel.fromJson(value.data()),),);
-    }).catchError((error){
-      print(error.toString());
-
-    });
+    }).catchError((error){});
   }
 
   ///---------- main layout navigation ----------
@@ -378,8 +375,6 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
-
-
   ///------------ has profession change ---------------
 
   bool hasProfession = CacheHelper.getData(key: 'hasProfession');
@@ -492,18 +487,16 @@ class AppCubit extends Cubit<AppState> {
 
   ///----------  update profile data ----------//
 
-  String? professionvaluuu='نقاش';
-  void changevalue(String? value){
-    professionvaluuu=value;
-    print("///////////////////////////////////////////////////////////////////////////////");
-    print(professionvaluuu);
+  String? profession='أختر الحرفة الخاصة بك';
+  void changeValue(String? value){
+    profession=value;
     emit(change());
   }
+
   void updateProfileDate({
     String? name,
-    String? phone,
     String? location,
-    String? professionvaluuu,
+    String? profession,
     String? bio,
     String? nationalId,
     required BuildContext context,
@@ -524,14 +517,14 @@ class AppCubit extends Cubit<AppState> {
       TechnicianModel newModel = TechnicianModel(
         name: name,
         uId: model!.uId,
-        phone: phone,
+        phone: model.phone,
         bio: bio,
         chatList:model.chatList,
         nationalId: nationalId,
         idCardPhoto: uploadedIdCardImage,
         location: location,
         token: model.token,
-        profession: professionvaluuu,
+        profession: profession,
         userImage: uploadedProfileImage,
         coverImage: uploadedProfileImage,
         hasProfession: true,
@@ -554,7 +547,7 @@ class AppCubit extends Cubit<AppState> {
       emit(AppUserUpdateLoadingState());
       UserModel newModel = UserModel(
         name: name,
-        phone: phone,
+        phone: model.phone,
         location: location,
         token: model.token,
         chatList: model.chatList,
@@ -571,13 +564,11 @@ class AppCubit extends Cubit<AppState> {
           .set(newModel.toMap())
           .then((value) {
         getUserData();
-        print(professionvaluuu);
         Navigator.pop(context);
       }).catchError((error) {
         emit(AppUserUpdateErrorState());
       });
     }
   }
-
 
 }

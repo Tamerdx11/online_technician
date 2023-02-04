@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-
 import '../../layout/home_layout.dart';
 import '../../shared/components/components.dart';
 import '../../shared/cubit/cubit.dart';
@@ -12,28 +11,25 @@ import '../register/register_screen.dart';
 import 'cubit/states.dart';
 import 'login_screen.dart';
 
-class verifycode extends StatelessWidget {
+class verifyCodeScreen extends StatelessWidget {
 
   final TextEditingController _pintotpcontrol = TextEditingController();
   final FocusNode _pintptofoucus = FocusNode();
-  String? varificationcode;
-  String phonenumber;
-  verifycode({required this.phonenumber});
+  String? verificationCode;
+  String phoneNumber;
 
+  verifyCodeScreen({super.key,required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) => AppLoginCubit(),
       child: BlocConsumer<AppLoginCubit, AppLoginState>(
         listener: (context, state) {
-          ///----- login error -----
           if (state is AppLoginErrorState) {
             showToast(text: state.error, state: ToastState.ERROR);
           }
-
-          ///----- login success-----
           if (state is AppLoginSuccessState) {
-            showToast(text: "نجح تسجيل الدخول", state: ToastState.SUCCESS);
+            showToast(text: "تم تسجيل الدخول بنجاح", state: ToastState.SUCCESS);
             FirebaseFirestore.instance
                 .collection('person')
                 .doc(state.uid.toString())
@@ -45,9 +41,7 @@ class verifycode extends StatelessWidget {
                 CacheHelper.savaData(key: 'uId', value: state.uid.toString());
                 navigateToAndFinish(context, AppLayout());
               }
-            }).catchError((error) {
-              print('==========error=======');
-            });
+            }).catchError((error) {});
           }
         },
         builder: (context, state) {
@@ -60,30 +54,46 @@ class verifycode extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 5,right: 20),
+                          padding: const EdgeInsets.only(bottom: 10.0,right: 20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text('يرجي ادخال كود التحقق',style: TextStyle(color:Colors.black,fontSize: 25,fontWeight: FontWeight.w600)),
+                            children: const [
+                              Text(
+                                  'يرجي إدخال رمز التحقق',
+                                  style: TextStyle(
+                                      color:Colors.black,
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold,
+                                  ),
+                              ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 20,right: 20),
+                          padding: const EdgeInsets.only(bottom: 20.0,right: 20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text('تم ارسال رسالة مرفق بها الكود',style: TextStyle(fontWeight: FontWeight.w600)),
+                              Text(
+                                  'تم إرسال رسالة مرفق بها الرمز علي الرقم $phoneNumber',
+                                  style:const TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.grey,
+                                  ),
+                              ),
                             ],
                           ),
                         ),
+                        const SizedBox(height: 20.0,),
                         PinPut(
                               fieldsCount: 6,
                               textStyle: const TextStyle(
-                              color: Colors.white, fontSize: 25,),
+                                color: Colors.white,
+                                fontSize: 25,
+                              ),
                               eachFieldHeight: 30,
                               eachFieldWidth: 30,
-                              eachFieldPadding: EdgeInsets.all(5),
+                              eachFieldPadding:const EdgeInsets.all(5),
                               focusNode: _pintptofoucus,
                               controller: _pintotpcontrol,
                               cursorColor: Colors.white,
@@ -97,40 +107,28 @@ class verifycode extends StatelessWidget {
                                   code: _pintotpcontrol.text);
                             }
                         ),
-                        SizedBox(height: 20,),
-                        Center(
-                          child: defaultButton(
-                            function: () {
-                              navigateTo(context, LoginScreen());
-                            },
-                            text: 'ارسال الكود',
-                            isUpperCase: true,
-                            width: 125,
-                            color: Colors.red,
-                            size: 18,
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                        Center(
-                          child: defaultButton(
-                            function: () {
-                              print("**********************************");
-                              print(phonenumber);
-                              AppLoginCubit.get(context).userLogin(phone: phonenumber);
-                            },
-                            text: 'اعادة ارسال',
-                            isUpperCase: true,
-                            width: 125,
-                            color: Colors.black,
-                            size: 18,
-                          ),
+                        const SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: (){
+                                AppLoginCubit.get(context).userLogin(phone: phoneNumber);
+                              },
+                              child:const Text(
+                                  "إعادة ارسال الرمز",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),),
+                            ),
+                            const Text(' في حالة عدم استلام رمز التحقيق'),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-
-              )
+              ),
           );
         },
       ),

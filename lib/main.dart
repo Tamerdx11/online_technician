@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// @dart=2.9
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +34,7 @@ void main() async {
 
   ///....... app opened ...............
   FirebaseMessaging.onMessage.listen((event) {
-    showToast(text: '${event.notification!.title.toString()}: ${event.notification!.body.toString()}', state: ToastState.SUCCESS);
+    showToast(text: '${event.notification.title.toString()}: ${event.notification.body.toString()}', state: ToastState.SUCCESS);
   });
 
   ///...........app opened in background........
@@ -43,7 +43,7 @@ void main() async {
   ///............app closed......
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  Widget? widget = null;
+  Widget widget = null;
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
@@ -75,10 +75,10 @@ void main() async {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  bool? isDark = false;
+  bool isDark = false;
   Widget widget;
 
-  MyApp({super.key, this.isDark, required this.widget});
+  MyApp({Key key, this.isDark, this.widget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

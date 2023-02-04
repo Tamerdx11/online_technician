@@ -1,30 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online_technician/layout/home_layout.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/modules/login/verify_code.dart';
-import 'package:online_technician/modules/register/register_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
-import 'package:online_technician/shared/cubit/cubit.dart';
-import 'package:online_technician/shared/network/local/cache_helper.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
   var code = "";
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
+  var phoneController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AppLoginCubit(),
       child: BlocConsumer<AppLoginCubit, AppLoginState>(
-        listener: (context, state) {
-
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           var cubit = AppLoginCubit.get(context);
 
@@ -61,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: const [
                              Text(
-                                'سجل دخول الان لاستكشاف افضل الفنيين...',
+                                'أستكشاف افضل الفنيين في كل المجالات',
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   color: Colors.grey,
@@ -82,8 +74,8 @@ class LoginScreen extends StatelessWidget {
                                 return null;
                               }
                             },
-                            controller: passwordController,
-                            label: 'الهاتف',
+                            controller: phoneController,
+                            label: 'رقم الهاتف',
                             keyboardType: TextInputType.phone,
                             prefixIcon:  const Icon(Icons.phone_outlined,color:Colors.black),
                           ),
@@ -94,13 +86,11 @@ class LoginScreen extends StatelessWidget {
                               function: () {
                                 if (formKey.currentState!.validate()){
                                 cubit.userLogin(
-                                  phone: passwordController.text,
-                                );
-                                navigateTo(context, verifycode(phonenumber: passwordController.text,));
+                                  phone: phoneController.text,);
+                                navigateTo(context, verifyCodeScreen(phoneNumber: phoneController.text,));
                                 }
-
                               },
-                              text: 'ارسال الكود الخاص بك',
+                              text: 'تسجيل',
                               isUpperCase: true,
                             ),
                         ],

@@ -57,24 +57,25 @@ Widget defaultFormText({
       decoration: InputDecoration(
         prefixIconColor: Colors.black,
         suffixIconColor: Colors.black,
+        focusColor: Colors.grey,
         labelText: label,
-        floatingLabelStyle: TextStyle(color: Colors.black),
+        floatingLabelStyle:const TextStyle(color: Colors.black54),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         hintTextDirection: TextDirection.rtl,
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(
-              30,
+              12,
             ),
-            borderSide: BorderSide(color: Colors.black)),
+            borderSide:const BorderSide(color: Colors.grey)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.black)),
+            borderRadius: BorderRadius.circular(12),
+            borderSide:const BorderSide(color: Colors.grey)),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(
-              30,
+              12,
             ),
-            borderSide: BorderSide(color: Colors.black)),
+            borderSide:const BorderSide(color: Colors.grey)),
       ),
       onFieldSubmitted: onSubmitted,
       onChanged: onchange,
@@ -116,9 +117,10 @@ PreferredSizeWidget defaultAppBar({
         child: Text(
           title,
           style: TextStyle(
-              color: Colors.black,
+              color: textColor,
               fontFamily: 'NotoNaskhArabic',
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       actions: actions,

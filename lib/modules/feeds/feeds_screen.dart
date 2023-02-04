@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
@@ -8,15 +7,11 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
-
-import '../../models/user.dart';
 import '../../shared/network/local/cache_helper.dart';
-import '../chat_details/chat_details_screen.dart';
 import '../google_map2/GoogleMaps2.dart';
 
 class FeedsScreen extends StatelessWidget {
-  FeedsScreen({Key? key}) : super(key: key);
-  final CarouselController _controller = CarouselController();
+  const FeedsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +19,7 @@ class FeedsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Container(
-          color: Colors.white,
-          //color: Color(0xFF898F9C),
+          color: Colors.white10,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: StreamBuilder(
@@ -41,7 +35,7 @@ class FeedsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       const SizedBox(
-                        height: 15.0,
+                        height: 5.0,
                       ),
                       ListView.separated(
                         itemCount: snapshot.data!.docs.length,
@@ -59,16 +53,15 @@ class FeedsScreen extends StatelessWidget {
                                 borderSide: const BorderSide(
                                   color: Colors.black,
                                   width: .3,
-                                )),
+                                ),),
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            elevation: 0,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
+                            elevation: 3.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: Row(
                                     children: [
                                       snapshot.data!.docs[index]
                                                   .data()['uId'] ==
@@ -86,20 +79,18 @@ class FeedsScreen extends StatelessWidget {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    ///go to chat
                                                     AppCubit.get(context)
                                                         .goToChatDetails(
-                                                            snapshot.data!
-                                                                .docs[index]
-                                                                .data()['uId'],
-                                                            context);
+                                                            snapshot.data!.docs[index].data()['uId'],
+                                                            context,
+                                                    );
                                                   },
                                                   child: const Padding(
                                                     padding:
                                                         EdgeInsets.all(6.0),
                                                     child: Icon(
                                                       Icons.whatsapp_sharp,
-                                                      color: Colors.black,
+                                                      color: Colors.black87,
                                                       size: 27.0,
                                                     ),
                                                   ),
@@ -181,8 +172,8 @@ class FeedsScreen extends StatelessWidget {
                                                   snapshot.data!.docs[index]
                                                       .data()['name'],
                                                   style: const TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
                                                   ),
                                                   textDirection:
                                                       TextDirection.rtl,
@@ -191,6 +182,8 @@ class FeedsScreen extends StatelessWidget {
                                                   navigateTo(context, ProfileScreen(
                                                     id: snapshot.data!.docs[index]
                                                         .data()['uId'],
+                                                    name:snapshot.data!.docs[index]
+                                                        .data()['name'] ,
                                                   ));
                                                 },
                                               ),
@@ -205,17 +198,16 @@ class FeedsScreen extends StatelessWidget {
                                                         .textTheme
                                                         .caption!
                                                         .copyWith(
+                                                      color: Colors.grey,
                                                           height: 1.6,
-                                                          fontWeight:
-                                                              FontWeight.bold,
                                                         ),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                   ),
                                                   const Icon(
-                                                    Icons.location_on_outlined,
-                                                    color: Colors.black,
-                                                    size: 20.0,
+                                                    Icons.where_to_vote,
+                                                    color: Colors.grey,
+                                                    size: 17.0,
                                                   ),
                                                   const SizedBox(
                                                     width: 7.0,
@@ -255,192 +247,208 @@ class FeedsScreen extends StatelessWidget {
                                           navigateTo(context, ProfileScreen(
                                             id: snapshot.data!.docs[index]
                                                 .data()['uId'],
+                                            name: snapshot.data!.docs[index]
+                                                .data()['name'] ,
                                           ));
                                         },
                                       ),
                                     ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 5.0,
-                                      bottom: 20.0,
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  height: 0.3,
+                                  color: Colors.black,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 10.0,
+                                    right: 10.0,
+                                    top: 5.0,
+                                    bottom: 20.0,
+                                  ),
+                                  child: Text(
+                                    snapshot.data!.docs[index]
+                                        .data()['postText'],
+                                    style:const TextStyle(
+                                      fontSize: 15,
                                     ),
-                                    child: Text(
-                                      snapshot.data!.docs[index]
-                                          .data()['postText'],
-                                      style: TextStyle(
-                                        fontSize: 15,
+                                    textDirection: TextDirection.rtl,
+                                    maxLines: 5,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (snapshot.data!.docs[index]
+                                    .data()['postImages']
+                                    .isNotEmpty)
+                                  CarouselSlider.builder(
+                                    itemCount: snapshot.data!.docs[index]
+                                        .data()['postImages']
+                                        .length,
+                                    itemBuilder: (BuildContext context,
+                                            int itemIndex,
+                                            int pageViewIndex) =>
+                                        InkWell(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              snapshot.data!.docs[index]
+                                                  .data()['postImages']
+                                                      ['$itemIndex']
+                                                  .toString(),
+                                            ),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        width: double.infinity,
                                       ),
-                                      textDirection: TextDirection.rtl,
-                                      maxLines: 5,
-                                      overflow: TextOverflow.ellipsis,
+                                      onTap: () async {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (context) => Dialog(
+                                              insetPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                              insetAnimationCurve:
+                                                  Curves.easeInOut,
+                                              insetAnimationDuration:
+                                                  const Duration(
+                                                      milliseconds: 1500),
+                                              child: Container(
+                                                height: 400.0,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        snapshot
+                                                            .data!.docs[index]
+                                                            .data()[
+                                                                'postImages']
+                                                                ['$itemIndex']
+                                                            .toString(),
+                                                      ),
+                                                      fit: BoxFit.fill),
+                                                ),
+                                              )),
+                                        );
+                                      },
+                                    ),
+                                    options: CarouselOptions(
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 0.85,
+                                      autoPlay: false,
+                                      aspectRatio: 1.0,
+                                      height: 300,
+                                      enableInfiniteScroll: false,
                                     ),
                                   ),
-                                  if (snapshot.data!.docs[index]
-                                      .data()['postImages']
-                                      .isNotEmpty)
-                                    CarouselSlider.builder(
-                                      itemCount: snapshot.data!.docs[index]
-                                          .data()['postImages']
-                                          .length,
-                                      itemBuilder: (BuildContext context,
-                                              int itemIndex,
-                                              int pageViewIndex) =>
-                                          InkWell(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                snapshot.data!.docs[index]
-                                                    .data()['postImages']
-                                                        ['$itemIndex']
-                                                    .toString(),
-                                              ),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                          width: double.infinity,
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0,
+                                          horizontal: 10.0,
                                         ),
-                                        onTap: () async {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) => Dialog(
-                                                insetPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                insetAnimationCurve:
-                                                    Curves.easeInOut,
-                                                insetAnimationDuration:
-                                                    const Duration(
-                                                        milliseconds: 1500),
-                                                child: Container(
-                                                  height: 400.0,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                          snapshot
-                                                              .data!.docs[index]
-                                                              .data()[
-                                                                  'postImages']
-                                                                  ['$itemIndex']
-                                                              .toString(),
-                                                        ),
-                                                        fit: BoxFit.fill),
-                                                  ),
-                                                )),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                                '$trueLikes من الأشخاص أعجبهم هذا...  ',
+                                                textDirection: TextDirection.rtl,
+                                              style:const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12.0,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            const Icon(
+                                              Icons.favorite,
+                                              color: Colors.black87,
+                                              size: 30.0,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 0.2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          AppCubit.get(context).likeChange(
+                                            key: uId,
+                                            postId: snapshot
+                                                .data!.docs[index].id
+                                                .toString(),
                                           );
                                         },
-                                      ),
-                                      options: CarouselOptions(
-                                        enlargeCenterPage: true,
-                                        viewportFraction: 0.85,
-                                        autoPlay: false,
-                                        aspectRatio: 1.0,
-                                        height: 300,
-                                        enableInfiniteScroll: false,
-                                      ),
-                                    ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 5,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                  trueLikes.toString() +
-                                                      '   اعجابات',
-                                                  textDirection:
-                                                      TextDirection.rtl),
-                                              const SizedBox(
-                                                width: 5,
+                                        enableFeedback: true,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            const Text(
+                                              'أعجبني',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 13.5,
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                              const Icon(
-                                                Icons.favorite,
-                                                color: Colors.black,
-                                                size: 30,
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            snapshot.data!.docs[index]
+                                                            .data()['likes']
+                                                        [uId] ==
+                                                    true
+                                                ? const Icon(
+                                                    Icons.favorite_rounded,
+                                                    color: Colors.black87,
+                                                    size: 30,
+                                                  )
+                                                : const Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.black87,
+                                                    size: 30,
+                                                  ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: .1,
-                                    color: Colors.black,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            AppCubit.get(context).likeChange(
-                                              key: uId,
-                                              postId: snapshot
-                                                  .data!.docs[index].id
-                                                  .toString(),
-                                            );
-                                          },
-                                          enableFeedback: true,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                'اعجاب',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              snapshot.data!.docs[index]
-                                                              .data()['likes']
-                                                          [uId] ==
-                                                      true
-                                                  ? const Icon(
-                                                      Icons.favorite_rounded,
-                                                      color: Colors.black,
-                                                      size: 30,
-                                                    )
-                                                  : const Icon(
-                                                      Icons.favorite_border,
-                                                      color: Colors.black,
-                                                      size: 30,
-                                                    ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                              ],
                             ),
                           );
                         },
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 10,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
                       ),
                     ],
                   );
@@ -449,7 +457,8 @@ class FeedsScreen extends StatelessWidget {
                     child: LinearProgressIndicator(
                   color: Colors.black,
                   backgroundColor: Colors.black,
-                ));
+                ),
+                );
               },
             ),
           ),
