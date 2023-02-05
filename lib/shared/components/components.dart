@@ -476,11 +476,11 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
-final BoxDecoration PinOtpDeco = BoxDecoration(
+const BoxDecoration PinOtpDeco = BoxDecoration(
   color: Colors.black,
   shape: BoxShape.circle,
 );
-final BoxDecoration PinOtpDeco1 = BoxDecoration(
+const BoxDecoration PinOtpDeco1 = BoxDecoration(
   color: Colors.red,
   shape: BoxShape.circle,
 );

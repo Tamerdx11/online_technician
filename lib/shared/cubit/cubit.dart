@@ -369,8 +369,10 @@ class AppCubit extends Cubit<AppState> {
         .then((value) {
       search = [];
       value.docs.forEach((element) {
-        search.add(element.data());
-        emit(AppLoadingState());
+        if(element.data()['uId'] != uId){
+          search.add(element.data());
+          emit(AppLoadingState());
+        }
       });
           emit(AppLoadingState());
     }).catchError((error) {});
