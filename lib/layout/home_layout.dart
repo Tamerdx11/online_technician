@@ -162,6 +162,7 @@ class AppLayout extends StatelessWidget {
               if (cubit.currentIndex == 0)
                 IconButton(
                   onPressed: () {
+                    AppCubit.get(context).search =[];
                     navigateTo(context, SearchScreen());
                   },
                   icon: const Icon(Icons.search_rounded, color: Colors.black),

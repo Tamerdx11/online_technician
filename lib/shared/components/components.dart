@@ -332,7 +332,7 @@ Widget buildSearchResultItem(data, context) => Padding(
       child: Card(
         shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(
+            borderSide:const BorderSide(
               color: Colors.black,
               width: .3,
             )),
@@ -343,15 +343,16 @@ Widget buildSearchResultItem(data, context) => Padding(
               child: InkWell(
                 child: CircleAvatar(
                   radius: 32.5,
-                  backgroundColor: Colors.black.withOpacity(0.5),
+                  backgroundColor: Colors.black54,
                   child: CircleAvatar(
-                    radius: 35.0,
+                    radius: 31.0,
                     backgroundImage: NetworkImage(data['userImage'].toString()),
                   ),
                 ),
                 onTap: () {
                   navigateTo(context, ProfileScreen(
                     id: data['uId'].toString(),
+                    name: data['name'].toString(),
                   ));
                 },
               ),
@@ -374,6 +375,7 @@ Widget buildSearchResultItem(data, context) => Padding(
                   onTap: (){
                     navigateTo(context, ProfileScreen(
                       id: data['uId'].toString(),
+                      name: data['name'].toString(),
                     ));
                   },
                 ),
@@ -391,28 +393,26 @@ Widget buildSearchResultItem(data, context) => Padding(
               ],
             ),
             const Spacer(),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Row(
-                  children: [
-                    Text(
-                      data['location'].toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 3.0,
-                    ),
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 30.0,
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  Text(
+                    data['location'].toString(),
+                    style: const TextStyle(
                       color: Colors.black,
+                      height: 1.4,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    width: 3.0,
+                  ),
+                  const Icon(
+                    Icons.location_on_outlined,
+                    size: 30.0,
+                    color: Colors.black,
+                  ),
+                ],
               ),
             ),
             const SizedBox(

@@ -360,11 +360,11 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get search results ---------
 
   List<dynamic> search = [];
-  void getSearchData(String value,String nameORprofession) {
+  void getSearchData(String value, String key) {
     emit(AppLoadingState());
     FirebaseFirestore.instance
         .collection('person')
-        .where(nameORprofession, isEqualTo: value)
+        .where(key, isEqualTo: value)
         .get()
         .then((value) {
       search = [];
@@ -372,6 +372,7 @@ class AppCubit extends Cubit<AppState> {
         search.add(element.data());
         emit(AppLoadingState());
       });
+          emit(AppLoadingState());
     }).catchError((error) {});
   }
 
