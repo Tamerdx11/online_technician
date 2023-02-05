@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -78,7 +79,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- main layout navigation ----------
 
   int currentIndex = 0;
-  List<Widget> screenss = [
+  List<Widget> screens = [
     FeedsScreen(),
     NotificationScreen(),
     SentRequestsScreen(),
@@ -107,7 +108,6 @@ class AppCubit extends Cubit<AppState> {
 
   var curr_index = 0;
   void changeCarousel(var index){
-
     curr_index = index;
      emit(AppChangeCarouselDotState());
   }
@@ -230,6 +230,7 @@ class AppCubit extends Cubit<AppState> {
           .catchError((error) {});
     }).catchError((error) {});
   }
+
   ///---------- get all users ----------
 
   List<UserModel> users = [];
@@ -455,7 +456,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+            'users/$uId')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -514,64 +515,73 @@ class AppCubit extends Cubit<AppState> {
       uploadIdCardImage();
     }
 
-    if (hasProfession == true)
-    {
-      emit(AppTechnicianUpdateLoadingState());
-      TechnicianModel newModel = TechnicianModel(
-        name: name,
-        uId: model!.uId,
-        phone: model.phone,
-        bio: bio,
-        chatList:model.chatList,
-        nationalId: nationalId,
-        idCardPhoto: uploadedIdCardImage,
-        location: location,
-        token: model.token,
-        profession: profession,
-        userImage: uploadedProfileImage,
-        coverImage: uploadedProfileImage,
-        hasProfession: true,
-        latitude: model.latitude,
-        longitude: model.longitude,
-      );
-      FirebaseFirestore.instance
-          .collection('person')
-          .doc(uId)
-          .set(newModel.toMap())
-          .then((value) {
-        getUserData();
-        Navigator.pop(context);
-      }).catchError((error) {
-        emit(AppTechnicianUpdateErrorState());
-      });
-    }
-    else if (hasProfession == false)
-    {
-      emit(AppUserUpdateLoadingState());
-      UserModel newModel = UserModel(
-        name: name,
-        phone: model.phone,
-        location: location,
-        token: model.token,
-        chatList: model.chatList,
-        userImage: uploadedProfileImage ?? model?.userImage,
-        coverImage: uploadedCoverImage ?? model?.coverImage,
-        uId: uId,
-        hasProfession: false,
-        latitude: model.latitude,
-        longitude: model.longitude,
-      );
-      FirebaseFirestore.instance
-          .collection('person')
-          .doc(uId)
-          .set(newModel.toMap())
-          .then((value) {
-        getUserData();
-        Navigator.pop(context);
-      }).catchError((error) {
-        emit(AppUserUpdateErrorState());
-      });
-    }
+    print('----------------------------------------state------------------------');
+    print(AppCubit.get(context).state.toString());
+    emit(AppTechnicianUpdateLoadingState());
+    Timer(
+        const Duration(seconds: 5),(){
+      if (hasProfession == true)
+      {
+        emit(AppTechnicianUpdateLoadingState());
+        TechnicianModel newModel = TechnicianModel(
+          name: name,
+          uId: model!.uId,
+          phone: model.phone,
+          bio: bio,
+          chatList:model.chatList,
+          nationalId: nationalId,
+          idCardPhoto: uploadedIdCardImage?? model?.idCardPhoto,
+          location: location,
+          token: model.token,
+          profession: profession,
+          userImage: uploadedProfileImage?? model?.userImage.toString(),
+          coverImage: uploadedCoverImage?? model?.coverImage.toString(),
+          hasProfession: true,
+          latitude: model.latitude,
+          longitude: model.longitude,
+        );
+        FirebaseFirestore.instance
+            .collection('person')
+            .doc(uId)
+            .set(newModel.toMap())
+            .then((value) {
+          getUserData();
+          emit(AppTechnicianUpdateSuccessState());
+        }).catchError((error) {
+          emit(AppTechnicianUpdateErrorState());
+        });
+      }
+      else if (hasProfession == false)
+      {
+        emit(AppUserUpdateLoadingState());
+        UserModel newModel = UserModel(
+          name: name,
+          phone: model.phone,
+          location: location,
+          token: model.token,
+          chatList: model.chatList,
+          userImage: uploadedProfileImage ?? model?.userImage,
+          coverImage: uploadedCoverImage ?? model?.coverImage,
+          uId: uId,
+          hasProfession: false,
+          latitude: model.latitude,
+          longitude: model.longitude,
+        );
+        FirebaseFirestore.instance
+            .collection('person')
+            .doc(uId)
+            .set(newModel.toMap())
+            .then((value) {
+          getUserData();
+          emit(AppTechnicianUpdateSuccessState());
+        }).catchError((error) {
+          emit(AppUserUpdateErrorState());
+        });
+      }
+    });
+
+
+
   }
 
 }

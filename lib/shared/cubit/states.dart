@@ -105,7 +105,7 @@ class AppTechnicianUpdateLoadingState extends AppState{}
 
 class AppTechnicianUpdateErrorState extends AppState{}
 
-
+class AppTechnicianUpdateSuccessState extends AppState{}
 
 class change extends AppState{}
 

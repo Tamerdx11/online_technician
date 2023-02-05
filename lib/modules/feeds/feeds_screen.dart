@@ -240,7 +240,7 @@ class FeedsScreen extends StatelessWidget {
                                             radius: 20,
                                             backgroundImage: NetworkImage(snapshot
                                                 .data!.docs[index]
-                                                .data()['userImage']),
+                                                .data()['userImage'].toString()),
                                           ),
                                         ),
                                         onTap: (){

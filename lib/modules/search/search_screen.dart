@@ -16,6 +16,7 @@ class SearchScreen extends StatelessWidget {
       builder: (context, state) {
         var data = AppCubit.get(context).search;
 
+
         return Scaffold(
           backgroundColor: Colors.white,
           body: Padding(

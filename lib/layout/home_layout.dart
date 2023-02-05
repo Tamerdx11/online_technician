@@ -211,7 +211,7 @@ class AppLayout extends StatelessWidget {
             },
             items: cubit.bottomItems,
           ),
-          body: cubit.screenss[cubit.currentIndex],
+          body: cubit.screens[cubit.currentIndex],
         );
       },
     );

@@ -42,6 +42,11 @@ class EditProfileScreen extends StatelessWidget {
         if (state is change) {
           dropdownValue = AppCubit.get(context).profession!;
         }
+        // ignore: unrelated_type_equality_checks
+        if(state is AppTechnicianUpdateSuccessState){
+          showToast(text: 'تم تحديث بياناتك بنجاح', state: ToastState.SUCCESS);
+          Navigator.pop(context);
+        }
       },
       builder: (context, state) {
 
@@ -120,6 +125,8 @@ class EditProfileScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  if(state is AppTechnicianUpdateLoadingState)
+                    const LinearProgressIndicator(),
                   SizedBox(
                     height: 205,
                     child: Stack(
