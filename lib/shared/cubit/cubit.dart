@@ -5,6 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:haversine_distance/haversine_distance.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/post.dart';
@@ -34,7 +36,6 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get person data ----------
 
   var model;
-  List<UserModel> myuser = [];
   void getUserData() {
     FirebaseFirestore.instance
         .collection('person')
@@ -44,7 +45,6 @@ class AppCubit extends Cubit<AppState> {
         {
           CacheHelper.savaData(key: 'hasProfession', value: true);
           model = TechnicianModel.fromJson(value.data());
-          myuser.add(UserModel.fromJson(value.data()));
           emit(AppGetUserSuccessState());
         }
         else {
@@ -237,24 +237,12 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get one users ----------
 
-  bool k=false;
-  List<UserModel> user = [];
+  UserModel? user ;
   Future<void> getUser(String id)async {
-    await FirebaseFirestore.instance.collection('person').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['uId'] == id) {
-          user.add(UserModel.fromJson(element.data()));
-          k=true;
-        }
-        if(k){
-          break;
-        }
-      }
+    await FirebaseFirestore.instance.collection('person').doc(id).get().then((value) {
+          user = UserModel.fromJson(value.data());
       emit(AppGetAllUsersSuccessState());
-    }).catchError((error) {
-      emit(AppGetAllUsersErrorState(error.toString()));
-      print(error.toString());
-    });
+    }).catchError((error) {});
   }
 
   ///---------- send message ----------
@@ -343,6 +331,11 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get search results ---------
 
+  // LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1')));
+  // LatLng to=LatLng(double.parse(CacheHelper.getData(key: 'latitude2')) , double.parse(CacheHelper.getData(key: 'longitude2')));
+  // HaversineDistance calc = HaversineDistance();
+  // double dis =0;
+  // dis = calc.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM)
   List<dynamic> search = [];
   void getSearchData(String value, String key) {
     emit(AppLoadingState());

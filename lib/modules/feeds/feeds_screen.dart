@@ -100,36 +100,29 @@ class FeedsScreen extends StatelessWidget {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                    await AppCubit.get(context)
-                                                        .getUser(snapshot
+                                                    await AppCubit.get(context).getUser(snapshot
                                                             .data!.docs[index]
                                                             .data()['uId']);
-                                                    var my =
-                                                        AppCubit.get(context)
-                                                            .myuser[0];
                                                     CacheHelper.savaData(
                                                         key: 'latitude1',
-                                                        value: my.latitude);
+                                                        value: AppCubit.get(context).model.latitude);
                                                     CacheHelper.savaData(
                                                         key: 'longitude1',
-                                                        value: my.longitude);
+                                                        value: AppCubit.get(context).model.longitude);
                                                     CacheHelper.savaData(
                                                         key: 'name1',
-                                                        value: my.name);
-                                                    var thatuser =
-                                                        AppCubit.get(context)
-                                                            .user[0];
+                                                        value: AppCubit.get(context).model.name);
                                                     CacheHelper.savaData(
                                                         key: 'latitude2',
                                                         value:
-                                                            thatuser.latitude);
+                                                        AppCubit.get(context).user?.latitude);
                                                     CacheHelper.savaData(
                                                         key: 'longitude2',
                                                         value:
-                                                            thatuser.longitude);
+                                                        AppCubit.get(context).user?.longitude);
                                                     CacheHelper.savaData(
                                                         key: 'name2',
-                                                        value: thatuser.name);
+                                                        value: AppCubit.get(context).user?.name);
                                                     print(
                                                         '*******************************************');
                                                     print(CacheHelper.getData(
@@ -411,7 +404,7 @@ class FeedsScreen extends StatelessWidget {
                                           children: [
                                             Container(
                                               color: Colors.grey,
-                                              width: 120.0,
+                                              width: 100.0,
                                               height: 0.1,
                                             ),
                                             const SizedBox(width: 25.0,),
@@ -443,7 +436,7 @@ class FeedsScreen extends StatelessWidget {
                                             const SizedBox(width: 25.0,),
                                             Container(
                                               color: Colors.grey,
-                                              width: 120.0,
+                                              width: 100.0,
                                               height: 0.15,
                                             ),
                                           ],

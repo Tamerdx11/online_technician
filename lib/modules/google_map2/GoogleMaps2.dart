@@ -1,18 +1,8 @@
-
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-
-import '../../shared/components/components.dart';
 
 class GoogleMaps2 extends StatefulWidget {
   const GoogleMaps2({Key? key}) : super(key: key);
@@ -22,19 +12,19 @@ class GoogleMaps2 extends StatefulWidget {
 }
 
 class _GoogleMaps2State extends State<GoogleMaps2> {
-  /// محدش يحرك حاجة من مكانها!!!!!!!!!!!!!
+  /// محدش    يحرك حاجة من مكانها!!!!!!!!!!!!!
   bool c=true;
   bool v=false;
-  Set<Marker> _markers = {};
-  Completer<GoogleMapController> _controller = Completer();
-  LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'latitude1')));
+  final Set<Marker> _markers = {};
+  final Completer<GoogleMapController> _controller = Completer();
+  LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1')));
   LatLng to=LatLng(double.parse(CacheHelper.getData(key: 'latitude2')) , double.parse(CacheHelper.getData(key: 'longitude2')));
   static final CameraPosition _initialCameraPosition =  CameraPosition(
-    target: LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'latitude1'))),
+    target: LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1'))),
     zoom: 14.4746,
   );
   LatLng currentLocation = _initialCameraPosition.target;
-  final HaversineDistance distance=new HaversineDistance(4,5,6,7);
+  final HaversineDistance distance=HaversineDistance(4,5,6,7);
   bool ccc=false;
   @override
   Widget build(BuildContext context) {
@@ -177,7 +167,9 @@ class RADII {
   int nmi;
   RADII(this.km, this.mile, this.meter, this.nmi);
 }
+
 enum Unit { KM, MILE, METER, NMI }
+
 class HaversineDistance {
   double startCoordinateslatitude;
   double startCoordinateslongitude;
@@ -189,7 +181,7 @@ class HaversineDistance {
       this.endCoordinateslatitude,
       this.endCoordinateslongitude,
       );
-  final RADII radii = new RADII(6371, 3960, 6371000, 3440);
+  final RADII radii = RADII(6371, 3960, 6371000, 3440);
   double toRad(double num) {
     return num * pi / 180;
   }
@@ -207,6 +199,7 @@ class HaversineDistance {
         return radii.km;
     }
   }
+
   double haversine(
       double startCoordinateslatitude,
       double startCoordinateslongitude,
@@ -226,6 +219,7 @@ class HaversineDistance {
     CacheHelper.savaData(key: 'dis', value: d.toStringAsFixed(2));
     return d;
   }
+
 }
 
 

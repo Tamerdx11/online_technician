@@ -242,27 +242,12 @@ class ProfileScreen extends StatelessWidget {
                                       onTap: () async {
                                         await AppCubit.get(context).getUser(
                                             snapshot.data!.data()!['uId'].toString());
-                                        var my = AppCubit.get(context).myuser[0];
-                                        CacheHelper.savaData(
-                                            key: 'latitude1', value: my.latitude);
-                                        CacheHelper.savaData(
-                                            key: 'longitude1', value: my.longitude);
-                                        CacheHelper.savaData(
-                                            key: 'name1', value: my.name);
-                                        var thatuser = AppCubit.get(context).user[0];
-                                        CacheHelper.savaData(
-                                            key: 'latitude2', value: thatuser.latitude);
-                                        CacheHelper.savaData(
-                                            key: 'longitude2',
-                                            value: thatuser.longitude);
-                                        CacheHelper.savaData(
-                                            key: 'name2', value: thatuser.name);
-                                        print(
-                                            '*******************************************');
-                                        print(CacheHelper.getData(key: 'latitude1'));
-                                        print(CacheHelper.getData(key: 'longitude1'));
-                                        print(CacheHelper.getData(key: 'longitude2'));
-                                        print(CacheHelper.getData(key: 'latitude2'));
+                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
                                         navigateTo(context, GoogleMaps2());
                                       },
                                       child: Row(

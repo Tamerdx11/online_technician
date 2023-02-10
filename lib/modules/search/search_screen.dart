@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
@@ -16,9 +17,8 @@ class SearchScreen extends StatelessWidget {
       builder: (context, state) {
         var data = AppCubit.get(context).search;
 
-
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: HexColor('#ebebeb'),
           body: Padding(
             padding: const EdgeInsets.only(top: 45.0),
             child: Column(
@@ -39,18 +39,20 @@ class SearchScreen extends StatelessWidget {
                       AppCubit.get(context).getSearchData(value,'name');
                     },
                     decoration: InputDecoration(
+                      fillColor: HexColor('#c6dfe7'),
                       labelText: "بحث...",
                       prefixIcon: const Icon(
                         Icons.search_sharp,
-                        color: Colors.black87,
+                        color: Colors.black54,
                       ),
+                      filled: true,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(30),
                           borderSide:const BorderSide(color: Colors.black),
                       ),
                       focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide:const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide:const BorderSide(color: Colors.black54),
                       ),
                     ),
                     onFieldSubmitted: (value){
