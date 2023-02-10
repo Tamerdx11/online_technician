@@ -107,5 +107,9 @@ class AppTechnicianUpdateErrorState extends AppState{}
 
 class AppTechnicianUpdateSuccessState extends AppState{}
 
+class AppGetProfilePostsSuccessState extends AppState{}
+
+class AppGetchangeBageMessageState extends AppState{}
+
 class change extends AppState{}
 

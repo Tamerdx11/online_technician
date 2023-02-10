@@ -36,7 +36,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(profileImage!.path.toString()).pathSegments.last}')
+            'users/$uId')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -60,6 +60,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     if (profileImage != null) {
       uploadProfileImageWithRegister();
     }
+
     emit(AppRegisterLoadingState());
       FirebaseMessaging.instance.getToken().then((token) {
         createUser(

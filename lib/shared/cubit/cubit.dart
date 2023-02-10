@@ -27,6 +27,10 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
   final storageRef = firebase_storage.FirebaseStorage.instance.ref();
 
+  ///---------------new message dot -------------
+
+
+
   ///---------- get person data ----------
 
   var model;
@@ -231,28 +235,8 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
-  ///---------- get all users ----------
-
-  List<UserModel> users = [];
-  void getUsers() {
-    users = [];
-    FirebaseFirestore.instance.collection('person').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['uId'] == model?.uId) {
-          myuser.add(UserModel.fromJson(element.data()));
-        }
-        if (element.data()['uId'] != model?.uId) {
-          users.add(UserModel.fromJson(element.data()));
-        }
-      }
-      emit(AppGetAllUsersSuccessState());
-    }).catchError((error) {
-      emit(AppGetAllUsersErrorState(error.toString()));
-      print(error.toString());
-    });
-  }
-
   ///---------- get one users ----------
+
   bool k=false;
   List<UserModel> user = [];
   Future<void> getUser(String id)async {
@@ -272,7 +256,6 @@ class AppCubit extends Cubit<AppState> {
       print(error.toString());
     });
   }
-
 
   ///---------- send message ----------
 
@@ -378,7 +361,7 @@ class AppCubit extends Cubit<AppState> {
           emit(AppLoadingState());
     }).catchError((error) {});
   }
-
+  
   ///------------ has profession change ---------------
 
   bool hasProfession = CacheHelper.getData(key: 'hasProfession');

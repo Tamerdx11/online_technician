@@ -402,12 +402,19 @@ class FeedsScreen extends StatelessWidget {
                                                 .data!.docs[index].id
                                                 .toString(),
                                           );
+
                                         },
                                         enableFeedback: true,
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                              MainAxisAlignment.center,
                                           children: [
+                                            Container(
+                                              color: Colors.grey,
+                                              width: 120.0,
+                                              height: 0.1,
+                                            ),
+                                            const SizedBox(width: 25.0,),
                                             const Text(
                                               'أعجبني',
                                               style: TextStyle(
@@ -426,13 +433,19 @@ class FeedsScreen extends StatelessWidget {
                                                 ? const Icon(
                                                     Icons.favorite_rounded,
                                                     color: Colors.black87,
-                                                    size: 30,
+                                                    size: 32.0,
                                                   )
                                                 : const Icon(
                                                     Icons.favorite_border,
                                                     color: Colors.black87,
-                                                    size: 30,
+                                                    size: 30.0,
                                                   ),
+                                            const SizedBox(width: 25.0,),
+                                            Container(
+                                              color: Colors.grey,
+                                              width: 120.0,
+                                              height: 0.15,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -455,8 +468,8 @@ class FeedsScreen extends StatelessWidget {
                 }
                 return const Center(
                     child: LinearProgressIndicator(
-                  color: Colors.black,
-                  backgroundColor: Colors.black,
+                  color: Colors.teal,
+                  backgroundColor: Colors.white,
                 ),
                 );
               },

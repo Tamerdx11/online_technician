@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
@@ -51,6 +53,7 @@ class EditProfileScreen extends StatelessWidget {
       builder: (context, state) {
 
         bool hasProfession = AppCubit.get(context).hasProfession;
+        hasProfession =  CacheHelper.getData(key: 'hasProfession');
         var userModel = AppCubit.get(context).model;
         var profileImage = AppCubit.get(context).profileImage;
         var coverImage = AppCubit.get(context).coverImage;
@@ -86,9 +89,10 @@ class EditProfileScreen extends StatelessWidget {
         }
 
         return Scaffold(
+          backgroundColor: HexColor('#ebebeb'),
           appBar: defaultAppBar(
             context: context,
-            color: Colors.black26,
+            color: HexColor('#80b0c8'),
             title: "تعديل الحساب",
             textColor: Colors.black54,
             actions: [
@@ -108,7 +112,7 @@ class EditProfileScreen extends StatelessWidget {
                   child: const Text(
                     "حفظ التعديلات",
                     style: TextStyle(
-                      color: Colors.deepPurpleAccent,
+                      color: Colors.lightGreenAccent,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -171,8 +175,7 @@ class EditProfileScreen extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 66.0,
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor: HexColor('#ebebeb'),
                               child: CircleAvatar(
                                 radius: 60.0,
                                 backgroundImage: image_profile,

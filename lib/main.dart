@@ -16,6 +16,7 @@ import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  messagesNumber++;
   // showToast(text: "new notification", state: ToastState.SUCCESS);
 }
 
@@ -34,11 +35,14 @@ void main() async {
 
   ///....... app opened ...............
   FirebaseMessaging.onMessage.listen((event) {
-    showToast(text: '${event.notification.title.toString()}: ${event.notification.body.toString()}', state: ToastState.SUCCESS);
+    messagesNumber++;
+   // showToast(text: '${event.notification.title.toString()}: ${event.notification.body.toString()}', state: ToastState.SUCCESS);
   });
 
   ///...........app opened in background........
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {});
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    messagesNumber++;
+  });
 
   ///............app closed......
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);

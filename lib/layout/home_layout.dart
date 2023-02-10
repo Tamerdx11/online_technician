@@ -1,11 +1,14 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/chats/chats_screen.dart';
 import 'package:online_technician/modules/new-post/new_post_screen.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/modules/search/search_screen.dart';
 import 'package:online_technician/modules/settings/settings_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
+import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
@@ -20,6 +23,7 @@ class AppLayout extends StatelessWidget {
     'الطلبات المستلمة',
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
@@ -27,9 +31,10 @@ class AppLayout extends StatelessWidget {
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
+          backgroundColor: HexColor('#ebebeb'),
           drawer: cubit.currentIndex == 0
               ? Drawer(
-                  backgroundColor: Colors.white,
+                  backgroundColor: HexColor('#ebebeb'),
                   elevation: 40,
                   width: 230.0,
                   child: ListView(
@@ -37,14 +42,14 @@ class AppLayout extends StatelessWidget {
                     children: [
                       DrawerHeader(
                         curve: Curves.bounceInOut,
-                        decoration: const BoxDecoration(
-                          color: Colors.black12,
+                        decoration: BoxDecoration(
+                          color: HexColor('#80b0c8'),
                         ),
                         child: Column(
                           children: [
                             CircleAvatar(
-                              radius: 46.5,
-                              backgroundColor:Colors.greenAccent,
+                              radius: 45.6,
+                              backgroundColor: Colors.black87,
                               child: CircleAvatar(
                                 radius: 45.0,
                                 backgroundImage:
@@ -80,6 +85,7 @@ class AppLayout extends StatelessWidget {
                             id: AppCubit.get(context).model.uId,
                             name: AppCubit.get(context).model.name,
                           ));
+
                         },
                       ),
                       Padding(
@@ -134,7 +140,7 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
+            backgroundColor: HexColor('#80b0c8'),
             elevation: 3.5,
             centerTitle: true,
             title: Text(
@@ -142,7 +148,8 @@ class AppLayout extends StatelessWidget {
               style: const TextStyle(
                   color: Colors.black,
                   fontFamily: 'NotoNaskhArabic',
-                  fontWeight: FontWeight.w600),
+                  fontWeight: FontWeight.w600,
+              ),
             ),
             leading: cubit.currentIndex == 0
                 ? Builder(builder: (context) {
@@ -174,10 +181,26 @@ class AppLayout extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     navigateTo(context, const ChatsScreen());
-                    AppCubit.get(context).getUsers();
+                    cubit.emit(AppGetchangeBageMessageState());
                   },
                   icon:
-                      const Icon(Icons.messenger_outline, color: Colors.black),
+                      Badge(
+                        badgeStyle:const BadgeStyle(
+                          badgeColor: Colors.green,
+                        ),
+                        badgeContent:Text(
+                          messagesNumber.toString(),
+                          style:const TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child:const  Icon(
+                          Icons.chat,
+                          color: Colors.white70,
+                          size: 30.0,
+                        ),
+                      ),
                 ),
               const SizedBox(
                 width: 5.0,
@@ -192,18 +215,22 @@ class AppLayout extends StatelessWidget {
                       left: 25,
                     ),
                     child: FloatingActionButton(
+                      elevation: 10.0,
                       onPressed: () {
                         navigateTo(context, NewPostScreen());
                       },
-                      backgroundColor: Colors.white,
-                      child: const Icon(Icons.post_add_outlined,
-                          color: Colors.black),
+                      backgroundColor: Colors.teal.withOpacity(0.6),
+                      child: const Icon(
+                          Icons.add_rounded,
+                          size: 30.0,
+                          color: Colors.white,
+                      ),
                     ),
                   ),
                 )
               : null,
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.black,
+            selectedItemColor: HexColor('#80b0c8'),
             type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {

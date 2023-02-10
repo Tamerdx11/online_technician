@@ -30,19 +30,19 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   List<BoardingModel> boarding =[
     BoardingModel(
-        image: 'assets/images/onboard_1.png',
-        title:'title 1',
-        body: 'body 1'
+        image: 'assets/images/im1.png',
+        title:'أهلا بك',
+        body: 'في مجتمعنا المتواضع لعرض وطلب الحِرْف '
     ),
     BoardingModel(
-        image: 'assets/images/onboard_1.png',
-        title:'title 2',
-        body: 'body 2'
+        image: 'assets/images/im2.jpg',
+        title:'بعد التسجيل ',
+        body: ' يمكنك الحصول علي أمهر الحِرْفيين القريبين منك والذين تم تقييمهم علي أعلي مستوي لضمان الحصول علي أفضل النتائج'
     ),
     BoardingModel(
-        image: 'assets/images/onboard_1.png',
-        title:'title 3',
-        body: 'body 3'
+        image: 'assets/images/m3.png',
+        title:'يمكن أيضا',
+        body: 'للحصول علي حساب مميز خاص بك وعرض مهاراتك والمساهمة في تطوير المجتمع '
     ),
   ];
 
@@ -56,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         actions: [
           TextButton(
               onPressed:submit,
-              child:const Text('SKIP'),
+              child:const Text('تخطي'),
           ),
         ],
       ),
@@ -100,6 +100,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       count: boarding.length,),
                   const Spacer(),
                   FloatingActionButton(
+                    backgroundColor: Colors.blueAccent,
                       onPressed: () {
                         if(isLast){
                           submit();
@@ -142,6 +143,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       Text(
         boarding.title,
         style:const TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.bold,
           fontSize: 24.0,
         ),
       ),

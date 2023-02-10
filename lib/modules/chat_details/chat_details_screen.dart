@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
@@ -19,9 +22,22 @@ class ChatDetailsScreen extends StatelessWidget {
   });
 
   var messageController = TextEditingController();
+  ScrollController listViewScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+
+    Timer(const Duration(seconds: 1),() {
+      if(listViewScrollController.hasClients){
+        listViewScrollController.animateTo(
+          listViewScrollController.position.maxScrollExtent,
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 500),
+        );
+      }
+    },
+    );
+
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(
@@ -31,11 +47,12 @@ class ChatDetailsScreen extends StatelessWidget {
         return BlocConsumer<AppCubit, AppState>(
           listener: (context, state) {},
           builder: (context, state) {
+
             return Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: HexColor('#ebebeb'),
               appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
+                backgroundColor: HexColor('#78b7b7'),
+                elevation: 5.0,
                 centerTitle: false,
                 leading: IconButton(
                   onPressed: () {
@@ -57,23 +74,24 @@ class ChatDetailsScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 22.5,
-                        backgroundColor: Colors.black45,
+                        radius: 22.0,
+                        backgroundColor: Colors.green,
                         child: CircleAvatar(
-                          radius: 20.0,
+                          radius: 21.0,
                           backgroundImage: NetworkImage(
                             '${userModel.userImage}',
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 12.0,
+                        width: 8.0,
                       ),
                       Text(
                         userModel.name.toString(),
                         style: const TextStyle(
                           fontSize: 16.0,
                           color: Colors.black54,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
                     ],
@@ -81,14 +99,15 @@ class ChatDetailsScreen extends StatelessWidget {
                 ),
               ),
               body: ConditionalBuilder(
-                condition: true,
-                //AppCubit.get(context).messages.length > 0,
+                condition: AppCubit.get(context).messages.isNotEmpty,
                 builder: (context) => Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
                       Expanded(
                         child: ListView.separated(
+                          shrinkWrap: true,
+                          controller: listViewScrollController,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             var message = AppCubit.get(context).messages[index];
@@ -105,20 +124,22 @@ class ChatDetailsScreen extends StatelessWidget {
                           itemCount: AppCubit.get(context).messages.length,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            30.0,
-                          ),
-                        ),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Row(
-                          children: [
-                            Expanded(
+                      const SizedBox(height: 20.0,),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: HexColor('#c6dfe7'),
+                                border: Border.all(
+                                  color: Colors.black87,
+                                  width: 0.3,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  30.0,
+                                ),
+                              ),
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 15.0,
@@ -129,11 +150,27 @@ class ChatDetailsScreen extends StatelessWidget {
                                   decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'الرسالة..',
-                                      hintStyle: TextStyle()),
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey
+                                      ),
+                                  ),
                                 ),
                               ),
                             ),
-                            MaterialButton(
+                          ),
+                          const SizedBox(width: 15.0,),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: HexColor('#78b7b7'),
+                              border: Border.all(
+                                color: Colors.black87,
+                                width: 0.3,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                30.0,
+                              ),
+                            ),
+                            child: IconButton(
                               onPressed: () {
                                 AppCubit.get(context).sendMessage(
                                   name: userModel.name,
@@ -146,15 +183,14 @@ class ChatDetailsScreen extends StatelessWidget {
                                 );
                                 messageController.clear();
                               },
-                              minWidth: 1.0,
-                              child: const Icon(
+                              icon:const Icon(
                                 Icons.send_sharp,
                                 size: 25.0,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -173,9 +209,9 @@ class ChatDetailsScreen extends StatelessWidget {
   Widget buildMessage(MessageModel model) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.deepOrange,
-            borderRadius: BorderRadiusDirectional.only(
+          decoration: BoxDecoration(
+            color: HexColor('#78b7b7'),
+            borderRadius:const BorderRadiusDirectional.only(
               bottomEnd: Radius.circular(
                 10.0,
               ),
@@ -193,7 +229,11 @@ class ChatDetailsScreen extends StatelessWidget {
           ),
           child: Text(
             '${model.text}',
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style:const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       );
@@ -201,8 +241,8 @@ class ChatDetailsScreen extends StatelessWidget {
   Widget buildMyMessage(MessageModel model) => Align(
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0xFF008080),
+          decoration:const BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadiusDirectional.only(
               bottomStart: Radius.circular(
                 10.0,
@@ -221,8 +261,13 @@ class ChatDetailsScreen extends StatelessWidget {
           ),
           child: Text(
             '${model.text}',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(
+                color: HexColor('#78b7b7'),
+                fontSize: 16,
+                fontWeight: FontWeight.bold
+            ),
           ),
         ),
       );
+
 }
