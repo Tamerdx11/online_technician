@@ -1,11 +1,13 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/layout/home_layout.dart';
 import 'package:online_technician/modules/register/cubit/cubit.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 import '../google_map/google_map.dart';
 
@@ -16,7 +18,6 @@ class RegisterScreen extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
-  var phoneController = TextEditingController();
   var locationController = TextEditingController();
 
   @override
@@ -31,7 +32,6 @@ class RegisterScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-
           var profileImage = AppRegisterCubit.get(context).profileImage;
           ImageProvider? image_profile;
           if (profileImage == null) {
@@ -41,12 +41,12 @@ class RegisterScreen extends StatelessWidget {
           }
 
           return Scaffold(
+            backgroundColor: HexColor('#ebebeb'),
             appBar: defaultAppBar(
               context: context,
-              title: "REGISTER",
-              color: Colors.grey,
+              title: " بيانات التسجيل ",
+              color: HexColor('#80b0c8'),
             ),
-            backgroundColor: Colors.white,
             body: Center(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -56,6 +56,7 @@ class RegisterScreen extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +90,7 @@ class RegisterScreen extends StatelessWidget {
                           ),],
                         ),
                         const SizedBox(
-                          height: 20.0,
+                          height: 80.0,
                         ),
                         defaultFormText(
                           validate: (value) {
@@ -101,58 +102,12 @@ class RegisterScreen extends StatelessWidget {
                           controller: usernameController,
                           onSubmitted: (value) {},
                           onchange: (value) {},
-                          label: 'username',
+                          label: 'الاسم',
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.person),
                         ),
                         const SizedBox(
-                          height: 30.0,
-                        ),
-                        const SizedBox(
-                          height: 30.0,
-                        ),
-                        /*defaultFormText(
-                          isPassword: AppRegisterCubit.get(context).isPassword,
-                          onchange: (value) {},
-                          validate: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'password very short!';
-                            }
-                            return null;
-                          },
-                          controller: passwordController,
-                          onSubmitted: (value) {},
-                          label: 'Password',
-                          keyboardType: TextInputType.visiblePassword,
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              AppRegisterCubit.get(context).showPassword();
-                            },
-                            icon: AppRegisterCubit.get(context).isPassword
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off_outlined),
-                          ),
-                        ),*/
-                        const SizedBox(
-                          height: 30.0,
-                        ),
-                        defaultFormText(
-                          validate: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'phone is too short!';
-                            }
-                            return null;
-                          },
-                          controller: phoneController,
-                          onSubmitted: (value) {},
-                          onchange: (value) {},
-                          label: 'phone number',
-                          keyboardType: TextInputType.number,
-                          prefixIcon: const Icon(Icons.phone),
-                        ),
-                        const SizedBox(
-                          height: 30.0,
+                          height: 40.0,
                         ),
                         defaultFormText(
                           validate: (value) {
@@ -164,38 +119,85 @@ class RegisterScreen extends StatelessWidget {
                           controller: locationController,
                           onSubmitted: (value) {},
                           onchange: (value) {},
-                          label: 'your location',
+                          label: 'موقعك بالتحديد ',
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.add_location_rounded),
                         ),
-                          IconButton(
-                            onPressed: () {
-                              navigateTo(context, GoogleMaps());
-                            },
-                            icon: const Icon(Icons.maps_ugc_sharp),
+                        const SizedBox(
+                          height: 50.0,
+                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  navigateTo(context,const GoogleMaps());
+                                },
+                                child: Container(
+                                  padding:const EdgeInsets.symmetric(vertical: 3.0,horizontal: 6.0),
+                                  decoration: BoxDecoration(
+                                    color: HexColor('#dedded'),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 0.3,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      30.0,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.my_location_rounded,color: HexColor('#59c9b0'),),
+                                      const SizedBox(width: 2.0,),
+                                      Text(
+                                        "تحديد موقعي",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          color: HexColor('#59c9b0'),
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0,),
+                              const Text(
+                                "يرجي تحديد موقعك علي الخريطة ",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                              const SizedBox(width: 5.0,),
+                            ],
                           ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 80.0,
                         ),
                         ConditionalBuilder(
                           condition: state is! AppRegisterLoadingState,
                           builder: (context) => defaultButton(
+                            color: HexColor('#78b7b7'),
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 AppRegisterCubit.get(context).userRegister(
                                   location: locationController.text,
                                   name: usernameController.text,
-                                  phone: phoneController.text,
+                                  phone: CacheHelper.getData(key: 'phoneNumber'),
                                   password: passwordController.text,
                                 );
                               }
                             },
-                            text: 'Register',
+                            text: 'التسجيل',
                             isUpperCase: true,
-
                           ),
                           fallback: (context) =>
                               const Center(child: CircularProgressIndicator()),
+                        ),
+                        const SizedBox(
+                          height: 20.0,
                         ),
                       ],
                     ),

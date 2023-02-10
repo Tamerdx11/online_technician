@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import '../../layout/home_layout.dart';
@@ -35,6 +36,7 @@ class verifyCodeScreen extends StatelessWidget {
                 .doc(state.uid.toString())
                 .get().then((value) {
               if (value.data() == null) {
+
                 navigateToAndFinish(context, RegisterScreen());
               } else {
                 AppCubit.get(context).getUserData();
@@ -46,6 +48,7 @@ class verifyCodeScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: HexColor('#ebebeb'),
               body: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
@@ -121,7 +124,7 @@ class verifyCodeScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),),
                             ),
-                            const Text(' في حالة عدم استلام رمز التحقيق'),
+                            const Text(' في حالة عدم استلام رمز التحقيق '),
                           ],
                         ),
                       ],

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/modules/login/verify_code.dart';
 import 'package:online_technician/shared/components/components.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
@@ -21,7 +23,7 @@ class LoginScreen extends StatelessWidget {
           var cubit = AppLoginCubit.get(context);
 
           return Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: HexColor('#ebebeb'),
             body: Center(
               child: SingleChildScrollView(
                 child: Padding(
@@ -40,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                                 'تسجيل الدخول',
                                 style:
                                     Theme.of(context).textTheme.headline4?.copyWith(
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                         ),
                                 textDirection: TextDirection.rtl,
                               ),
@@ -83,14 +85,16 @@ class LoginScreen extends StatelessWidget {
                             height: 30.0,
                           ),
                            defaultButton(
+                             color: HexColor('#78b7b7'),
                               function: () {
                                 if (formKey.currentState!.validate()){
-                                cubit.userLogin(
-                                  phone: phoneController.text,);
+                                cubit.userLogin(phone: phoneController.text);
                                 navigateTo(context, verifyCodeScreen(phoneNumber: phoneController.text,));
+                                CacheHelper.savaData(key: 'phoneNumber', value: phoneController.text);
                                 }
                               },
                               text: 'تسجيل',
+                              size: 17.0,
                               isUpperCase: true,
                             ),
                         ],

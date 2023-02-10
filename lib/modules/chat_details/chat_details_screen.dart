@@ -97,7 +97,7 @@ class ChatDetailsScreen extends StatelessWidget {
                 ),
               ),
               body: ConditionalBuilder(
-                condition: AppCubit.get(context).messages.isNotEmpty,
+                condition: true,
                 builder: (context) => Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -35,17 +36,22 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child(
-            'users/$uId')
-        .putFile(profileImage!)
+        .child('users/$uId').putFile(profileImage!)
         .then((value) {
+          print('--------------------loaded----------------');
       value.ref.getDownloadURL().then((value) {
         imageUrl = value.toString();
+        print('-----------------------------------link---------------------');
+        print(imageUrl);
       }).catchError((error) {
         emit(AppUploadProfileImageErrorState());
+        print("===============error1==============");
+        print(error.toString());
       });
-    }).catchError((error) {
+    }).catchError((e) {
       emit(AppUploadProfileImageErrorState());
+      print("===============error2==============");
+      print(e.toString());
     });
   }
 
@@ -60,14 +66,17 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     if (profileImage != null) {
       uploadProfileImageWithRegister();
     }
+    else{
+      imageUrl = 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919';
+    }
 
     emit(AppRegisterLoadingState());
       FirebaseMessaging.instance.getToken().then((token) {
-        createUser(
+        print("===============================token=================");
+        print(token.toString());
+          createUser(
             name: name,
-            userImage: imageUrl == ''
-                ? 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919'
-                : imageUrl,
+            userImage: imageUrl,
             location: location,
             token: token.toString(),
             phone: phone,
@@ -102,16 +111,17 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       coverImage:
           'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
     );
-
-    FirebaseFirestore.instance
-        .collection("person")
-        .doc(uId)
-        .set(model.toMap())
-        .then((value) {
-      CacheHelper.savaData(key: 'uId', value: uId.toString());
-      emit(AppCreateUserSuccessState());
-    }).catchError((error) {
-      emit(AppCreateUserErrorState(error));
+    Timer(const Duration(seconds: 5),() {
+      FirebaseFirestore.instance
+          .collection("person")
+          .doc(uId)
+          .set(model.toMap())
+          .then((value) {
+        CacheHelper.savaData(key: 'uId', value: uId.toString());
+        emit(AppCreateUserSuccessState());
+      }).catchError((error) {
+        emit(AppCreateUserErrorState(error));
+      });
     });
   }
 

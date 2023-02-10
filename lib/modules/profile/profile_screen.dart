@@ -108,8 +108,7 @@ class ProfileScreen extends StatelessWidget {
                                             bottomRight: Radius.circular(50.0),
                                           ),
                                           image: DecorationImage(
-                                            image: NetworkImage(snapshot.data!.data()!['coverImage'].toString(),
-                                            ),
+                                            image: NetworkImage(snapshot.data!.data()!['coverImage'].toString()),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
