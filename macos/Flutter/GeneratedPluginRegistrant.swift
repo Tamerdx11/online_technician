@@ -11,7 +11,7 @@ import firebase_core
 import firebase_messaging
 import firebase_storage
 import location
-import shared_preferences_foundation
+import shared_preferences_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
