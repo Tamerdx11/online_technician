@@ -34,7 +34,7 @@ class EditProfileScreen extends StatelessWidget {
     'محار',
     'جزار'
   ];
-  String? dropdownValue = 'أختر الحرفة الخاصة بك';
+  String? dropdownValue = 'نقاش';
   int x = 0;
 
   @override
@@ -53,7 +53,6 @@ class EditProfileScreen extends StatelessWidget {
       builder: (context, state) {
 
         bool hasProfession = AppCubit.get(context).hasProfession;
-        hasProfession =  CacheHelper.getData(key: 'hasProfession');
         var userModel = AppCubit.get(context).model;
         var profileImage = AppCubit.get(context).profileImage;
         var coverImage = AppCubit.get(context).coverImage;
@@ -125,7 +124,6 @@ class EditProfileScreen extends StatelessWidget {
             ],
           ),
           body: Container(
-            color: Colors.white24,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -234,7 +232,6 @@ class EditProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: CheckboxListTile(
-                      enableFeedback: true,
                       activeColor: Colors.black,
                       value: hasProfession,
                       onChanged: (value) {
@@ -280,50 +277,44 @@ class EditProfileScreen extends StatelessWidget {
                   if (hasProfession == true)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              enableFeedback: true,
-                              value: dropdownValue,
-                              iconSize: 24,
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide:const BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide:const BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              icon: const Icon(
-                                Icons.work_outline,
-                                color: Colors.grey,
-                              ),
-                              elevation: 16,
-                              style: const TextStyle(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(12.0),
-                              onChanged: (value) {
-                                AppCubit.get(context).changeValue(value!);
-                              },
-                              items: list.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style:const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600),
-                                    textDirection: TextDirection.rtl,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        enableFeedback: true,
+                        value: dropdownValue,
+                        iconSize: 24,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:const BorderSide(color: Colors.grey),
                           ),
-                        ],
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:const BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.work_outline,
+                          color: Colors.grey,
+                        ),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12.0),
+                        onChanged: (value) {
+                          AppCubit.get(context).changeValue(value!);
+                        },
+                        items: list.map<DropdownMenuItem<String>>(
+                            (String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style:const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                              textDirection: TextDirection.rtl,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   const SizedBox(

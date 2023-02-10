@@ -43,6 +43,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
         imageUrl = value.toString();
         print('-----------------------------------link---------------------');
         print(imageUrl);
+        CacheHelper.savaData(key: 'imageUrl', value: imageUrl);
       }).catchError((error) {
         emit(AppUploadProfileImageErrorState());
         print("===============error1==============");
@@ -65,6 +66,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
   }) {
     if (profileImage != null) {
       uploadProfileImageWithRegister();
+      imageUrl = CacheHelper.getData(key: 'imageUrl');
     }
     else{
       imageUrl = 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1669387743~exp=1669388343~hmac=2a61727dbf9e1a3deba0672ef43e642a69431e56544a4fb0fe6b950dccecb919';

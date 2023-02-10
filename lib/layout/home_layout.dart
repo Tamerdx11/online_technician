@@ -207,7 +207,7 @@ class AppLayout extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: cubit.currentIndex == 0
+          floatingActionButton: cubit.currentIndex == 0 && cubit.hasProfession == true
               ? Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(

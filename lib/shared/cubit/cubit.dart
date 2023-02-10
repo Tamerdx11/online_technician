@@ -29,10 +29,6 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
   final storageRef = firebase_storage.FirebaseStorage.instance.ref();
 
-  ///---------------new message dot -------------
-
-
-
   ///---------- get person data ----------
 
   var model;

@@ -298,11 +298,11 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                                   )
-                                  : const SizedBox(),
+                                  : const SizedBox(height: 10.0,),
                             ],
                           ),
                         ),
-                        Padding(
+                        snapshot.data!.data()!['hasProfession'] == true?Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 50.0),
                           child: Container(
                               decoration: BoxDecoration(
@@ -324,7 +324,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
+                        ):const SizedBox(),
                         const SizedBox(height: 20.0,),
                         StreamBuilder(
                           stream:  FirebaseFirestore.instance
