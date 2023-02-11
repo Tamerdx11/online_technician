@@ -32,8 +32,8 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: HexColor('#ebebeb'),
             appBar: defaultAppBar(
               context: context,
-              color: HexColor('#80b0c8'),
-              textColor: Colors.black45,
+              color: HexColor('#D6E4E5'),
+              textColor: Colors.black87,
               title: '$name',
               actions: [
                 id == CacheHelper.getData(key: 'uId')?
@@ -41,11 +41,12 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(9.0),
                     child: OutlinedButton(
                       onPressed: () {
-                        navigateTo(context, EditProfileScreen());},
-                      child: const Text(
+                        navigateTo(context, EditProfileScreen());
+                        },
+                      child: Text(
                         'تعديل',
                         style: TextStyle(
-                            color: Colors.lightGreenAccent,
+                            color: HexColor('#7286D3'),
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
                         ),
@@ -336,15 +337,16 @@ class ProfileScreen extends StatelessWidget {
                             }
                             if(snapshot.hasData){
                               return ListView.separated(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) => Card(
                                   shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(20),
                                     borderSide: const BorderSide(
                                       color: Colors.black,
-                                      width: .3,
+                                      width: 0.05,
                                     ),),
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   elevation: 3.0,
@@ -424,11 +426,10 @@ class ProfileScreen extends StatelessWidget {
                                               width: 10,
                                             ),
                                             CircleAvatar(
-                                              radius: 21.5,
-                                              backgroundColor:
-                                              Colors.green.withOpacity(0.5),
+                                              radius: 21.2,
+                                              backgroundColor: Colors.black,
                                               child: CircleAvatar(
-                                                radius: 20,
+                                                radius: 21.0,
                                                 backgroundImage: NetworkImage(
                                                   snapshot.data!.docs[index].data()['userImage'].toString(),
                                                 ),
@@ -437,10 +438,13 @@ class ProfileScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 0.3,
-                                        color: Colors.black,
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 80.0, right: 5.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 0.1,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -534,17 +538,17 @@ class ProfileScreen extends StatelessWidget {
                                                     textDirection: TextDirection.rtl,
                                                     style:const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 12.0,
+                                                      fontSize: 11.0,
                                                       color: Colors.grey,
                                                     ),
                                                   ),
                                                   const SizedBox(
-                                                    width: 5,
+                                                    width: 3,
                                                   ),
-                                                  const Icon(
+                                                  Icon(
                                                     Icons.favorite,
-                                                    color: Colors.black87,
-                                                    size: 30.0,
+                                                    color: HexColor('#F48484'),
+                                                    size: 27.0,
                                                   ),
                                                 ],
                                               ),

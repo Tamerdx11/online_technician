@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
@@ -19,7 +20,7 @@ class FeedsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Container(
-          color: Colors.white10,
+          color:  HexColor('#FAF7F0'),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: StreamBuilder(
@@ -35,12 +36,13 @@ class FeedsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       const SizedBox(
-                        height: 5.0,
+                        height: 13.0,
                       ),
                       ListView.separated(
+                        padding:const EdgeInsets.symmetric(horizontal: 7.0),
                         itemCount: snapshot.data!.docs.length,
                         shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           int trueLikes = 0;
                           snapshot.data!.docs[index].data()['likes'].forEach(
@@ -49,13 +51,14 @@ class FeedsScreen extends StatelessWidget {
                               );
                           return Card(
                             shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(20),
                                 borderSide: const BorderSide(
-                                  color: Colors.black,
-                                  width: .3,
-                                ),),
+                                  color: Colors.grey,
+                                  width: 0.05,
+                                ),
+                            ),
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            elevation: 3.0,
+                            elevation: 2.0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -85,18 +88,17 @@ class FeedsScreen extends StatelessWidget {
                                                             context,
                                                     );
                                                   },
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(6.0),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(6.0),
                                                     child: Icon(
-                                                      Icons.whatsapp_sharp,
-                                                      color: Colors.black87,
+                                                      Icons.whatsapp_rounded,
+                                                      color: HexColor('#7FB77E'),
                                                       size: 27.0,
                                                     ),
                                                   ),
                                                 ),
                                                 const SizedBox(
-                                                  width: 1.0,
+                                                  width: 2.0,
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
@@ -140,9 +142,8 @@ class FeedsScreen extends StatelessWidget {
                                                     padding:
                                                         EdgeInsets.all(6.0),
                                                     child: Icon(
-                                                      Icons
-                                                          .location_on_outlined,
-                                                      color: Colors.black,
+                                                      Icons.location_on_outlined,
+                                                      color: Colors.black54,
                                                       size: 27.0,
                                                     ),
                                                   ),
@@ -155,7 +156,7 @@ class FeedsScreen extends StatelessWidget {
                                       Expanded(
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 12),
+                                              vertical: 10),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
@@ -165,6 +166,7 @@ class FeedsScreen extends StatelessWidget {
                                                   snapshot.data!.docs[index]
                                                       .data()['name'],
                                                   style: const TextStyle(
+                                                    color: Colors.black87,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15,
                                                   ),
@@ -226,11 +228,11 @@ class FeedsScreen extends StatelessWidget {
                                       ),
                                       InkWell(
                                         child: CircleAvatar(
-                                          radius: 21.5,
+                                          radius: 22.1,
                                           backgroundColor:
-                                              Colors.green.withOpacity(0.5),
+                                              Colors.black,
                                           child: CircleAvatar(
-                                            radius: 20,
+                                            radius: 22.0,
                                             backgroundImage: NetworkImage(snapshot
                                                 .data!.docs[index]
                                                 .data()['userImage'].toString()),
@@ -248,10 +250,13 @@ class FeedsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 0.3,
-                                  color: Colors.black,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 90.0, right: 5.0, bottom: 1.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 0.1,
+                                    color: HexColor('#453C67'),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
@@ -355,17 +360,17 @@ class FeedsScreen extends StatelessWidget {
                                                 textDirection: TextDirection.rtl,
                                               style:const TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 12.0,
+                                                fontSize: 11.0,
                                                 color: Colors.grey,
                                               ),
                                             ),
                                             const SizedBox(
-                                              width: 5,
+                                              width: 3.0,
                                             ),
-                                            const Icon(
+                                            Icon(
                                               Icons.favorite,
-                                              color: Colors.black87,
-                                              size: 30.0,
+                                              color: HexColor('#F48484'),
+                                              size: 27.0,
                                             ),
                                           ],
                                         ),
@@ -374,10 +379,10 @@ class FeedsScreen extends StatelessWidget {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                  padding: const EdgeInsets.only(left: 5.0, right: 90.0),
                                   child: Container(
                                     width: double.infinity,
-                                    height: 0.2,
+                                    height: 0.1,
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -423,14 +428,14 @@ class FeedsScreen extends StatelessWidget {
                                                             .data()['likes']
                                                         [uId] ==
                                                     true
-                                                ? const Icon(
+                                                ? Icon(
                                                     Icons.favorite_rounded,
-                                                    color: Colors.black87,
-                                                    size: 32.0,
+                                                    color: HexColor('#F48484'),
+                                                    size: 30.0,
                                                   )
-                                                : const Icon(
+                                                : Icon(
                                                     Icons.favorite_border,
-                                                    color: Colors.black87,
+                                                    color: HexColor('#F48484'),
                                                     size: 30.0,
                                                   ),
                                             const SizedBox(width: 25.0,),
@@ -453,8 +458,11 @@ class FeedsScreen extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
+                          height: 5.0,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
                       ),
                     ],
                   );

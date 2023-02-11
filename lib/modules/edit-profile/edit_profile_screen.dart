@@ -91,12 +91,12 @@ class EditProfileScreen extends StatelessWidget {
           backgroundColor: HexColor('#ebebeb'),
           appBar: defaultAppBar(
             context: context,
-            color: HexColor('#80b0c8'),
+            color: HexColor('#D6E4E5'),
             title: "تعديل الحساب",
             textColor: Colors.black54,
             actions: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8.0),
                 child: OutlinedButton(
                   onPressed: () {
                     AppCubit.get(context).updateProfileDate(
@@ -108,10 +108,10 @@ class EditProfileScreen extends StatelessWidget {
                       profession: dropdownValue,
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     "حفظ التعديلات",
                     style: TextStyle(
-                      color: Colors.lightGreenAccent,
+                      color: HexColor('#7286D3'),
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -128,7 +128,7 @@ class EditProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   if(state is AppTechnicianUpdateLoadingState)
-                    const LinearProgressIndicator(),
+                    const LinearProgressIndicator(color: Colors.greenAccent),
                   SizedBox(
                     height: 205,
                     child: Stack(

@@ -23,7 +23,6 @@ class AppLayout extends StatelessWidget {
     'الطلبات المستلمة',
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
@@ -43,13 +42,13 @@ class AppLayout extends StatelessWidget {
                       DrawerHeader(
                         curve: Curves.bounceInOut,
                         decoration: BoxDecoration(
-                          color: HexColor('#80b0c8'),
+                          color: HexColor('#D6E4E5'),
                         ),
                         child: Column(
                           children: [
                             CircleAvatar(
-                              radius: 45.6,
-                              backgroundColor: Colors.black87,
+                              radius: 45.3,
+                              backgroundColor: Colors.black,
                               child: CircleAvatar(
                                 radius: 45.0,
                                 backgroundImage:
@@ -140,13 +139,13 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: HexColor('#80b0c8'),
-            elevation: 3.5,
+            backgroundColor: HexColor('#D6E4E5'),
+            elevation: 3.0,
             centerTitle: true,
             title: Text(
               titles[cubit.currentIndex],
               style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.black87,
                   fontFamily: 'NotoNaskhArabic',
                   fontWeight: FontWeight.w600,
               ),
@@ -158,9 +157,13 @@ class AppLayout extends StatelessWidget {
                         Scaffold.of(context).openDrawer();
                       },
                       icon: CircleAvatar(
-                        radius: 18.0,
-                        backgroundImage:
-                            NetworkImage('${cubit.model?.userImage}'),
+                        radius: 20.2,
+                        backgroundColor: Colors.black,
+                        child: CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage:
+                              NetworkImage('${cubit.model?.userImage}'),
+                        ),
                       ),
                     );
                   })
@@ -172,10 +175,14 @@ class AppLayout extends StatelessWidget {
                     AppCubit.get(context).search =[];
                     navigateTo(context, SearchScreen());
                   },
-                  icon: const Icon(Icons.search_rounded, color: Colors.black),
+                  icon: const Icon(
+                    Icons.search_rounded,
+                    color: Colors.black54,
+                    size: 30.0,
+                  ),
                 ),
               const SizedBox(
-                width: 3.0,
+                width: 1.0,
               ),
               if (cubit.currentIndex == 0)
                 IconButton(
@@ -203,7 +210,7 @@ class AppLayout extends StatelessWidget {
                       ),
                 ),
               const SizedBox(
-                width: 5.0,
+                width: 6.0,
               ),
             ],
           ),

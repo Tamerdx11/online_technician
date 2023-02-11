@@ -21,8 +21,8 @@ class ChatsScreen extends StatelessWidget {
           backgroundColor: HexColor('#ebebeb'),
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: HexColor('#78b7b7'),
-              elevation: 5.0,
+              backgroundColor: HexColor('#D6E4E5'),
+              elevation: 3.0,
               title:const Text("المحادثات",
                   style: TextStyle(
                       color: Colors.black54,
@@ -80,14 +80,14 @@ class ChatsScreen extends StatelessWidget {
             AppCubit.get(context).goToChatDetails(id, context);
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Card(
-              elevation: 5.0,
+              elevation: 3.0,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide:const BorderSide(
-                    color: Colors.black,
+                    color: Colors.grey,
                     width: .1,
                   ),
               ),
@@ -95,17 +95,24 @@ class ChatsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const SizedBox(width: 20.0,),
-                  Text(
-                    chatData[id][0],
-                    style: const TextStyle(
-                      height: 1.4,
-                      fontSize: 13.0,
-                      color: Colors.black45,
-                      fontWeight: FontWeight.w600
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                          chatData[id][0],
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+
+                            height: 1.4,
+                            fontSize: 13.0,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.w600
+                          ),
+                          softWrap: true,
+                          maxLines: 1,
+                          textDirection: TextDirection.rtl,
+                        ),
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    textDirection: TextDirection.rtl,
                   ),
                   const Spacer(),
                   Text(

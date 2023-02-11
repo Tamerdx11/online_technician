@@ -1,6 +1,7 @@
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/models/post.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/constants.dart';
@@ -325,49 +326,68 @@ Widget buildPostItem(PostModel model, context, index) => Card(
       ),
     );
 
-///----------------------------------- build one search item --- items builder------/// need to be customize ***********
+///----------------------------------- build one search item --- items builder------
 
 Widget buildSearchResultItem(data, context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
       child: Card(
+        elevation: 3.0,
         shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide:const BorderSide(
               color: Colors.black,
-              width: .3,
+              width: 0.05,
             )),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                child: CircleAvatar(
-                  radius: 32.5,
-                  backgroundColor: Colors.black54,
-                  child: CircleAvatar(
-                    radius: 31.0,
-                    backgroundImage: NetworkImage(data['userImage'].toString()),
-                  ),
+            const SizedBox(
+              width: 15.0,
+            ),
+            InkWell(
+              child: Padding(
+                padding:const EdgeInsets.all(4.0),
+                child: Icon(
+                  Icons.whatsapp,
+                  size: 27.0,
+                  color: HexColor('#7FB77E'),
                 ),
-                onTap: () {
-                  navigateTo(context, ProfileScreen(
-                    id: data['uId'].toString(),
-                    name: data['name'].toString(),
-                  ));
-                },
+              ),
+              onTap: () {
+                ///go to chat
+                AppCubit.get(context).goToChatDetails(
+                  data['uId'].toString(),
+                  context,
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.location_on_outlined,
+                    size: 27.0,
+                    color: Colors.black54,
+                  ),
+                  Text(
+                    data['location'].toString(),
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(
-              width: 8.0,
-            ),
+            const Spacer(),
             Column(
               children: [
                 InkWell(
                   child: Text(
                     data['name'].toString(),
                     style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black,
+                      fontSize: 15.0,
+                      color: Colors.black87,
                       fontWeight: FontWeight.bold,
                       height: 1.4,
                     ),
@@ -392,55 +412,27 @@ Widget buildSearchResultItem(data, context) => Padding(
                 ),
               ],
             ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Row(
-                children: [
-                  Text(
-                    data['location'].toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      height: 1.4,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 3.0,
-                  ),
-                  const Icon(
-                    Icons.location_on_outlined,
-                    size: 30.0,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(
-              width: 0,
+              width: 3.0,
             ),
-            data['uId'].toString()!=uId
-                ?Container(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.whatsapp,
-                    size: 30.0,
-                    color: Colors.black,
+                child: CircleAvatar(
+                  radius: 30.1,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: NetworkImage(data['userImage'].toString()),
                   ),
                 ),
                 onTap: () {
-                  ///go to chat
-                  AppCubit.get(context).goToChatDetails(
-                    data['uId'].toString(),
-                    context,
-                  );
+                  navigateTo(context, ProfileScreen(
+                    id: data['uId'].toString(),
+                    name: data['name'].toString(),
+                  ));
                 },
               ),
-            )
-                :const SizedBox(),
-            const SizedBox(
-              width: 6.0,
             ),
           ],
         ),
@@ -454,13 +446,13 @@ Widget searchResultsBuilder(data, context) => ConditionalBuilder(
         itemBuilder: (context, index) =>
             buildSearchResultItem(data[index], context),
         separatorBuilder: (context, index) => const SizedBox(
-          height: 10.0,
+          height: 5.0,
         ),
         itemCount: data.length,
       ),
       fallback: (context) => const Center(
           child: CircularProgressIndicator(
-        color: Colors.black,
+        color: Colors.black54,
       )),
     );
 

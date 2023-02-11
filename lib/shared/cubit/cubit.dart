@@ -83,22 +83,24 @@ class AppCubit extends Cubit<AppState> {
     FeedsScreen(),
     NotificationScreen(),
     SentRequestsScreen(),
-    ReceivedRequestsScreen(),
+    if(CacheHelper.getData(key: 'hasProfession')==true)
+      ReceivedRequestsScreen(),
   ];
-  List<BottomNavigationBarItem> bottomItems = const[
-    BottomNavigationBarItem(
+  List<BottomNavigationBarItem> bottomItems = [
+    const BottomNavigationBarItem(
       icon: Icon(Icons.home_sharp),
       label: "Home",
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.notifications_active),
       label: "notification",),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.hail),
       label: "Sent",),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.handyman_sharp),
-      label: "Received",),
+    if(CacheHelper.getData(key: 'hasProfession')==true)
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.handyman_sharp),
+        label: "Received",),
   ];
 
   void changeButtonNav(int index) {
@@ -407,7 +409,7 @@ class AppCubit extends Cubit<AppState> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'users/${Uri.file(idCardImage!.path.toString()).pathSegments.last}')
+            'users/$uId$uId$uId')
         .putFile(idCardImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -448,7 +450,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
+        .child('users/$uId$uId')
         .putFile(coverImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -463,7 +465,7 @@ class AppCubit extends Cubit<AppState> {
 
   ///----------  update profile data ----------//
 
-  String? profession='أختر الحرفة الخاصة بك';
+  String? profession='نقاش';
   void changeValue(String? value){
     profession=value;
     emit(change());
@@ -477,6 +479,7 @@ class AppCubit extends Cubit<AppState> {
     String? nationalId,
     required BuildContext context,
   }) {
+
     if (profileImage != null) {
       uploadProfileImage();
     }
@@ -487,8 +490,6 @@ class AppCubit extends Cubit<AppState> {
       uploadIdCardImage();
     }
 
-    print('----------------------------------------state------------------------');
-    print(AppCubit.get(context).state.toString());
     emit(AppTechnicianUpdateLoadingState());
     Timer(
         const Duration(seconds: 5),(){
@@ -512,16 +513,22 @@ class AppCubit extends Cubit<AppState> {
           latitude: model.latitude,
           longitude: model.longitude,
         );
-        FirebaseFirestore.instance
-            .collection('person')
-            .doc(uId)
-            .set(newModel.toMap())
-            .then((value) {
-          getUserData();
-          emit(AppTechnicianUpdateSuccessState());
-        }).catchError((error) {
-          emit(AppTechnicianUpdateErrorState());
-        });
+        if(idCardImage == null && model?.idCardPhoto == null){
+          showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
+          emit(AppUserUpdateErrorState());
+        }
+        else{
+          FirebaseFirestore.instance
+              .collection('person')
+              .doc(uId)
+              .set(newModel.toMap())
+              .then((value) {
+            getUserData();
+            emit(AppTechnicianUpdateSuccessState());
+          }).catchError((error) {
+            emit(AppTechnicianUpdateErrorState());
+          });
+        }
       }
       else if (hasProfession == false)
       {
@@ -551,9 +558,6 @@ class AppCubit extends Cubit<AppState> {
         });
       }
     });
-
-
-
   }
 
 }

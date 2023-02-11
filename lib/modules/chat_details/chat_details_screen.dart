@@ -50,7 +50,7 @@ class ChatDetailsScreen extends StatelessWidget {
               backgroundColor: HexColor('#ebebeb'),
               appBar: AppBar(
                 backgroundColor: HexColor('#78b7b7'),
-                elevation: 5.0,
+                elevation: 3.0,
                 centerTitle: false,
                 leading: IconButton(
                   onPressed: () {
@@ -72,8 +72,8 @@ class ChatDetailsScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 22.0,
-                        backgroundColor: Colors.green,
+                        radius: 21.1,
+                        backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: 21.0,
                           backgroundImage: NetworkImage(
