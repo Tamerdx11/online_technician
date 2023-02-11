@@ -20,7 +20,6 @@ class ProfileScreen extends StatelessWidget {
     this.id,
     this.name
   });
-
   @override
   Widget build(BuildContext context) {
 

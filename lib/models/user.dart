@@ -4,7 +4,7 @@ class UserModel extends PersonModel {
   String? phone;
   String? coverImage;
   String? token;
-  bool hasProfession = false;
+  bool? hasProfession;
   String? latitude;
   String? longitude;
 
@@ -17,7 +17,7 @@ class UserModel extends PersonModel {
     this.phone,
     this.token,
     this.coverImage,
-    required this.hasProfession,
+    this.hasProfession,
     this.latitude,
     this.longitude,
   }) : super(

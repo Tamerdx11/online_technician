@@ -36,11 +36,11 @@ class verifyCodeScreen extends StatelessWidget {
                 .doc(state.uid.toString())
                 .get().then((value) {
               if (value.data() == null) {
-
                 navigateToAndFinish(context, RegisterScreen());
               } else {
                 AppCubit.get(context).getUserData();
                 CacheHelper.savaData(key: 'uId', value: state.uid.toString());
+                CacheHelper.savaData(key: 'hasProfession', value: value.data()!['hasProfession']);
                 navigateToAndFinish(context, AppLayout());
               }
             }).catchError((error) {});

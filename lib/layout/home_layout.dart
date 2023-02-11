@@ -11,6 +11,7 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
@@ -214,7 +215,7 @@ class AppLayout extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: cubit.currentIndex == 0 && cubit.hasProfession == true
+          floatingActionButton: cubit.currentIndex == 0 && CacheHelper.getData(key: 'hasProfession') == true
               ? Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(

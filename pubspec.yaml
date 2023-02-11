@@ -64,6 +64,13 @@ dependencies:
   popup_banner: ^1.0.0
   pinput: ^1.2.0
   badges: ^3.0.2
+  flutter_launcher_icons: "^0.11.0"
+
+flutter_icons:
+  image_path: "assets/images/logo1.png"
+  android: true
+  image_path_android: "assets/images/logo1.png"
+  ios: true
 
 dev_dependencies:
   flutter_test:

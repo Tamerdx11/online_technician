@@ -37,7 +37,7 @@ class AppCubit extends Cubit<AppState> {
         .collection('person')
         .doc(uId)
         .get().then((value) {
-        if(value.data()!['hasProfession'])
+        if(value.data()!['hasProfession'] == true)
         {
           CacheHelper.savaData(key: 'hasProfession', value: true);
           model = TechnicianModel.fromJson(value.data());
@@ -79,14 +79,14 @@ class AppCubit extends Cubit<AppState> {
   ///---------- main layout navigation ----------
 
   int currentIndex = 0;
-  List<Widget> screens = [
-    FeedsScreen(),
-    NotificationScreen(),
-    SentRequestsScreen(),
-    if(CacheHelper.getData(key: 'hasProfession')==true)
-      ReceivedRequestsScreen(),
+  late List<Widget> screens = [
+    const FeedsScreen(),
+    const NotificationScreen(),
+    const SentRequestsScreen(),
+    if(CacheHelper.getData(key: 'hasProfession') == true)
+      const ReceivedRequestsScreen(),
   ];
-  List<BottomNavigationBarItem> bottomItems = [
+  late List<BottomNavigationBarItem> bottomItems = [
     const BottomNavigationBarItem(
       icon: Icon(Icons.home_sharp),
       label: "Home",
@@ -100,7 +100,7 @@ class AppCubit extends Cubit<AppState> {
     if(CacheHelper.getData(key: 'hasProfession')==true)
       const BottomNavigationBarItem(
         icon: Icon(Icons.handyman_sharp),
-        label: "Received",),
+        label: "Received",)
   ];
 
   void changeButtonNav(int index) {
@@ -355,7 +355,7 @@ class AppCubit extends Cubit<AppState> {
   
   ///------------ has profession change ---------------
 
-  bool hasProfession = CacheHelper.getData(key: 'hasProfession');
+  late bool hasProfession = model.hasProfession;
   void checkboxChange(value) {
     hasProfession = value;
     emit(AppChangeCheckboxState());

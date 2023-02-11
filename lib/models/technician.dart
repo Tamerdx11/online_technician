@@ -29,7 +29,7 @@ class TechnicianModel extends UserModel {
           userImage: userImage,
           phone: phone,
           coverImage: coverImage,
-          hasProfession: true,
+          hasProfession: hasProfession,
           location: location,
           latitude:latitude,
           longitude:longitude,
