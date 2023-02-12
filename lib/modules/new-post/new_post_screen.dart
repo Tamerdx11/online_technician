@@ -1,7 +1,7 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
@@ -22,12 +22,19 @@ class NewPostScreen extends StatelessWidget {
         var cubit = AppCubit.get(context).model;
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: HexColor('#FAF7F0'),
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              title:Text("اضافة بوست",style: TextStyle(color: Colors.black,fontFamily: 'NotoNaskhArabic',fontWeight: FontWeight.w600)),
+              backgroundColor: HexColor('#D6E4E5'),
+              elevation: 3.0,
+              title:const Text(
+                  "اضافة بوست",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'NotoNaskhArabic',
+                      fontWeight: FontWeight.w600,
+                  ),
+              ),
               leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -38,10 +45,16 @@ class NewPostScreen extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 7.0),
               child: Card(
-                elevation: 0,
-                shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: const BorderSide(color: Colors.black,width: .3,)),
+                elevation: 3.0,
+                shape: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 0.1,
+                    ),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -69,6 +82,7 @@ class NewPostScreen extends StatelessWidget {
                                   onTap: (){
                                     navigateTo(context, ProfileScreen(
                                       id: cubit.uId,
+                                      name: cubit.name,
                                     ));
                                   },
                                 ),
@@ -87,9 +101,9 @@ class NewPostScreen extends StatelessWidget {
                                       textDirection: TextDirection.rtl,
                                     ),
                                     const Icon(
-                                      Icons.location_on,
-                                      color: Colors.black,
-                                      size: 20.0,
+                                      Icons.where_to_vote,
+                                      color: Colors.grey,
+                                      size: 17.0,
                                     ),
                                     const SizedBox(
                                       width: 7.0,
@@ -114,10 +128,10 @@ class NewPostScreen extends StatelessWidget {
                           ),
                           InkWell(
                             child: CircleAvatar(
-                              radius: 27,
-                              backgroundColor: Colors.green.withOpacity(0.5),
+                              radius: 23.1,
+                              backgroundColor: Colors.black,
                               child: CircleAvatar(
-                                radius: 25,
+                                radius: 23,
                                 backgroundImage:
                                 NetworkImage('${cubit?.userImage}'),
                               ),
@@ -125,13 +139,19 @@ class NewPostScreen extends StatelessWidget {
                             onTap: () {
                               navigateTo(context, ProfileScreen(
                                 id: cubit.uId,
+                                name: cubit.name,
                               ));
                             },
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 15.0,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 90.0, right: 5.0, bottom: 6.0, top: 4.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 0.1,
+                          color: HexColor('#453C67'),
+                        ),
                       ),
                       TextFormField(
                         controller: textController,
@@ -202,76 +222,12 @@ class NewPostScreen extends StatelessWidget {
                             spacing: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5.0),
                           ), // decorator: ,
                         ),
-
-                      // Column(
-                      //   children: [
-                      //     CarouselSlider(
-                      //         items: [
-                      //           Image.network('https://pixlr.com/images/index/remove-bg.webp',fit: BoxFit.cover, width: double.infinity,),
-                      //           Image.network('https://pixlr.com/images/index/remove-bg.webp',fit: BoxFit.cover, width: double.infinity,),
-                      //           Image.network('https://pixlr.com/images/index/remove-bg.webp',fit: BoxFit.cover, width: double.infinity,),
-                      //         ],
-                      //         options: CarouselOptions(
-                      //           scrollPhysics: ClampingScrollPhysics(),
-                      //             // enlargeCenterPage: true,
-                      //             viewportFraction: 1,
-                      //             aspectRatio: 2.0,
-                      //             height: 250,
-                      //             enableInfiniteScroll: false
-                      //         ),
-                      //       carouselController: _controller,
-                      //     ),
-                      //     RaisedButton(
-                      //       onPressed: () => buttonCarouselController.nextPage(
-                      //           duration: Duration(milliseconds: 300), curve: Curves.linear),
-                      //       child: Text('→'),
-                      //     )
-                      //   ],
-                      // ),
-
-                      // Column(
-                      //   children: [
-                      //     ListView.builder(
-                      //       itemCount: AppCubit.get(context).len,
-                      //       itemBuilder: (context, index) => Stack(
-                      //         alignment: AlignmentDirectional.topEnd,
-                      //         children: [
-                      //           Container(
-                      //             height: 80.0,
-                      //             width: 80.0,
-                      //             decoration: BoxDecoration(
-                      //               borderRadius: BorderRadius.circular(4.0),
-                      //               image: DecorationImage(
-                      //                 image: FileImage(
-                      //                     AppCubit.get(context).postImageFile!.first),
-                      //                 fit: BoxFit.cover,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //           IconButton(
-                      //             onPressed: () {
-                      //               AppCubit.get(context).removePostImage(index: index);
-                      //             },
-                      //             icon: CircleAvatar(
-                      //               backgroundColor: Colors.black.withOpacity(0.4),
-                      //               child: const Icon(
-                      //                 Icons.close,
-                      //                 color: Colors.white,
-                      //                 size: 15.0,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.only(left: 5.0, right: 90.0, bottom: 6.0, top: 4.0),
                         child: Container(
                           width: double.infinity,
-                          height: .1,
-                          color: Colors.black,
+                          height: 0.1,
+                          color: HexColor('#453C67'),
                         ),
                       ),
                       Padding(
@@ -285,7 +241,7 @@ class NewPostScreen extends StatelessWidget {
                               icon: const Icon(
                                 Icons.add_photo_alternate_outlined,
                                 size: 25.0,
-                                color: Colors.black,
+                                color: Colors.black87,
                               ),
                             ),
                             IconButton(
@@ -295,7 +251,7 @@ class NewPostScreen extends StatelessWidget {
                               icon: const Icon(
                                   Icons.add_a_photo_outlined,
                                   size: 25.0,
-                                color: Colors.black,
+                                color: Colors.black87,
                               ),
                             ),
                             const Spacer(),
@@ -322,7 +278,6 @@ class NewPostScreen extends StatelessWidget {
                                 }
                                 else
                                 {
-                                  print('only text -------------------------');
                                   AppCubit.get(context).createPost(
                                     context: context,
                                     text: textController.text,
@@ -334,12 +289,20 @@ class NewPostScreen extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30.0),
-                                  color: Colors.black,
+                                  color: HexColor('#76BA99'),
                                 ),
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 4.0, horizontal: 22.0),
-                                  child: Text('شارك اعمالك الان',textDirection: TextDirection.rtl,style: TextStyle(color: Colors.white,fontSize: 16)),
+                                  child: Text(
+                                      'شارك ألان',
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold
+                                      ),
+                                  ),
                                 ),
                               ),
                             ),

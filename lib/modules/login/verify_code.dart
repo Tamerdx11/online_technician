@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +43,10 @@ class verifyCodeScreen extends StatelessWidget {
                 AppCubit.get(context).getUserData();
                 CacheHelper.savaData(key: 'uId', value: state.uid.toString());
                 CacheHelper.savaData(key: 'hasProfession', value: value.data()!['hasProfession']);
-                navigateToAndFinish(context, AppLayout());
+                Timer(const Duration(seconds: 3), () {
+                  showToast(text: 'مرحبا بعودتك', state: ToastState.WELCOME);
+                  navigateToAndFinish(context, AppLayout());
+                });
               }
             }).catchError((error) {});
           }

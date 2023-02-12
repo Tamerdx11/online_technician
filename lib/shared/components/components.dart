@@ -153,16 +153,18 @@ void showToast({
         textColor: Colors.white,
         fontSize: 10.0);
 
-enum ToastState { SUCCESS, ERROR, WORNING }
+enum ToastState { SUCCESS, ERROR, WORNING, WELCOME }
 
 Color chooseToastColor(ToastState state) {
   switch (state) {
     case ToastState.SUCCESS:
       return Colors.green;
     case ToastState.ERROR:
-      return Colors.red;
+      return HexColor('#DC3535');
     case ToastState.WORNING:
-      return Colors.yellow;
+      return Colors.green;
+    case ToastState.WELCOME:
+      return Colors.tealAccent;
   }
 }
 
