@@ -40,7 +40,8 @@ class NewPostScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
-              )),
+              ),
+          ),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Padding(
@@ -49,7 +50,7 @@ class NewPostScreen extends StatelessWidget {
               child: Card(
                 elevation: 3.0,
                 shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: const BorderSide(
                       color: Colors.grey,
                       width: 0.1,
@@ -185,8 +186,10 @@ class NewPostScreen extends StatelessWidget {
                         CarouselSlider.builder(
                           carouselController: _controller,
                           itemCount: AppCubit.get(context).postImageFile.length,
-                          itemBuilder: (BuildContext context, int itemIndex,
-                              int pageViewIndex) => Container(
+                          itemBuilder: (
+                              BuildContext context,
+                              int itemIndex,
+                              int pageViewIndex,) => Container(
                             height: 80.0,
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -241,7 +244,7 @@ class NewPostScreen extends StatelessWidget {
                               icon: const Icon(
                                 Icons.add_photo_alternate_outlined,
                                 size: 25.0,
-                                color: Colors.black87,
+                                color: Colors.green,
                               ),
                             ),
                             IconButton(
@@ -251,7 +254,7 @@ class NewPostScreen extends StatelessWidget {
                               icon: const Icon(
                                   Icons.add_a_photo_outlined,
                                   size: 25.0,
-                                color: Colors.black87,
+                                color: Colors.blueAccent,
                               ),
                             ),
                             const Spacer(),

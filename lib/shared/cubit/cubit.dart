@@ -111,7 +111,9 @@ class AppCubit extends Cubit<AppState> {
   var curr_index = 0;
   void changeCarousel(var index){
     curr_index = index;
-     emit(AppChangeCarouselDotState());
+    Timer(const Duration(milliseconds: 10),(){
+      emit(AppChangeCarouselDotState());
+    });
   }
 
   ///---------- create post ----------
