@@ -345,11 +345,6 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get search results ---------
 
-  // LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1')));
-  // LatLng to=LatLng(double.parse(CacheHelper.getData(key: 'latitude2')) , double.parse(CacheHelper.getData(key: 'longitude2')));
-  // HaversineDistance calc = HaversineDistance();
-  // double dis =0;
-  // dis = calc.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM)
   List<dynamic> search = [];
   void getSearchData(String value, String key) {
     emit(AppLoadingState());
@@ -494,7 +489,8 @@ class AppCubit extends Cubit<AppState> {
     String? bio,
     String? nationalId,
     required BuildContext context,
-  }) {
+  })
+  {
 
     if (profileImage != null) {
       uploadProfileImage();
@@ -531,7 +527,7 @@ class AppCubit extends Cubit<AppState> {
         );
         if(idCardImage == null && model?.idCardPhoto == null){
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
-          emit(AppUserUpdateErrorState());
+          emit(AppUserUpdateErrorState(),);
         }
         else{
           FirebaseFirestore.instance
