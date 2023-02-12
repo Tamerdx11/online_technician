@@ -331,6 +331,7 @@ class ProfileScreen extends StatelessWidget {
                               .collection('posts')
                               .where("uId", isEqualTo: id).snapshots(),
                           builder: (context, snapshot) {
+
                             if (snapshot.hasError) {
                               return const Center(child: Text('error 404'));
                             }
@@ -340,7 +341,13 @@ class ProfileScreen extends StatelessWidget {
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) => Card(
+                                itemBuilder: (context, index) {
+                                  int trueLikes = 0;
+                                  snapshot.data!.docs[index].data()['likes'].forEach(
+                                        (key, value) =>
+                                    value == true ? trueLikes++ : trueLikes,
+                                  );
+                                  return Card(
                                   shape: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                     borderSide: const BorderSide(
@@ -533,7 +540,7 @@ class ProfileScreen extends StatelessWidget {
                                                 MainAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    '${snapshot.data!.docs[index].data()['postImages'].length} من الأشخاص أعجبهم هذا...  ',
+                                                    '${trueLikes} من الأشخاص أعجبهم هذا... ',
                                                     textDirection: TextDirection.rtl,
                                                     style:const TextStyle(
                                                       fontWeight: FontWeight.bold,
@@ -560,7 +567,8 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                ),
+                                );
+                                  },
                                 separatorBuilder: (context, index) => const SizedBox(height: 3.0,),
                                 itemCount: snapshot.data!.docs.length,
                               );

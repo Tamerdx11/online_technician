@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -46,8 +48,10 @@ class EditProfileScreen extends StatelessWidget {
         }
         // ignore: unrelated_type_equality_checks
         if(state is AppTechnicianUpdateSuccessState){
-          showToast(text: 'تم تحديث بياناتك بنجاح', state: ToastState.SUCCESS);
-          Navigator.pop(context);
+          Timer(const Duration(seconds: 2), () {
+            showToast(text: 'تم تحديث بياناتك بنجاح', state: ToastState.SUCCESS);
+            Navigator.pop(context);
+          });
         }
       },
       builder: (context, state) {
@@ -380,6 +384,7 @@ class EditProfileScreen extends StatelessWidget {
                             color: Colors.red,
                             size: 20.0,
                           ),
+                          const SizedBox(width: 5.0,),
                         ],
                       ),
                     ),
