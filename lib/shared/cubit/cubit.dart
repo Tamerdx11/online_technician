@@ -20,9 +20,12 @@ import 'package:online_technician/modules/notification/notification_screen.dart'
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
 
 import '../components/components.dart';
+import '../network/local/cache_helper.dart';
+import '../network/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -79,14 +82,14 @@ class AppCubit extends Cubit<AppState> {
   ///---------- main layout navigation ----------
 
   int currentIndex = 0;
-  late List<Widget> screens = [
+  List<Widget> screens =
+  [
     const FeedsScreen(),
     const NotificationScreen(),
     const SentRequestsScreen(),
-    if(CacheHelper.getData(key: 'hasProfession') == true)
-      const ReceivedRequestsScreen(),
+    const ReceivedRequestsScreen(),
   ];
-  late List<BottomNavigationBarItem> bottomItems = [
+  List<BottomNavigationBarItem> bottomItems1 = [
     const BottomNavigationBarItem(
       icon: Icon(Icons.home_sharp),
       label: "Home",
@@ -97,10 +100,21 @@ class AppCubit extends Cubit<AppState> {
     const BottomNavigationBarItem(
       icon: Icon(Icons.hail),
       label: "Sent",),
-    if(CacheHelper.getData(key: 'hasProfession')==true)
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.handyman_sharp),
-        label: "Received",)
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.handyman_sharp),
+      label: "Received",)
+  ];
+  List<BottomNavigationBarItem> bottomItems2 = [
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.home_sharp),
+      label: "Home",
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.notifications_active),
+      label: "notification",),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.hail),
+      label: "Sent",),
   ];
 
   void changeButtonNav(int index) {
@@ -525,6 +539,7 @@ class AppCubit extends Cubit<AppState> {
               .doc(uId)
               .set(newModel.toMap())
               .then((value) {
+            CacheHelper.savaData(key: 'hasProfession', value: true);
             getUserData();
             emit(AppTechnicianUpdateSuccessState());
           }).catchError((error) {
@@ -553,6 +568,7 @@ class AppCubit extends Cubit<AppState> {
             .doc(uId)
             .set(newModel.toMap())
             .then((value) {
+          CacheHelper.savaData(key: 'hasProfession', value: false);
           getUserData();
           emit(AppTechnicianUpdateSuccessState());
         }).catchError((error) {

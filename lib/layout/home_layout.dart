@@ -238,13 +238,14 @@ class AppLayout extends StatelessWidget {
                 )
               : null,
           bottomNavigationBar: BottomNavigationBar(
+            elevation: 2.0,
             selectedItemColor: HexColor('#80b0c8'),
             type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {
               cubit.changeButtonNav(index);
             },
-            items: cubit.bottomItems,
+            items:CacheHelper.getData(key: 'hasProfession') == true? cubit.bottomItems1:cubit.bottomItems2,
           ),
           body: cubit.screens[cubit.currentIndex],
         );

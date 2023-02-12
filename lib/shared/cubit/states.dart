@@ -111,5 +111,7 @@ class AppGetProfilePostsSuccessState extends AppState{}
 
 class AppGetchangeBageMessageState extends AppState{}
 
+class AppBackState extends AppState{}
+
 class change extends AppState{}
 

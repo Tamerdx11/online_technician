@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
-import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
@@ -93,11 +91,27 @@ class EditProfileScreen extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: HexColor('#ebebeb'),
-          appBar: defaultAppBar(
-            context: context,
-            color: HexColor('#D6E4E5'),
-            title: "تعديل الحساب",
-            textColor: Colors.black54,
+          appBar: AppBar(
+            backgroundColor: HexColor('#D6E4E5'),
+            title:const Center(
+              child: Text(
+                'تعديل الحساب',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontFamily: 'NotoNaskhArabic',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            leading: IconButton(
+                onPressed: (){
+                  AppCubit.get(context).checkboxChange(AppCubit.get(context).model.hasProfession);
+                  Timer(const Duration(seconds: 1),(){
+                    Navigator.pop(context);
+                  });
+                },
+                icon:const Icon(Icons.arrow_back,color: Colors.black87,),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8.0),
