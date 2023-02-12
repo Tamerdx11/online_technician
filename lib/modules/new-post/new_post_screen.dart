@@ -2,7 +2,6 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
@@ -72,20 +71,12 @@ class NewPostScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                InkWell(
-                                  child: Text(
-                                    '${cubit.name}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,fontSize: 16,
-                                    ),
-                                    textDirection: TextDirection.rtl,
+                                Text(
+                                  '${cubit.name}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,fontSize: 16,
                                   ),
-                                  onTap: (){
-                                    navigateTo(context, ProfileScreen(
-                                      id: cubit.uId,
-                                      name: cubit.name,
-                                    ));
-                                  },
+                                  textDirection: TextDirection.rtl,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -127,22 +118,14 @@ class NewPostScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10.0,
                           ),
-                          InkWell(
+                          CircleAvatar(
+                            radius: 23.1,
+                            backgroundColor: Colors.black,
                             child: CircleAvatar(
-                              radius: 23.1,
-                              backgroundColor: Colors.black,
-                              child: CircleAvatar(
-                                radius: 23,
-                                backgroundImage:
-                                NetworkImage('${cubit?.userImage}'),
-                              ),
+                              radius: 23,
+                              backgroundImage:
+                              NetworkImage('${cubit?.userImage}'),
                             ),
-                            onTap: () {
-                              navigateTo(context, ProfileScreen(
-                                id: cubit.uId,
-                                name: cubit.name,
-                              ));
-                            },
                           ),
                         ],
                       ),
