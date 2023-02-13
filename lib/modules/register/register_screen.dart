@@ -8,7 +8,6 @@ import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-
 import '../google_map/google_map.dart';
 
 // ignore: must_be_immutable
@@ -95,13 +94,11 @@ class RegisterScreen extends StatelessWidget {
                         defaultFormText(
                           validate: (value) {
                             if (value.toString().isEmpty) {
-                              return 'name is too short!';
+                              return 'يرجي إدخال الأسم';
                             }
                             return null;
                           },
                           controller: usernameController,
-                          onSubmitted: (value) {},
-                          onchange: (value) {},
                           label: 'الاسم',
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.person),
@@ -112,7 +109,7 @@ class RegisterScreen extends StatelessWidget {
                         defaultFormText(
                           validate: (value) {
                             if (value.toString().isEmpty) {
-                              return 'phone is too short!';
+                              return 'يرجي تحديد موقعك';
                             }
                             return null;
                           },
