@@ -164,6 +164,71 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    if(id != CacheHelper.getData(key: 'uId'))
+                                      Text(
+                                        'يبعد عنك مسافة ${AppCubit.get(context).getDistance(
+                                          lat1: AppCubit.get(context).model.latitude,
+                                          long1: AppCubit.get(context).model.longitude,
+                                          lat2: snapshot.data!.data()!['latitude'],
+                                          long2: snapshot.data!.data()!['longitude'],
+                                        ).toInt()} كم',
+                                        style:const  TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    const SizedBox(width: 10.0,),
+                                    InkWell(
+                                      onTap: () async {
+                                        await AppCubit.get(context).getUser(
+                                            snapshot.data!.data()!['uId'].toString());
+                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
+                                        navigateTo(context, GoogleMaps2());
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            snapshot.data!
+                                                .data()!['location']
+                                                .toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 16.0,
+                                                color: Colors.blueAccent,
+                                                fontStyle: FontStyle.italic
+                                            ),
+                                          ),
+                                          const Text(
+                                            ' يقيم في ',
+                                            style:TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          const Icon(
+                                            Icons.gps_fixed_rounded,
+                                            color: Colors.blueAccent,
+                                            size: 20.0,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 10.0,
                                   vertical: 10.0,
@@ -174,12 +239,9 @@ class ProfileScreen extends StatelessWidget {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
+                                      const SizedBox(width: 10.0,),
                                       Row(
                                         children:const [
-                                          Icon(
-                                            Icons.star_half_rounded,
-                                            color: Colors.amberAccent,
-                                          ),
                                           Text(
                                             ' تقييم : 15.0',
                                             style: TextStyle(
@@ -187,6 +249,10 @@ class ProfileScreen extends StatelessWidget {
                                               fontSize: 16.0,
                                               color: Colors.black87,
                                             ),
+                                          ),
+                                          Icon(
+                                            Icons.star_half_rounded,
+                                            color: Colors.amber,
                                           ),
                                         ],
                                       ),
@@ -209,6 +275,8 @@ class ProfileScreen extends StatelessWidget {
                                                 fontSize: 16.0,
                                                 color: Colors.black87,
                                               )),
+                                          const SizedBox(width: 2.0,),
+                                          const Icon(Icons.handyman_sharp, size: 20.0, color: Colors.green,),
                                         ],
                                       ),
                                   ],
@@ -221,64 +289,6 @@ class ProfileScreen extends StatelessWidget {
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const Text(
-                                      'يبعد عنك مسافة 13 كم',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    InkWell(
-                                      onTap: () async {
-                                        await AppCubit.get(context).getUser(
-                                            snapshot.data!.data()!['uId'].toString());
-                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
-                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
-                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
-                                        navigateTo(context, GoogleMaps2());
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          const Icon(
-                                            Icons.gps_fixed_rounded,
-                                            color: Colors.lightGreen,
-                                            size: 27.0,
-                                          ),
-                                          Text(
-                                            snapshot.data!
-                                                .data()!['location']
-                                                .toString(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 17.0,
-                                              color: Colors.lightGreen,
-                                              fontStyle: FontStyle.italic
-                                            ),
-                                          ),
-                                          const Text(
-                                            ' يقيم في ',
-                                            style:TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16.0,
-                                              color: Colors.black87,
-                                            ),),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
                               snapshot.data!.data()!['hasProfession'] != false
@@ -315,7 +325,7 @@ class ProfileScreen extends StatelessWidget {
                             child:const Padding(
                               padding: EdgeInsets.only(left: 15.0,right: 15.0,bottom: 10.0, top: 2.0),
                               child: Text(
-                                  ' أعمالي ',
+                                  ' أعمالي',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15.0,

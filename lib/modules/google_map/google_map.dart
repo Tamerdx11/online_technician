@@ -65,8 +65,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
     _animateCamera(LatLng(_myLocation.latitude!, _myLocation.longitude!));
     LatLng current=await LatLng(_myLocation.latitude!, _myLocation.longitude!);
     _setMarker(current);
-    latitude =_myLocation.latitude;
-    longitude=_myLocation.longitude;
+    latitude  = _myLocation.latitude;
+    longitude = _myLocation.longitude;
     CacheHelper.savaData(key: 'latitude1', value: _myLocation.latitude);
     CacheHelper.savaData(key: 'longitude1', value: _myLocation.longitude);
     print('============================================///////////////');

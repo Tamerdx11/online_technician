@@ -335,7 +335,7 @@ Widget buildSearchResultItem(data, context) => Padding(
       child: Card(
         elevation: 3.0,
         shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(15),
             borderSide:const BorderSide(
               color: Colors.black,
               width: 0.05,
@@ -362,66 +362,78 @@ Widget buildSearchResultItem(data, context) => Padding(
                 );
               },
             ),
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    size: 27.0,
-                    color: Colors.black54,
-                  ),
-                  Text(
-                    data['location'].toString(),
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             const Spacer(),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                InkWell(
-                  child: Text(
-                    data['name'].toString(),
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                      height: 1.4,
+                Row(
+                  children: [
+                    Text(
+                      'يبعد عنك مسافة ${AppCubit.get(context).getDistance(
+                          lat1: AppCubit.get(context).model.latitude,
+                          long1: AppCubit.get(context).model.longitude,
+                          lat2: data['latitude'],
+                          long2: data['longitude'],
+                      ).toInt()} كم',
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        height: 1.4,
+                        fontSize: 11.0
+                      ),
                     ),
-                  ),
-                  onTap: (){
-                    navigateTo(context, ProfileScreen(
-                      id: data['uId'].toString(),
-                      name: data['name'].toString(),
-                    ));
-                  },
+                    const SizedBox(width: 10.0,),
+                    InkWell(
+                      child: Text(
+                        data['name'].toString(),
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          height: 1.4,
+                        ),
+                      ),
+                      onTap: (){
+                        navigateTo(context, ProfileScreen(
+                          id: data['uId'].toString(),
+                          name: data['name'].toString(),
+                        ));
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 7.0,
                 ),
-                Text(
-                  data['profession'].toString(),
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    height: 1.4,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      data['location'].toString(),
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        height: 1.4,
+                      ),
+                    ),
+                    const Icon(Icons.location_on_outlined, size: 18.0, color: Colors.blueAccent,),
+                    const SizedBox(width: 8.0,),
+                    Text(
+                       data['profession'].toString(),
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        height: 1.4,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 2.0,),
+                    const Icon(Icons.handyman_sharp, size: 18.0, color: Colors.green,),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(
-              width: 3.0,
-            ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
               child: InkWell(
                 child: CircleAvatar(
-                  radius: 30.1,
+                  radius: 30.2,
                   backgroundColor: Colors.black,
                   child: CircleAvatar(
                     radius: 30.0,
@@ -445,10 +457,12 @@ Widget searchResultsBuilder(data, context) => ConditionalBuilder(
       condition: data.isNotEmpty,
       builder: (context) => ListView.separated(
         physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) =>
-            buildSearchResultItem(data[index], context),
+        itemBuilder: (context, index) {
+          /// distance
+          return buildSearchResultItem(data[index], context);
+        },
         separatorBuilder: (context, index) => const SizedBox(
-          height: 5.0,
+          height: 0.0,
         ),
         itemCount: data.length,
       ),

@@ -116,7 +116,7 @@ class RegisterScreen extends StatelessWidget {
                           controller: locationController,
                           onSubmitted: (value) {},
                           onchange: (value) {},
-                          label: 'موقعك بالتحديد ',
+                          label: 'أكتب موقعك بالتحديد',
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.add_location_rounded),
                         ),

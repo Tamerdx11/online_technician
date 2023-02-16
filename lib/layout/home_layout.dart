@@ -36,7 +36,7 @@ class AppLayout extends StatelessWidget {
               ? Drawer(
                   backgroundColor: HexColor('#ebebeb'),
                   elevation: 40,
-                  width: 230.0,
+                  width: 200.0,
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
@@ -48,10 +48,10 @@ class AppLayout extends StatelessWidget {
                         child: Column(
                           children: [
                             CircleAvatar(
-                              radius: 45.3,
+                              radius: 40.5,
                               backgroundColor: Colors.black,
                               child: CircleAvatar(
-                                radius: 45.0,
+                                radius: 40.0,
                                 backgroundImage:
                                     NetworkImage('${cubit.model?.userImage}'),
                               ),
@@ -72,10 +72,11 @@ class AppLayout extends StatelessWidget {
                       ListTile(
                         title: const Center(
                           child:  Text(
-                            'الملف الشخصي',
+                            'حسابي',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
+                              fontSize: 16.0,
+                              color: Colors.black87,
                             ),
                           ),
                         ),
@@ -97,18 +98,49 @@ class AppLayout extends StatelessWidget {
                         ),
                       ),
                       ListTile(
-                        title:const Center(
-                          child: Text(
-                            'الاعدادات',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.star_outlined,color: Colors.amber,),
+                            SizedBox(width: 3.0,),
+                            Text(
+                              'قيم البرنامج ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                                color: Colors.black87,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                         onTap: () {
-                          Navigator.pop(context);
-                          navigateTo(context, SettingsScreen());
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: Container(
+                          height: .5,
+                          width: double.infinity,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.headset_mic_outlined,color: Colors.black54,),
+                            SizedBox(width: 3.0,),
+                            Text(
+                              'تواصل معنا ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
                         },
                       ),
                       Padding(
@@ -125,7 +157,8 @@ class AppLayout extends StatelessWidget {
                             'تسجيل الخروج',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
+                              fontSize: 16.0,
+                              color: Colors.black87,
                             ),
                           ),
                         ),
@@ -133,6 +166,14 @@ class AppLayout extends StatelessWidget {
                           ///update state
                           Navigator.pop(context);
                         },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: Container(
+                          height: .5,
+                          width: double.infinity,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),

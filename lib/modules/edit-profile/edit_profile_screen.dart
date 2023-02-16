@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:online_technician/modules/google_map/google_map.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
@@ -243,6 +244,55 @@ class EditProfileScreen extends StatelessWidget {
                       suffixIcon: const Icon(Icons.location_on),
                       label: 'الموقع',
                     ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          navigateTo(context,const GoogleMaps());
+                        },
+                        child: Container(
+                          padding:const EdgeInsets.symmetric(vertical: 3.0,horizontal: 6.0),
+                          decoration: BoxDecoration(
+                            color: HexColor('#dedded'),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 0.3,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              30.0,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.my_location_rounded,color: HexColor('#59c9b0'),),
+                              const SizedBox(width: 2.0,),
+                              Text(
+                                "تحديد موقعي",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  color: HexColor('#59c9b0'),
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20.0,),
+                      const Text(
+                        "يرجي تحديد موقعك علي الخريطة ",
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 10.0,

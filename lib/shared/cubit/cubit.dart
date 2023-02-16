@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:haversine_distance/haversine_distance.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/message.dart';
 import 'package:online_technician/models/post.dart';
@@ -14,18 +13,15 @@ import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/chat_details/chat_details_screen.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
+import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
-
 import '../components/components.dart';
-import '../network/local/cache_helper.dart';
-import '../network/local/cache_helper.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -39,18 +35,17 @@ class AppCubit extends Cubit<AppState> {
     FirebaseFirestore.instance
         .collection('person')
         .doc(uId)
-        .get().then((value) {
-        if(value.data()!['hasProfession'] == true)
-        {
-          CacheHelper.savaData(key: 'hasProfession', value: true);
-          model = TechnicianModel.fromJson(value.data());
-          emit(AppGetUserSuccessState());
-        }
-        else {
-          CacheHelper.savaData(key: 'hasProfession', value: false);
-          model = UserModel.fromJson(value.data());
-          emit(AppGetUserSuccessState());
-        }
+        .get()
+        .then((value) {
+      if (value.data()!['hasProfession'] == true) {
+        CacheHelper.savaData(key: 'hasProfession', value: true);
+        model = TechnicianModel.fromJson(value.data());
+        emit(AppGetUserSuccessState());
+      } else {
+        CacheHelper.savaData(key: 'hasProfession', value: false);
+        model = UserModel.fromJson(value.data());
+        emit(AppGetUserSuccessState());
+      }
       FirebaseMessaging.instance.getToken().then((token) {
         if (model.token.toString() != token.toString()) {
           FirebaseFirestore.instance
@@ -61,29 +56,32 @@ class AppCubit extends Cubit<AppState> {
               .catchError((error) {});
         }
       });
-
-    }).catchError((error){
+    }).catchError((error) {
       emit(AppGetUserErrorState(error.toString()));
     });
   }
 
   ///-----------get data for chat person----------
 
-  void goToChatDetails(String id, BuildContext context){
+  void goToChatDetails(String id, BuildContext context) {
     FirebaseFirestore.instance
         .collection('person')
         .doc(id.toString())
-        .get().then((value){
-          navigateTo(context, ChatDetailsScreen(
-            userModel: UserModel.fromJson(value.data()),),);
-    }).catchError((error){});
+        .get()
+        .then((value) {
+      navigateTo(
+        context,
+        ChatDetailsScreen(
+          userModel: UserModel.fromJson(value.data()),
+        ),
+      );
+    }).catchError((error) {});
   }
 
   ///---------- main layout navigation ----------
 
   int currentIndex = 0;
-  List<Widget> screens =
-  [
+  List<Widget> screens = [
     const FeedsScreen(),
     const NotificationScreen(),
     const SentRequestsScreen(),
@@ -92,29 +90,34 @@ class AppCubit extends Cubit<AppState> {
   List<BottomNavigationBarItem> bottomItems1 = [
     const BottomNavigationBarItem(
       icon: Icon(Icons.home_sharp),
-      label: "Home",
+      label: "الرئيسية",
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.notifications_active),
-      label: "notification",),
+      label: "الأشعارات",
+    ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.hail),
-      label: "Sent",),
+      label: "طلباتي",
+    ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.handyman_sharp),
-      label: "Received",)
+      label: "طلبات عمل",
+    )
   ];
   List<BottomNavigationBarItem> bottomItems2 = [
     const BottomNavigationBarItem(
       icon: Icon(Icons.home_sharp),
-      label: "Home",
+      label: "الرئيسية",
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.notifications_active),
-      label: "notification",),
+      label: "الأشعارات",
+    ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.hail),
-      label: "Sent",),
+      label: "طلباتي",
+    ),
   ];
 
   void changeButtonNav(int index) {
@@ -123,9 +126,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   var curr_index = 0;
-  void changeCarousel(var index){
+  void changeCarousel(var index) {
     curr_index = index;
-    Timer(const Duration(milliseconds: 10),(){
+    Timer(const Duration(milliseconds: 10), () {
       emit(AppChangeCarouselDotState());
     });
   }
@@ -133,7 +136,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- create post ----------
 
   final picker = ImagePicker();
-  List<File> postImageFile =[];
+  List<File> postImageFile = [];
 
   void removePostImage({required int index}) {
     postImageFile.removeAt(index);
@@ -146,8 +149,7 @@ class AppCubit extends Cubit<AppState> {
     if (pickedFile != null) {
       postImageFile.add(File(pickedFile.path));
       emit(AppPostImagePickedSuccessState());
-    } else
-    {
+    } else {
       emit(AppPostImagePickedErrorState());
     }
   }
@@ -162,9 +164,10 @@ class AppCubit extends Cubit<AppState> {
       emit(AppPostImagePickedErrorState());
     }
   }
+
   int i = 0;
   int j = 0;
-  Map postsImagesMap ={};
+  Map postsImagesMap = {};
   void uploadPostImage({
     required BuildContext context,
     required String text,
@@ -176,12 +179,13 @@ class AppCubit extends Cubit<AppState> {
       firebase_storage.FirebaseStorage.instance
           .ref()
           .child('posts/${Uri.file(element.path).pathSegments.last}')
-          .putFile(element).whenComplete((){ })
+          .putFile(element)
+          .whenComplete(() {})
           .then((value) {
         value.ref.getDownloadURL().then((value) {
           postsImagesMap['$i'] = value.toString();
           i++;
-          if(postsImagesMap.length == postImageFile.length ) {
+          if (postsImagesMap.length == postImageFile.length) {
             createPost(context: context, text: text, dateTime: dateTime);
           }
         }).catchError((error) {
@@ -198,31 +202,29 @@ class AppCubit extends Cubit<AppState> {
     required String text,
     required String dateTime,
   }) {
-          emit(AppCreatePostLoadingState());
-          PostModel newPostModel = PostModel(
-            name: model!.name,
-            userImage: model?.userImage,
-            location: model?.location,
-            uId: model?.uId.toString(),
-            postText: text,
-            dateTime: dateTime,
-            postImages: postsImagesMap,
-            likes: {},
-          );
+    emit(AppCreatePostLoadingState());
+    PostModel newPostModel = PostModel(
+      name: model!.name,
+      userImage: model?.userImage,
+      location: model?.location,
+      uId: model?.uId.toString(),
+      postText: text,
+      dateTime: dateTime,
+      postImages: postsImagesMap,
+      likes: {},
+    );
 
-          FirebaseFirestore.instance
-              .collection('posts')
-              .add(newPostModel.toMap())
-              .then((value) {
-            emit(AppCreatePostSuccessState());
-            postImageFile.clear();
-            postsImagesMap.clear();
-            Navigator.pop(context);
-          }).catchError((error) {
-            emit(AppUserUpdateErrorState());
-          });
-
-
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add(newPostModel.toMap())
+        .then((value) {
+      emit(AppCreatePostSuccessState());
+      postImageFile.clear();
+      postsImagesMap.clear();
+      Navigator.pop(context);
+    }).catchError((error) {
+      emit(AppUserUpdateErrorState());
+    });
   }
 
   ///---------- add like post ----------
@@ -251,10 +253,14 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get one users ----------
 
-  UserModel? user ;
-  Future<void> getUser(String id)async {
-    await FirebaseFirestore.instance.collection('person').doc(id).get().then((value) {
-          user = UserModel.fromJson(value.data());
+  UserModel? user;
+  Future<void> getUser(String id) async {
+    await FirebaseFirestore.instance
+        .collection('person')
+        .doc(id)
+        .get()
+        .then((value) {
+      user = UserModel.fromJson(value.data());
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {});
   }
@@ -262,7 +268,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- send message ----------
 
   List<MessageModel> messages = [];
-  
+
   void sendMessage({
     required String? image,
     required String? name,
@@ -295,11 +301,17 @@ class AppCubit extends Cubit<AppState> {
       emit(AppSendMessageErrorState());
     });
     Map<String, dynamic>? mm = model.chatList;
-    mm?.addAll({receiverId.toString():[text,dateTime,image,name]});
+    mm?.addAll({
+      receiverId.toString(): [text, dateTime, image, name]
+    });
     FirebaseFirestore.instance
         .collection('person')
-        .doc(model!.uId).update({'chatList': mm })
-        .then((value) {}).catchError((e){print(e.toString());});
+        .doc(model!.uId)
+        .update({'chatList': mm})
+        .then((value) {})
+        .catchError((e) {
+          print(e.toString());
+        });
 
     FirebaseFirestore.instance
         .collection('person')
@@ -315,16 +327,21 @@ class AppCubit extends Cubit<AppState> {
     });
 
     Map<String, dynamic>? m = chatList;
-    m?.addAll({model.uId.toString():[text,dateTime,model.userImage,model.name]});
+    m?.addAll({
+      model.uId.toString(): [text, dateTime, model.userImage, model.name]
+    });
     FirebaseFirestore.instance
         .collection('person')
-        .doc(receiverId).update({
-      'chatList': m })
-        .then((value) {}).catchError((e){print(e.toString());});
+        .doc(receiverId)
+        .update({'chatList': m})
+        .then((value) {})
+        .catchError((e) {
+          print(e.toString());
+        });
   }
 
   ///---------- get all messages ----------
-  
+
   void getMessages({required String? receiverId}) {
     FirebaseFirestore.instance
         .collection('person')
@@ -346,6 +363,8 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get search results ---------
 
   List<dynamic> search = [];
+  Map searchunorderwd = {};
+  Map searchOrderwd = {};
   void getSearchData(String value, String key) {
     emit(AppLoadingState());
     FirebaseFirestore.instance
@@ -354,16 +373,38 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then((value) {
       search = [];
+      searchunorderwd ={};
       value.docs.forEach((element) {
-        if(element.data()['uId'] != uId){
-          search.add(element.data());
+        if (element.data()['uId'] != uId) {
+          searchunorderwd.addAll({
+            element.data()['uId']:[
+              element.data()
+              ,getDistance(
+                  lat1: model.latitude,
+                  long1: model.longitude,
+                  lat2: element.data()['latitude'],
+                  long2: element.data()['longitude'],
+              )
+            ]
+          });
           emit(AppLoadingState());
         }
       });
-          emit(AppLoadingState());
-    }).catchError((error) {});
+      searchOrderwd = Map.fromEntries(
+          searchunorderwd.entries.toList()..sort((e1, e2) => e1.value[1].compareTo(e2.value[1]))
+      );
+      searchOrderwd.forEach((key, value) {
+        search.add(value.first);
+      });
+      print("====================================sss=========================");
+      print(search.length);
+      emit(AppLoadingState());
+    }).catchError((error) {
+      print("====================================error=========================");
+      print(error.toString());
+    });
   }
-  
+
   ///------------ has profession change ---------------
 
   late bool hasProfession = model.hasProfession;
@@ -419,8 +460,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child(
-            'users/$uId$uId$uId')
+        .child('users/$uId$uId$uId')
         .putFile(idCardImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -440,8 +480,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child(
-            'users/$uId')
+        .child('users/$uId')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
@@ -476,9 +515,9 @@ class AppCubit extends Cubit<AppState> {
 
   ///----------  update profile data ----------//
 
-  String? profession='نقاش';
-  void changeValue(String? value){
-    profession=value;
+  String? profession = 'نقاش';
+  void changeValue(String? value) {
+    profession = value;
     emit(change());
   }
 
@@ -489,9 +528,7 @@ class AppCubit extends Cubit<AppState> {
     String? bio,
     String? nationalId,
     required BuildContext context,
-  })
-  {
-
+  }) {
     if (profileImage != null) {
       uploadProfileImage();
     }
@@ -503,33 +540,32 @@ class AppCubit extends Cubit<AppState> {
     }
 
     emit(AppTechnicianUpdateLoadingState());
-    Timer(
-        const Duration(seconds: 5),(){
-      if (hasProfession == true)
-      {
+    Timer(const Duration(seconds: 5), () {
+      if (hasProfession == true) {
         emit(AppTechnicianUpdateLoadingState());
         TechnicianModel newModel = TechnicianModel(
           name: name,
           uId: model!.uId,
           phone: model.phone,
           bio: bio,
-          chatList:model.chatList,
+          chatList: model.chatList,
           nationalId: nationalId,
-          idCardPhoto: uploadedIdCardImage?? model?.idCardPhoto,
+          idCardPhoto: uploadedIdCardImage ?? model?.idCardPhoto,
           location: location,
           token: model.token,
           profession: profession,
-          userImage: uploadedProfileImage?? model?.userImage.toString(),
-          coverImage: uploadedCoverImage?? model?.coverImage.toString(),
+          userImage: uploadedProfileImage ?? model?.userImage.toString(),
+          coverImage: uploadedCoverImage ?? model?.coverImage.toString(),
           hasProfession: true,
-          latitude: model.latitude,
-          longitude: model.longitude,
+          latitude: latitude != 0 ? latitude.toString() : model.latitude,
+          longitude: longitude != 0 ? longitude.toString() : model.longitude,
         );
-        if(idCardImage == null && model?.idCardPhoto == null){
+        if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
-          emit(AppUserUpdateErrorState(),);
-        }
-        else{
+          emit(
+            AppUserUpdateErrorState(),
+          );
+        } else {
           FirebaseFirestore.instance
               .collection('person')
               .doc(uId)
@@ -542,9 +578,7 @@ class AppCubit extends Cubit<AppState> {
             emit(AppTechnicianUpdateErrorState());
           });
         }
-      }
-      else if (hasProfession == false)
-      {
+      } else if (hasProfession == false) {
         emit(AppUserUpdateLoadingState());
         UserModel newModel = UserModel(
           name: name,
@@ -556,8 +590,8 @@ class AppCubit extends Cubit<AppState> {
           coverImage: uploadedCoverImage ?? model?.coverImage,
           uId: uId,
           hasProfession: false,
-          latitude: model.latitude,
-          longitude: model.longitude,
+          latitude: latitude != 0 ? latitude.toString() : model.latitude,
+          longitude: longitude != 0 ? longitude.toString() : model.longitude,
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -574,4 +608,18 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
+  ///---------------------get distance ----------------------
+
+  double getDistance({
+    required String lat1,
+    required String long1,
+    required String lat2,
+    required String long2,
+  }) {
+    HaversineDistance g = HaversineDistance(4,5,6,7);
+    LatLng from=LatLng(double.parse(lat1) , double.parse(long1));
+    LatLng to=LatLng(double.parse(lat2) , double.parse(long2));
+    double distance = g.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
+    return distance;
+  }
 }
