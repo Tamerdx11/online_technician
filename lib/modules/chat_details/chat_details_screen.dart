@@ -58,7 +58,7 @@ class ChatDetailsScreen extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.arrow_back_sharp,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 titleSpacing: 0.0,
@@ -73,7 +73,7 @@ class ChatDetailsScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 21.1,
+                        radius: 21.2,
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: 21.0,
@@ -89,7 +89,7 @@ class ChatDetailsScreen extends StatelessWidget {
                         userModel.name.toString(),
                         style: const TextStyle(
                           fontSize: 16.0,
-                          color: Colors.black54,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold
                         ),
                       ),

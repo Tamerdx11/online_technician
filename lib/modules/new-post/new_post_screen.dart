@@ -24,12 +24,12 @@ class NewPostScreen extends StatelessWidget {
           backgroundColor: HexColor('#FAF7F0'),
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: HexColor('#D6E4E5'),
+              backgroundColor: HexColor('#0A81AB'),
               elevation: 3.0,
               title:const Text(
-                  "اضافة بوست",
+                  "إضافة بوست",
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontFamily: 'NotoNaskhArabic',
                       fontWeight: FontWeight.w600,
                   ),
@@ -38,7 +38,7 @@ class NewPostScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
+                icon:const Icon(Icons.arrow_back_sharp,color: Colors.white,),
               ),
           ),
           body: SingleChildScrollView(

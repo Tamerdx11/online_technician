@@ -18,14 +18,14 @@ class ChatsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: Colors.white,
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: HexColor('#D6E4E5'),
+              backgroundColor: HexColor('#0A81AB'),
               elevation: 3.0,
               title:const Text("المحادثات",
                   style: TextStyle(
-                      color: Colors.black54,
+                      color: Colors.white,
                       fontFamily: 'NotoNaskhArabic',
                       fontWeight: FontWeight.w600)),
               leading: IconButton(
@@ -34,9 +34,10 @@ class ChatsScreen extends StatelessWidget {
                 },
                 icon: const Icon(
                   Icons.arrow_back_sharp,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
-              )),
+              ),
+          ),
           body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('person')
@@ -52,12 +53,12 @@ class ChatsScreen extends StatelessWidget {
                   ..sort((e1, e2) => e2.value[1].compareTo(e1.value[1])));
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) => buildChatItem(
                         chatData.keys.toList()[index], chatData, context),
-                    separatorBuilder: (context, index) => const SizedBox(height: 4.0,),
+                    separatorBuilder: (context, index) => Container(),
                     itemCount: chatData.length,
                   ),
                 );
@@ -74,75 +75,89 @@ class ChatsScreen extends StatelessWidget {
   }
 
   Widget buildChatItem(String id, Map chatData, context) => Material(
-    color: HexColor('#ebebeb'),
+    color: Colors.white,
         child: InkWell(
           onTap: () {
             AppCubit.get(context).goToChatDetails(id, context);
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
             child: Card(
-              elevation: 3.0,
+              elevation: 0,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(00),
                   borderSide:const BorderSide(
-                    color: Colors.grey,
-                    width: .1,
+                    color: Colors.white,
+                    width: 0,
                   ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const SizedBox(width: 20.0,),
-                  Flexible(
-                    child: Container(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                          chatData[id][0],
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12.0),
+                          child: Icon(Icons.arrow_back_ios, color: Colors.grey,),
+                        ),
+                        const SizedBox(width: 20.0,),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                                chatData[id][0],
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
 
-                            height: 1.4,
-                            fontSize: 13.0,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.w600
+                                  height: 1.4,
+                                  fontSize: 13.0,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.w600
+                                ),
+                                softWrap: true,
+                                maxLines: 1,
+                                textDirection: TextDirection.rtl,
+                              ),
                           ),
-                          softWrap: true,
-                          maxLines: 1,
+                        ),
+                        const Spacer(),
+                        Text(
+                          chatData[id][3],
+                          style: const TextStyle(
+                              height: 1.4,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15.0,
+                          ),
                           textDirection: TextDirection.rtl,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    chatData[id][3],
-                    style: const TextStyle(
-                        height: 1.4,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15.0,
-                    ),
-                    textDirection: TextDirection.rtl,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      radius: 30.6,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                          chatData[id][2].toString(),
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: CircleAvatar(
+                            radius: 30.2,
+                            backgroundColor: Colors.black87,
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(
+                                chatData[id][2].toString(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Container(width: double.infinity,height: 1, color: Colors.grey,),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

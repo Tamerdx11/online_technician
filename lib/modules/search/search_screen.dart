@@ -9,14 +9,23 @@ import 'package:online_technician/shared/cubit/states.dart';
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
   var searchController = TextEditingController();
+  String groupValue = '';
+  bool result = true;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if(state is AppEmptySearchState){
+          result = false;
+        }
+        if(state is AppLoadingState1){
+          result = true;
+        }
+      },
       builder: (context, state) {
         var data = AppCubit.get(context).search;
-
+        var cubit = AppCubit.get(context);
         return Scaffold(
           backgroundColor: HexColor('#ebebeb'),
           body: Padding(
@@ -25,8 +34,9 @@ class SearchScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 20,left: 20,bottom: 8.0),
+                  padding: const EdgeInsets.only(right: 20,left: 20,bottom: 5.0),
                   child: TextFormField(
+                    textDirection: TextDirection.rtl,
                     validator: (value) {
                       if(value == null)
                       {
@@ -36,7 +46,7 @@ class SearchScreen extends StatelessWidget {
                     },
                     controller: searchController,
                     onChanged: (value) {
-                      AppCubit.get(context).getSearchData(value,'name');
+                      AppCubit.get(context).getSearchData(value,cubit.searchItem);
                     },
                     decoration: InputDecoration(
                       fillColor: HexColor('#c6dfe7'),
@@ -60,8 +70,59 @@ class SearchScreen extends StatelessWidget {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                  child: Row(
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            " الأسم",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Radio(
+                            value: cubit.values[0],
+                            groupValue: cubit.searchItem,
+                            onChanged: (value) => cubit.changeSearchItem(value),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 10.0,),
+                      Row(
+                        children: [
+                          const Text(
+                            " الحرفة",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Radio(
+                            value: cubit.values[1],
+                            groupValue: cubit.searchItem,
+                            onChanged: (value) => cubit.changeSearchItem(value),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      const Text(
+                        " :البحث عن طريق",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14.0,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
+                  padding: EdgeInsets.only(left: 20.0,right: 20.0, bottom: 5.0),
                   child: Text(
                     " :الأكثر بحثا",
                     style: TextStyle(
@@ -85,7 +146,8 @@ class SearchScreen extends StatelessWidget {
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
                             data =[];
-                            AppCubit.get(context).getSearchData("نقاش",'profession');
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("نقاش",cubit.searchItem);
                             searchController.text = "نقاش";
                           }, child:const Text(
                             "نقاش",
@@ -102,7 +164,8 @@ class SearchScreen extends StatelessWidget {
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
                             data =[];
-                            AppCubit.get(context).getSearchData("كهربائي",'profession');
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("كهربائي",cubit.searchItem);
                             searchController.text = "كهربائي";
                           }, child:const Text(
                             "كهربائي",
@@ -119,7 +182,8 @@ class SearchScreen extends StatelessWidget {
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
                             data =[];
-                            AppCubit.get(context).getSearchData("نجار",'profession');
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("نجار",cubit.searchItem);
                             searchController.text = "نجار";
                           }, child:const Text(
                             "نجار",
@@ -135,7 +199,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("صيانة حمامات السباحة",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("صيانة حمامات السباحة",cubit.searchItem);
                             searchController.text = "صيانة حمامات السباحة";
                           }, child:const Text(
                             "صيانة حمامات السباحة",
@@ -151,7 +217,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("سباك",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("سباك",cubit.searchItem);
                             searchController.text = "سباك";
                           }, child:const Text(
                             "سباك",
@@ -167,7 +235,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("عامل بناء",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("عامل بناء",cubit.searchItem);
                             searchController.text = "عامل بناء";
                           }, child:const Text(
                             "عامل بناء",
@@ -183,7 +253,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("ميكانيكي",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("ميكانيكي",cubit.searchItem);
                             searchController.text = "ميكانيكي";
                           }, child:const Text(
                             "ميكانيكي",
@@ -199,7 +271,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("مكافحة حشرات",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("مكافحة حشرات",cubit.searchItem);
                             searchController.text = "مكافحة حشرات";
                           }, child:const Text(
                             "مكافحة حشرات",
@@ -215,7 +289,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("صيانة أجهزة منزلية",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("صيانة أجهزة منزلية",cubit.searchItem);
                             searchController.text = "صيانة أجهزة منزلية";
                           }, child:const Text(
                             "صيانة أجهزة منزلية",
@@ -231,7 +307,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("صيانة دش",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("صيانة دش",cubit.searchItem);
                             searchController.text = "صيانة دش";
                           }, child:const Text(
                             "صيانة دش",
@@ -247,7 +325,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("أعمال زجاج",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("أعمال زجاج",cubit.searchItem);
                             searchController.text = "أعمال زجاج";
                           }, child:const Text(
                             "أعمال زجاج",
@@ -263,7 +343,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("أعمال رخام",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("أعمال رخام",cubit.searchItem);
                             searchController.text = "أعمال رخام";
                           }, child:const Text(
                             "أعمال رخام",
@@ -279,7 +361,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("بنّاء",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("بنّاء",cubit.searchItem);
                             searchController.text = "بنّاء";
                           }, child:const Text(
                             "بنّاء",
@@ -295,7 +379,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("أعمال أرضيات",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("أعمال أرضيات",cubit.searchItem);
                             searchController.text = "أعمال أرضيات";
                           }, child:const Text(
                             "أعمال أرضيات",
@@ -311,7 +397,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("حداد",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("حداد",cubit.searchItem);
                             searchController.text = "حداد";
                           }, child:const Text(
                             "حداد",
@@ -327,7 +415,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("محار",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("محار",cubit.searchItem);
                             searchController.text = "محار";
                           }, child:const Text(
                             "محار",
@@ -343,7 +433,9 @@ class SearchScreen extends StatelessWidget {
                           height: 32.0,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
                           child: TextButton(onPressed: (){
-                            AppCubit.get(context).getSearchData("جزار",'profession');
+                            data =[];
+                            cubit.changeSearchItem('profession');
+                            AppCubit.get(context).getSearchData("جزار",cubit.searchItem);
                             searchController.text = "جزار";
                           }, child:const Text(
                             "جزار",
@@ -357,6 +449,19 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(child: searchResultsBuilder(data, context)),
+                if(data.isEmpty)
+                  result?const Center(child: LinearProgressIndicator()):
+                  const Center(child: Padding(
+                    padding: EdgeInsets.only(bottom: 50.0),
+                    child: Text(
+                      '!لم نجد نتائج لبحثك',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )),
               ],
             ),
           ),

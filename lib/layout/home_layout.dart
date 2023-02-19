@@ -43,7 +43,7 @@ class AppLayout extends StatelessWidget {
                       DrawerHeader(
                         curve: Curves.bounceInOut,
                         decoration: BoxDecoration(
-                          color: HexColor('#D6E4E5'),
+                          color: HexColor('#0A81AB'),
                         ),
                         child: Column(
                           children: [
@@ -181,13 +181,13 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: HexColor('#D6E4E5'),
+            backgroundColor: HexColor('#0A81AB'),
             elevation: 3.0,
             centerTitle: true,
             title: Text(
               titles[cubit.currentIndex],
               style: const TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontFamily: 'NotoNaskhArabic',
                   fontWeight: FontWeight.w600,
               ),
@@ -219,7 +219,7 @@ class AppLayout extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.search_rounded,
-                    color: Colors.black54,
+                    color: Colors.white70,
                     size: 30.0,
                   ),
                 ),
@@ -268,7 +268,7 @@ class AppLayout extends StatelessWidget {
                       onPressed: () {
                         navigateTo(context, NewPostScreen());
                       },
-                      backgroundColor: Colors.teal.withOpacity(0.6),
+                      backgroundColor: HexColor('#0A81AB').withOpacity(0.60),
                       child: const Icon(
                           Icons.add_rounded,
                           size: 30.0,
@@ -280,7 +280,7 @@ class AppLayout extends StatelessWidget {
               : null,
           bottomNavigationBar: BottomNavigationBar(
             elevation: 2.0,
-            selectedItemColor: HexColor('#80b0c8'),
+            selectedItemColor: HexColor('#0A81AB'),
             type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {

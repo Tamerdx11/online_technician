@@ -31,8 +31,8 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: HexColor('#ebebeb'),
             appBar: defaultAppBar(
               context: context,
-              color: HexColor('#D6E4E5'),
-              textColor: Colors.black87,
+              color: HexColor('#0A81AB'),
+              textColor: Colors.white,
               title: '$name',
               actions: [
                 id == CacheHelper.getData(key: 'uId')?
@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                       child: Text(
                         'تعديل',
                         style: TextStyle(
-                            color: HexColor('#7286D3'),
+                            color: HexColor('#A5E1AD'),
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
                         ),

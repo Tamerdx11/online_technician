@@ -133,7 +133,7 @@ PreferredSizeWidget defaultAppBar({
         },
         icon: const Icon(
           Icons.arrow_back_rounded,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     );
@@ -168,166 +168,6 @@ Color chooseToastColor(ToastState state) {
   }
 }
 
-///---------------- build post item --------------
-
-Widget buildPostItem(PostModel model, context, index) => Card(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: 5,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(
-                    '${model.userImage}',
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${model.name}',
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Icon(
-                            Icons.check_circle_rounded,
-                            color: Colors.black,
-                            size: 18,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '${model.dateTime}',
-                        style: Theme.of(context).textTheme.caption!.copyWith(
-                              height: 1.6,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_horiz,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey[300],
-              ),
-            ),
-            Text(
-              '${model.postText}',
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            if (model.postImages != '')
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 15,
-                ),
-                child: Container(
-                  height: 400,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        '${model.postImages}',
-                      ),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.favorite_border,
-                            color: Colors.red,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          // AppCubit.get(context).isLove?Text(
-                          //   '${AppCubit.get(context).likes[index]}',
-                          //   style: Theme.of(context).textTheme.caption,
-                          // ):Text('${AppCubit.get(context).likes[index]}'),
-                        ],
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: 10,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey[300],
-              ),
-            ),
-            InkWell(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.favorite_border,
-                    color: Colors.red,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    'Love',
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
-              ),
-              onTap: () {
-                // AppCubit.get(context).isLove?AppCubit.get(context).likePost(AppCubit.get(context).postId[index]):AppCubit.get(context).unlikePost(AppCubit.get(context).postId[index]);
-                // AppCubit.get(context).showLove();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-
 ///----------------------------------- build one search item --- items builder------
 
 Widget buildSearchResultItem(data, context) => Padding(
@@ -355,7 +195,6 @@ Widget buildSearchResultItem(data, context) => Padding(
                 ),
               ),
               onTap: () {
-                ///go to chat
                 AppCubit.get(context).goToChatDetails(
                   data['uId'].toString(),
                   context,
@@ -369,11 +208,21 @@ Widget buildSearchResultItem(data, context) => Padding(
                 Row(
                   children: [
                     Text(
-                      'يبعد عنك مسافة ${AppCubit.get(context).getDistance(
+                      AppCubit.get(context).getDistance(
+                        lat1: AppCubit.get(context).model.latitude,
+                        long1: AppCubit.get(context).model.longitude,
+                        lat2: data['latitude'],
+                        long2: data['longitude'],
+                      ).toInt()==0?'يبعد عنك مسافة ${(AppCubit.get(context).getDistance(
                           lat1: AppCubit.get(context).model.latitude,
                           long1: AppCubit.get(context).model.longitude,
                           lat2: data['latitude'],
                           long2: data['longitude'],
+                      )*1000).toInt()} م':'يبعد عنك مسافة ${AppCubit.get(context).getDistance(
+                        lat1: AppCubit.get(context).model.latitude,
+                        long1: AppCubit.get(context).model.longitude,
+                        lat2: data['latitude'],
+                        long2: data['longitude'],
                       ).toInt()} كم',
                       style: const TextStyle(
                         color: Colors.black54,
@@ -453,24 +302,16 @@ Widget buildSearchResultItem(data, context) => Padding(
       ),
     );
 
-Widget searchResultsBuilder(data, context) => ConditionalBuilder(
-      condition: data.isNotEmpty,
-      builder: (context) => ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          /// distance
-          return buildSearchResultItem(data[index], context);
-        },
-        separatorBuilder: (context, index) => const SizedBox(
-          height: 0.0,
-        ),
-        itemCount: data.length,
-      ),
-      fallback: (context) => const Center(
-          child: CircularProgressIndicator(
-        color: Colors.black54,
-      )),
-    );
+Widget searchResultsBuilder(data, context) => ListView.separated(
+  physics: const BouncingScrollPhysics(),
+  itemBuilder: (context, index) {
+    return buildSearchResultItem(data[index], context);
+  },
+  separatorBuilder: (context, index) => const SizedBox(
+    height: 0.0,
+  ),
+  itemCount: data.length,
+);
 
 ///****************** E2
 

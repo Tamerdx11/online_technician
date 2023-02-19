@@ -93,12 +93,12 @@ class EditProfileScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: HexColor('#ebebeb'),
           appBar: AppBar(
-            backgroundColor: HexColor('#D6E4E5'),
+            backgroundColor: HexColor('#0A81AB'),
             title:const Center(
               child: Text(
                 'تعديل الحساب',
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: Colors.white,
                   fontFamily: 'NotoNaskhArabic',
                   fontWeight: FontWeight.w600,
                 ),
@@ -111,7 +111,7 @@ class EditProfileScreen extends StatelessWidget {
                     Navigator.pop(context);
                   });
                 },
-                icon:const Icon(Icons.arrow_back,color: Colors.black87,),
+                icon:const Icon(Icons.arrow_back,color: Colors.white,),
             ),
             actions: [
               Padding(
@@ -130,7 +130,7 @@ class EditProfileScreen extends StatelessWidget {
                   child: Text(
                     "حفظ التعديلات",
                     style: TextStyle(
-                      color: HexColor('#7286D3'),
+                      color: HexColor('#A5E1AD'),
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -300,7 +300,8 @@ class EditProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: CheckboxListTile(
-                      activeColor: Colors.black,
+                      activeColor: HexColor('#0A81AB'),
+                      controlAffinity: ListTileControlAffinity.leading,
                       value: hasProfession,
                       onChanged: (value) {
                         AppCubit.get(context).checkboxChange(value);

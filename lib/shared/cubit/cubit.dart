@@ -14,6 +14,7 @@ import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/chat_details/chat_details_screen.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
 import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
+import 'package:online_technician/modules/search/search_screen.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
@@ -366,7 +367,7 @@ class AppCubit extends Cubit<AppState> {
   Map searchunorderwd = {};
   Map searchOrderwd = {};
   void getSearchData(String value, String key) {
-    emit(AppLoadingState());
+    emit(AppLoadingState1());
     FirebaseFirestore.instance
         .collection('person')
         .where(key, isEqualTo: value)
@@ -398,11 +399,21 @@ class AppCubit extends Cubit<AppState> {
       });
       print("====================================sss=========================");
       print(search.length);
+      if(search.length == 0){
+        emit(AppEmptySearchState());
+      }
       emit(AppLoadingState());
     }).catchError((error) {
-      print("====================================error=========================");
-      print(error.toString());
     });
+  }
+
+  ///---------- change search item ---------
+
+  List values = ['name', 'profession'];
+  String searchItem = 'profession';
+  void changeSearchItem(value){
+    searchItem = value;
+    emit(AppChangeSearchItemState());
   }
 
   ///------------ has profession change ---------------

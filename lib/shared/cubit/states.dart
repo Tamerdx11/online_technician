@@ -89,6 +89,8 @@ class AppGetMessageErrorState extends AppState{}
 
 class AppLoadingState extends AppState{}
 
+class AppLoadingState1 extends AppState{}
+
 class AppGetSearchSuccessState extends AppState{}
 
 class AppGetSearchErrorState extends AppState{}
@@ -112,6 +114,10 @@ class AppGetProfilePostsSuccessState extends AppState{}
 class AppGetchangeBageMessageState extends AppState{}
 
 class AppBackState extends AppState{}
+
+class AppChangeSearchItemState extends AppState{}
+
+class AppEmptySearchState extends AppState{}
 
 class change extends AppState{}
 
