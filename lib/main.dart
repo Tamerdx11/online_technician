@@ -70,7 +70,6 @@ void main() async {
     widget = const OnBoardingScreen();
   }
 
-  ///------------------------------------
   runApp(MyApp(
     isDark: isDark,
     widget: widget,

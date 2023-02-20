@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) {
 
         return Scaffold(
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: HexColor('#F9F9F9'),
             appBar: defaultAppBar(
               context: context,
               color: HexColor('#0A81AB'),
@@ -80,20 +80,25 @@ class ProfileScreen extends StatelessWidget {
                   if (snapshot.hasData){
                     name = snapshot.data!.data()!['name'];
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: HexColor('#c6dfe7'),
-                            borderRadius:const BorderRadius.only(
+                        Card(
+                          margin:const EdgeInsets.all(0),
+                          elevation: 5.0,
+                          shape: const OutlineInputBorder(
+                            borderRadius:BorderRadius.only(
                               bottomRight: Radius.circular(50.0),
                               bottomLeft: Radius.circular(50.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 0.05,
                             ),
                           ),
                           child: Column(
                             children: [
                               SizedBox(
-                                height: 235.0,
+                                height: 280.0,
                                 child: Stack(
                                   alignment: Alignment.bottomLeft,
                                   children: [
@@ -117,44 +122,135 @@ class ProfileScreen extends StatelessWidget {
                                     Row(
                                       children: [
                                         const SizedBox(
-                                          width: 20.0,
+                                          width: 30.0,
                                         ),
-                                        Expanded(
+                                        CircleAvatar(
+                                          radius: 66.0,
+                                          backgroundColor: Colors.white,
                                           child: CircleAvatar(
-                                            radius: 66.0,
-                                            backgroundColor: HexColor('#c6dfe7'),
+                                            radius: 60.3,
+                                            backgroundColor: Colors.black,
                                             child: CircleAvatar(
-                                              radius: 60.3,
-                                              backgroundColor: Colors.black,
-                                              child: CircleAvatar(
-                                                radius: 60.0,
-                                                backgroundImage: NetworkImage(snapshot
-                                                    .data!
-                                                    .data()!['userImage']
-                                                    .toString()),
-                                              ),
+                                              radius: 60.0,
+                                              backgroundImage: NetworkImage(snapshot
+                                                  .data!
+                                                  .data()!['userImage']
+                                                  .toString()),
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.only(top: 25.0, right: 25.0),
-                                          height: 125.0,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(30.0),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  snapshot.data!
-                                                      .data()!['name']
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 20.0,
-                                                    color: Colors.black87,
-                                                    overflow: TextOverflow.clip,
+                                        Expanded(
+                                          child: Container(
+                                            padding: const EdgeInsets.only(top: 35.0, right:0.0),
+                                            height: 180.0,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(30.0),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    snapshot.data!
+                                                        .data()!['name']
+                                                        .toString(),
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                      fontWeight: FontWeight.w900,
+                                                      fontSize: 20.0,
+                                                      color: Colors.black87,
+                                                      overflow: TextOverflow.clip,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                  if(snapshot.data!.data()!['hasProfession'] == true)
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                            snapshot.data!
+                                                                .data()!['profession']
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 14.0,
+                                                                color: Colors.grey,
+                                                                fontStyle: FontStyle.italic
+                                                            )),
+                                                        const SizedBox(width: 2.0,),
+                                                        const Icon(Icons.handyman_sharp, size: 17.0, color: Colors.black54,),
+                                                      ],
+                                                    ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      if(id != CacheHelper.getData(key: 'uId'))
+                                                        Text(
+                                                          AppCubit.get(context).getDistance(
+                                                            lat1: AppCubit.get(context).model.latitude,
+                                                            long1: AppCubit.get(context).model.longitude,
+                                                            lat2: snapshot.data!.data()!['latitude'],
+                                                            long2: snapshot.data!.data()!['longitude'],
+                                                          ).toInt()==0?'يبعد عنك ${(AppCubit.get(context).getDistance(
+                                                            lat1: AppCubit.get(context).model.latitude,
+                                                            long1: AppCubit.get(context).model.longitude,
+                                                            lat2: snapshot.data!.data()!['latitude'],
+                                                            long2: snapshot.data!.data()!['longitude'],
+                                                          )*1000).toInt()} م':'يبعد عنك ${AppCubit.get(context).getDistance(
+                                                            lat1: AppCubit.get(context).model.latitude,
+                                                            long1: AppCubit.get(context).model.longitude,
+                                                            lat2: snapshot.data!.data()!['latitude'],
+                                                            long2: snapshot.data!.data()!['longitude'],
+                                                          ).toInt()} كم',
+                                                          style:const  TextStyle(
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 12.0,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      if(id != CacheHelper.getData(key: 'uId'))
+                                                         Padding(
+                                                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                                           child: Container(
+                                                             width: 1.0,
+                                                             height: 20.0,
+                                                             color: Colors.black54,
+                                                           ),
+                                                         ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await AppCubit.get(context).getUser(
+                                                              snapshot.data!.data()!['uId'].toString());
+                                                          CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                                          CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                                          CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                                          CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                                          CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                                          CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
+                                                          navigateTo(context, GoogleMaps2());
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Text(
+                                                              snapshot.data!
+                                                                  .data()!['location']
+                                                                  .toString(),
+                                                              style: const TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontSize: 12.0,
+                                                                  color: Colors.grey,
+                                                                  fontStyle: FontStyle.italic
+                                                              ),
+                                                            ),
+                                                            const Icon(
+                                                              Icons.gpp_good_sharp,
+                                                              color: Colors.green,
+                                                              size: 18.0,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -163,71 +259,24 @@ class ProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    if(id != CacheHelper.getData(key: 'uId'))
-                                      Text(
-                                        'يبعد عنك مسافة ${AppCubit.get(context).getDistance(
-                                          lat1: AppCubit.get(context).model.latitude,
-                                          long1: AppCubit.get(context).model.longitude,
-                                          lat2: snapshot.data!.data()!['latitude'],
-                                          long2: snapshot.data!.data()!['longitude'],
-                                        ).toInt()} كم',
-                                        style:const  TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15.0,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    const SizedBox(width: 10.0,),
-                                    InkWell(
-                                      onTap: () async {
-                                        await AppCubit.get(context).getUser(
-                                            snapshot.data!.data()!['uId'].toString());
-                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
-                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
-                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
-                                        navigateTo(context, GoogleMaps2());
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            snapshot.data!
-                                                .data()!['location']
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 16.0,
-                                                color: Colors.blueAccent,
-                                                fontStyle: FontStyle.italic
-                                            ),
-                                          ),
-                                          const Text(
-                                            ' يقيم في ',
-                                            style:TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16.0,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.gps_fixed_rounded,
-                                            color: Colors.blueAccent,
-                                            size: 20.0,
-                                          ),
-                                        ],
+                              if(snapshot.data!.data()!['hasProfession'] == true)
+                                Center(
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 3.0),
+                                    child: Text(
+                                      overflow: TextOverflow.clip,
+                                      snapshot.data!.data()!['bio'].toString(),
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14.0,
+                                        overflow: TextOverflow.ellipsis,
+
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              /// tamer will fix this part, don't touch خخخخ اوعي حد يقرب منها
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 10.0,
@@ -257,84 +306,15 @@ class ProfileScreen extends StatelessWidget {
                                         ],
                                       ),
                                       const Spacer(),
-                                      Row(
-                                        children: [
-                                          Text(
-                                              snapshot.data!
-                                                  .data()!['profession']
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16.0,
-                                                color: Colors.grey,
-                                              )),
-                                          const Text(
-                                              ' :الحرفة',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16.0,
-                                                color: Colors.black87,
-                                              )),
-                                          const SizedBox(width: 2.0,),
-                                          const Icon(Icons.handyman_sharp, size: 20.0, color: Colors.green,),
-                                        ],
-                                      ),
                                   ],
                                 ),
                                     )
-                                    : const Text(
-                                    "لا يقدم اي حرفة",
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                    : const SizedBox(),
                               ),
-                              snapshot.data!.data()!['hasProfession'] != false
-                                  ? Center(
-                                    child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                    overflow: TextOverflow.clip,
-                                    snapshot.data!.data()!['bio'].toString(),
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16.0,
-                                      overflow: TextOverflow.ellipsis,
-
-                                    ),
-                                ),
-                              ),
-                                  )
-                                  : const SizedBox(height: 10.0,),
                             ],
                           ),
                         ),
-                        snapshot.data!.data()!['hasProfession'] == true?Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: HexColor('#80b0c8'),
-                                borderRadius:const BorderRadius.only(
-                                  bottomRight: Radius.circular(100.0),
-                                  bottomLeft: Radius.circular(100.0),
-                                ),
-                            ),
-                            child:const Padding(
-                              padding: EdgeInsets.only(left: 15.0,right: 15.0,bottom: 10.0, top: 2.0),
-                              child: Text(
-                                  ' أعمالي',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ):const SizedBox(),
+
                         const SizedBox(height: 20.0,),
                         StreamBuilder(
                           stream:  FirebaseFirestore.instance

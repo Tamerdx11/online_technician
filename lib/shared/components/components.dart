@@ -179,7 +179,8 @@ Widget buildSearchResultItem(data, context) => Padding(
             borderSide:const BorderSide(
               color: Colors.black,
               width: 0.05,
-            )),
+            ),
+        ),
         child: Row(
           children: [
             const SizedBox(

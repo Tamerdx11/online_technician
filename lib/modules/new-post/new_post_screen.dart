@@ -19,7 +19,6 @@ class NewPostScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = AppCubit.get(context).model;
-
         return Scaffold(
           backgroundColor: HexColor('#FAF7F0'),
           appBar: AppBar(
