@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:online_technician/firebase_options.dart';
 import 'package:online_technician/layout/home_layout.dart';
 import 'package:online_technician/modules/login/login_screen.dart';
@@ -94,6 +95,12 @@ class MyApp extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+            ],
+            supportedLocales:const [
+              Locale('ar', 'SA'),
+            ],
             // theme: lightTheme,
             // darkTheme: darkTheme,
             // themeMode:AppCubit.get(context).isDark?ThemeMode.dark:ThemeMode.light,

@@ -7,18 +7,21 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/edit-profile/edit_profile_screen.dart';
 import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
 import 'package:online_technician/shared/components/components.dart';
+import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
+import '../send_request_to_tech/send_request_to_tech_screen.dart';
+
 class ProfileScreen extends StatelessWidget {
-  String? id;
-  String? name;
+  String id;
+  String name;
 
   ProfileScreen({
     super.key,
-    this.id,
-    this.name
+    required this.id,
+    required this.name
   });
   @override
   Widget build(BuildContext context) {
@@ -277,7 +280,8 @@ class ProfileScreen extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Expanded(
+                                    if(snapshot.data!.data()!['hasProfession'] == true)
+                                      Expanded(
                                       child: Column(
                                         children: const [
                                           Text(
@@ -327,34 +331,45 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 5.0,),
                                     ///===== add طلب للعمل
-                                    Container(
-                                      decoration: BoxDecoration(
+                                    if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
+                                      Container(
+                                        decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(8),
                                           color: Colors.green,
-                                      ),
-                                      child: MaterialButton(
-                                        onPressed: () {},
-                                        child: Row(
-                                          children:const [
-                                            Icon(
-                                              Icons.work_history,
-                                              color: Colors.lightGreenAccent,
-                                              size: 25.0,
-                                            ),
-                                            SizedBox(width: 8.0,),
-                                            Text(
-                                                'طلب للعمل',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.black87,
-                                                fontSize: 15.0,
-                                              ),
-                                            ),
-                                          ],
                                         ),
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            ///navigation here
+                                            navigateTo(context, SendRequestToTechScreen(
+                                              id: id,
+                                              name: snapshot.data!.data()!['name'],
+                                              userImage: snapshot.data!.data()!['userImage'],
+                                              latitude: snapshot.data!.data()!['latitude'],
+                                              longitude:  snapshot.data!.data()!['longitude'],
+                                              location: snapshot.data!.data()!['location'],
+                                            ));
+                                          },
+                                          child: Row(
+                                            children:const [
+                                              Icon(
+                                                Icons.work_history,
+                                                color: Colors.lightGreenAccent,
+                                                size: 25.0,
+                                              ),
+                                              SizedBox(width: 8.0,),
+                                              Text(
+                                                'طلب للعمل',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.black87,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
 
+                                        ),
                                       ),
-                                    ),
                                     const SizedBox(width: 25.0,)
                                   ],
                                 ),

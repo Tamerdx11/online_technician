@@ -6,7 +6,6 @@ import 'package:online_technician/modules/chats/chats_screen.dart';
 import 'package:online_technician/modules/new-post/new_post_screen.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/modules/search/search_screen.dart';
-import 'package:online_technician/modules/settings/settings_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';

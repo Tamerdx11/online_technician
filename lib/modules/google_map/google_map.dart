@@ -104,35 +104,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
     setState(() {
     });
   }
-
-
-
-
 }
-
 
 /// google map ==> الخريطة
 /// marker ==> العلامة
 /// polygon ==> الخط الازرق اقصر مسافة بين علامتين وهيبقي متفاعل  ==> order
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

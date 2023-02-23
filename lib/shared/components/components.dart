@@ -1,10 +1,7 @@
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:online_technician/models/post.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
-import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 
 ///---------- customized button ----------
@@ -47,6 +44,7 @@ Widget defaultFormText({
   Icon? suffixIcon,
   bool isClickable = true,
   bool isPassword = false,
+  int maxLines = 1,
 }) =>
     TextFormField(
       validator: validate,
@@ -54,6 +52,7 @@ Widget defaultFormText({
       keyboardType: keyboardType,
       obscureText: isPassword,
       onTap: onTap,
+      maxLines: maxLines,
       enabled: isClickable,
       decoration: InputDecoration(
         prefixIconColor: Colors.black,
@@ -168,7 +167,7 @@ Color chooseToastColor(ToastState state) {
   }
 }
 
-///----------------------------------- build one search item --- items builder------
+///----------------------------------- build one search item and  items builder------
 
 Widget buildSearchResultItem(data, context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
@@ -314,7 +313,7 @@ Widget searchResultsBuilder(data, context) => ListView.separated(
   itemCount: data.length,
 );
 
-///****************** E2
+///---------------------------------- E2-----------------------------------------
 
 Widget myDivider() => Padding(
       padding: const EdgeInsetsDirectional.only(
@@ -326,10 +325,12 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
+
 const BoxDecoration PinOtpDeco = BoxDecoration(
   color: Colors.black,
   shape: BoxShape.circle,
 );
+
 const BoxDecoration PinOtpDeco1 = BoxDecoration(
   color: Colors.red,
   shape: BoxShape.circle,

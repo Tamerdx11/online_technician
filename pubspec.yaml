@@ -65,6 +65,10 @@ dependencies:
   pinput: ^1.2.0
   badges: ^3.0.2
   flutter_launcher_icons: "^0.11.0"
+  flutter_holo_date_picker: ^1.1.0
+  flutter_localizations:
+    sdk: flutter
+
 
 flutter_icons:
   image_path: "assets/images/logo1.png"

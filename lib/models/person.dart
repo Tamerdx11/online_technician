@@ -4,6 +4,8 @@ class PersonModel{
   String? userImage;
   String? location;
   Map<String, dynamic>? chatList;
+  Map<String, dynamic>? sentRequests;
+  Map<String, dynamic>? receivedRequests;
 
   PersonModel({
     this.name,
@@ -11,6 +13,8 @@ class PersonModel{
     this.uId,
     this.location,
     this.chatList,
+    this.sentRequests,
+    this.receivedRequests
   });
 
 }

@@ -397,8 +397,6 @@ class AppCubit extends Cubit<AppState> {
       searchOrderwd.forEach((key, value) {
         search.add(value.first);
       });
-      print("====================================sss=========================");
-      print(search.length);
       if(search.length == 0){
         emit(AppEmptySearchState());
       }
@@ -570,6 +568,8 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: true,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
+          sentRequests: model.sentRequests,
+          receivedRequests: model.receivedRequests,
         );
         if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
@@ -603,6 +603,8 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: false,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
+          sentRequests: model.sentRequests,
+          receivedRequests: model.receivedRequests,
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -634,3 +636,5 @@ class AppCubit extends Cubit<AppState> {
     return distance;
   }
 }
+
+///----------------------------

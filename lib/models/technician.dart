@@ -18,41 +18,45 @@ class TechnicianModel extends UserModel {
     String? latitude,
     String? longitude,
     String? token,
+    Map<String, dynamic>? sentRequests,
+    Map<String, dynamic>? receivedRequests,
     this.bio,
     this.profession,
     this.nationalId,
     this.idCardPhoto,
   }) : super(
-          name: name,
-          uId: uId,
-          chatList: chatList,
-          userImage: userImage,
-          phone: phone,
-          coverImage: coverImage,
-          hasProfession: hasProfession,
-          location: location,
-          latitude:latitude,
-          longitude:longitude,
-          token: token,
-        );
+            name: name,
+            uId: uId,
+            chatList: chatList,
+            userImage: userImage,
+            phone: phone,
+            coverImage: coverImage,
+            hasProfession: hasProfession,
+            location: location,
+            latitude: latitude,
+            longitude: longitude,
+            token: token,
+            receivedRequests: receivedRequests,
+            sentRequests: sentRequests);
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(
-            name: json!['name'],
-            chatList: json['chatList'],
-            uId: json['uId'],
-            userImage: json['userImage'],
-            phone: json['phone'],
-            coverImage: json['coverImage'],
-            hasProfession: json['hasProfession'],
-            location: json['location'],
-            latitude:json['latitude'],
-            longitude:json['longitude'],
-            token: json['token'],
-  )
-  {
+          name: json!['name'],
+          chatList: json['chatList'],
+          uId: json['uId'],
+          userImage: json['userImage'],
+          phone: json['phone'],
+          coverImage: json['coverImage'],
+          hasProfession: json['hasProfession'],
+          location: json['location'],
+          latitude: json['latitude'],
+          longitude: json['longitude'],
+          token: json['token'],
+          sentRequests: json['sentRequests'],
+          receivedRequests: json['receivedRequests'],
+        ) {
     bio = json['bio'];
-    profession =json['profession'];
+    profession = json['profession'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];
   }
@@ -64,7 +68,7 @@ class TechnicianModel extends UserModel {
       'nationalId': nationalId,
       'idCardPhoto': idCardPhoto,
       'phone': phone,
-      'chatList':chatList,
+      'chatList': chatList,
       'coverImage': coverImage,
       'hasProfession': hasProfession,
       'name': name,
@@ -72,9 +76,11 @@ class TechnicianModel extends UserModel {
       'userImage': userImage,
       'location': location,
       'profession': profession,
-      'latitude':latitude,
-      'longitude':longitude,
-      'token':token,
+      'latitude': latitude,
+      'longitude': longitude,
+      'token': token,
+      'sentRequests': sentRequests,
+      'receivedRequests': receivedRequests,
     };
   }
 }

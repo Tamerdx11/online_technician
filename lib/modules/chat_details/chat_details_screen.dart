@@ -65,8 +65,8 @@ class ChatDetailsScreen extends StatelessWidget {
                 title: InkWell(
                   onTap: () {
                     navigateTo(context, ProfileScreen(
-                      id: userModel.uId,
-                      name: userModel.name,
+                      id: userModel.uId!,
+                      name: userModel.name!,
                     ));
                   },
                   child: Row(
