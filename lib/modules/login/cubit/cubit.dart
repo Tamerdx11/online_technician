@@ -30,7 +30,7 @@ class AppLoginCubit extends Cubit<AppLoginState> {
           codeAutoRetrievalTimeout: (String verificationId) {
             verify = verificationId;
             },
-          timeout: const Duration(seconds: 3),
+          timeout: const Duration(seconds: 5),
         )
         .then((value) {})
         .catchError((error) {

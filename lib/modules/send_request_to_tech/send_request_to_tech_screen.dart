@@ -9,7 +9,8 @@ import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 
 // ignore: must_be_immutable
 class SendRequestToTechScreen extends StatelessWidget {
-  String id, name, userImage, latitude, longitude, location;
+  String id, name, userImage, latitude, longitude, location,token;
+  var receivedRequests;
 
   SendRequestToTechScreen(
       {Key? key,
@@ -18,7 +19,9 @@ class SendRequestToTechScreen extends StatelessWidget {
       required this.userImage,
       required this.latitude,
       required this.longitude,
-      required this.location})
+      required this.location,
+      required this.receivedRequests,
+      required this.token})
       : super(key: key);
 
   var detailsController = TextEditingController();
@@ -30,13 +33,13 @@ class SendRequestToTechScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if(state is AppSuccessSendingState){
+          Navigator.pop(context);
+        }
+      },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
-        print(
-            '---------------------------------------------date----------------');
-        print(
-            ('${DateTime.now().year + 1}-${DateTime.now().month + 2}-${DateTime.now().day}'));
 
         return Scaffold(
           backgroundColor: Colors.white,
@@ -78,6 +81,8 @@ class SendRequestToTechScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if(state is AppSendingRequestState)
+                    const LinearProgressIndicator(),
                   const SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -165,7 +170,22 @@ class SendRequestToTechScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 50.0),
                   defaultButton(
-                    function: (){},
+                    function: (){
+                      cubit.sendRequestToTech(
+                          techId: id,
+                          name: name,
+                          image: userImage,
+                          techReceivedRequests: receivedRequests,
+                          fDay: day,
+                          fMonth: month,
+                          fYear: year,
+                          details: detailsController.text,
+                          latitude: latitude,
+                          longitude: longitude,
+                          location: location,
+                          token: token,
+                      );
+                    },
                     text: ' إرسال الطلب ',
                     size: 17.0,
                     color: Colors.black87,

@@ -343,6 +343,8 @@ class ProfileScreen extends StatelessWidget {
                                             navigateTo(context, SendRequestToTechScreen(
                                               id: id,
                                               name: snapshot.data!.data()!['name'],
+                                              token: snapshot.data!.data()!['token'],
+                                              receivedRequests: snapshot.data!.data()!['receivedRequests'],
                                               userImage: snapshot.data!.data()!['userImage'],
                                               latitude: snapshot.data!.data()!['latitude'],
                                               longitude:  snapshot.data!.data()!['longitude'],

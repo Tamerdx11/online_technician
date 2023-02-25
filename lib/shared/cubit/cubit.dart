@@ -301,10 +301,12 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
+
     Map<String, dynamic>? mm = model.chatList;
     mm?.addAll({
       receiverId.toString(): [text, dateTime, image, name]
     });
+
     FirebaseFirestore.instance
         .collection('person')
         .doc(model!.uId)
@@ -339,6 +341,84 @@ class AppCubit extends Cubit<AppState> {
         .catchError((e) {
           print(e.toString());
         });
+  }
+
+  ///---------- send request to tech ----------
+
+  void sendRequestToTech({
+    required String? techId,
+    required String? name,
+    required String? image,
+    required Map<String, dynamic>? techReceivedRequests,
+    required int fDay,
+    required int fMonth,
+    required int fYear,
+    required String? details,
+    required String? latitude,
+    required String? longitude,
+    required String? location,
+    required String? token,
+  }) {
+    emit(AppSendingRequestState());
+    ///------fix my requests-------
+    Map<String, dynamic>? mySendRequests = model.sentRequests;
+    mySendRequests?.addAll({
+      techId.toString(): {
+        'name':name,
+        'image':image,
+        'deadline':[fYear,fMonth,fDay],
+        'details':details,
+        'location':location,
+        'latitude':latitude,
+        'longitude':longitude,
+        'isAccepted':false,
+        'isRejected':false,
+        'isDeadline':false,
+        'isRated':false
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(model!.uId)
+        .update({'sentRequests': mySendRequests})
+        .then((value) {})
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+
+    ///------fix tech requests------
+    Map<String, dynamic>? receivedRequests = techReceivedRequests;
+    receivedRequests?.addAll({
+      uId.toString(): {
+        'name':model.name,
+        'image':model.userImage,
+        'deadline':[fYear,fMonth,fDay],
+        'details':details,
+        'location':model.location,
+        'latitude':model.latitude,
+        'longitude':model.longitude,
+        'isAccepted':false,
+        'isRejected':false,
+        'isDeadline':false,
+        'isRated':false
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(techId.toString())
+        .update({'receivedRequests': receivedRequests})
+        .then((value) {
+      emit(AppSuccessSendingState());
+          showToast(text: 'تم ارسال طلبك بنجاح', state: ToastState.SUCCESS);
+      DioHelper.sendFcmMessage(title: 'طلب عمل من ${model.name}', message: details, token: token)
+          .then((value) {})
+          .catchError((error) {});
+    })
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
   }
 
   ///---------- get all messages ----------
@@ -568,8 +648,8 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: true,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
-          sentRequests: model.sentRequests,
-          receivedRequests: model.receivedRequests,
+          sentRequests: model.sentRequests??{},
+          receivedRequests: model.receivedRequests??{},
         );
         if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
@@ -603,8 +683,8 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: false,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
-          sentRequests: model.sentRequests,
-          receivedRequests: model.receivedRequests,
+          sentRequests: model.sentRequests??{},
+          receivedRequests: model.receivedRequests??{},
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -636,5 +716,3 @@ class AppCubit extends Cubit<AppState> {
     return distance;
   }
 }
-
-///----------------------------

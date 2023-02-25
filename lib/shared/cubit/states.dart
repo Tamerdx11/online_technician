@@ -119,5 +119,11 @@ class AppChangeSearchItemState extends AppState{}
 
 class AppEmptySearchState extends AppState{}
 
+class AppSendingRequestState extends AppState{}
+
+class AppSuccessSendingState extends AppState{}
+
+class AppErrorSendingState extends AppState{}
+
 class change extends AppState{}
 
