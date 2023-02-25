@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 class GoogleMaps2 extends StatefulWidget {
-  const GoogleMaps2({Key? key}) : super(key: key);
+ const GoogleMaps2({Key? key}) : super(key: key);
 
   @override
   State<GoogleMaps2> createState() => _GoogleMaps2State();
@@ -32,14 +32,22 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.white,
-          elevation: 0,
-          title:Text("حساب المسافة",style: TextStyle(color: Colors.black,fontFamily: 'NotoNaskhArabic',fontWeight: FontWeight.w600)),
+          elevation: 3.0,
+          title:const Text(
+              "المواقع علي الخريطة",
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontFamily: 'NotoNaskhArabic',
+                  fontWeight: FontWeight.bold,
+              ),
+          ),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
             icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
-          )),
+          ),
+      ),
       body:  Stack(
         alignment: Alignment.center,
         children:[ GoogleMap(
@@ -85,20 +93,20 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
                       color: Colors.white,
                     ),
                     children: <TextSpan> [
-                      TextSpan(
-                        text: '${CacheHelper.getData(key: 'dis')} KM',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red,
-                        ),
-                      ),
                       const TextSpan(
-                        text: ' away from you',
+                        text: ' يبعد عنك مسافة  ',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '${CacheHelper.getData(key: 'dis')} كم',
+                        style:const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.redAccent,
                         ),
                       ),
                     ],

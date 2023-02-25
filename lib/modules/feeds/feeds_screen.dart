@@ -101,10 +101,12 @@ class FeedsScreen extends StatelessWidget {
                                                   width: 2.0,
                                                 ),
                                                 InkWell(
-                                                  onTap: () async {
-                                                    await AppCubit.get(context).getUser(snapshot
+                                                  onTap: () {
+                                                    AppCubit.get(context).getUser(snapshot
                                                             .data!.docs[index]
-                                                            .data()['uId']);
+                                                            .data()['uId']).then((value){
+                                                      navigateTo(context, const GoogleMaps2());
+                                                    });
                                                     CacheHelper.savaData(
                                                         key: 'latitude1',
                                                         value: AppCubit.get(context).model.latitude);
@@ -125,18 +127,6 @@ class FeedsScreen extends StatelessWidget {
                                                     CacheHelper.savaData(
                                                         key: 'name2',
                                                         value: AppCubit.get(context).user?.name);
-                                                    print(
-                                                        '*******************************************');
-                                                    print(CacheHelper.getData(
-                                                        key: 'latitude1'));
-                                                    print(CacheHelper.getData(
-                                                        key: 'longitude1'));
-                                                    print(CacheHelper.getData(
-                                                        key: 'longitude2'));
-                                                    print(CacheHelper.getData(
-                                                        key: 'latitude2'));
-                                                    navigateTo(
-                                                        context, GoogleMaps2());
                                                   },
                                                   child: const Padding(
                                                     padding:
