@@ -125,5 +125,7 @@ class AppSuccessSendingState extends AppState{}
 
 class AppErrorSendingState extends AppState{}
 
+class AppChangeStatusState extends AppState{}
+
 class change extends AppState{}
 

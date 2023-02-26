@@ -9,12 +9,13 @@ import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 
 // ignore: must_be_immutable
 class SendRequestToTechScreen extends StatelessWidget {
-  String id, name, userImage, latitude, longitude, location,token;
+  String id, name, userImage, latitude, longitude, location,token, profession;
   var receivedRequests;
 
   SendRequestToTechScreen(
       {Key? key,
       required this.id,
+      required this.profession,
       required this.name,
       required this.userImage,
       required this.latitude,
@@ -173,6 +174,7 @@ class SendRequestToTechScreen extends StatelessWidget {
                     function: (){
                       cubit.sendRequestToTech(
                           techId: id,
+                          profession: profession,
                           name: name,
                           image: userImage,
                           techReceivedRequests: receivedRequests,

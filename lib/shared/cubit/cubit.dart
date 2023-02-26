@@ -255,6 +255,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get one users ----------
 
   UserModel? user;
+  Map<String, dynamic>? userSendRequests ={};
   Future<void> getUser(String id) async {
     await FirebaseFirestore.instance
         .collection('person')
@@ -262,6 +263,7 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then((value) {
       user = UserModel.fromJson(value.data());
+      userSendRequests = user?.sentRequests;
       emit(AppGetAllUsersSuccessState());
     }).catchError((error) {});
   }
@@ -343,10 +345,54 @@ class AppCubit extends Cubit<AppState> {
         });
   }
 
+  ///---------- change request status ----------
+
+  void changeRequestStatus({
+    required String? userId,
+    required Map<String, dynamic>? techSendRequests,
+    required String? token,
+    required bool status,
+  }) {
+    emit(AppSendingRequestState());
+    ///------fix my requests-------
+    Map<String, dynamic>? myReceivedRequests = model.receivedRequests;
+    myReceivedRequests![userId]['isAccepted'] = status;
+    myReceivedRequests[userId]['isRejected'] = !status;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(model!.uId)
+        .update({'receivedRequests': myReceivedRequests})
+        .then((value) {})
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+
+    ///------fix tech requests------
+    Map<String, dynamic>? newTechSendRequests = techSendRequests;
+    newTechSendRequests![uId.toString()]['isAccepted'] = status;
+    newTechSendRequests[uId.toString()]['isRejected'] = !status;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userId.toString())
+        .update({'sentRequests': newTechSendRequests})
+        .then((value) {
+      emit(AppChangeStatusState());
+      DioHelper.sendFcmMessage(title:status? 'تم الموافقة علي طلب العمل من  ${model.name}':'تم رفض طلبك من قبل  ${model.name}', message: ' ', token: token)
+          .then((value) {})
+          .catchError((error) {});
+    })
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+  }
+
   ///---------- send request to tech ----------
 
   void sendRequestToTech({
     required String? techId,
+    required String? profession,
     required String? name,
     required String? image,
     required Map<String, dynamic>? techReceivedRequests,
@@ -371,6 +417,7 @@ class AppCubit extends Cubit<AppState> {
         'location':location,
         'latitude':latitude,
         'longitude':longitude,
+        'profession':profession,
         'isAccepted':false,
         'isRejected':false,
         'isDeadline':false,
@@ -411,7 +458,7 @@ class AppCubit extends Cubit<AppState> {
         .update({'receivedRequests': receivedRequests})
         .then((value) {
       emit(AppSuccessSendingState());
-          showToast(text: 'تم ارسال طلبك بنجاح', state: ToastState.SUCCESS);
+      showToast(text: 'تم ارسال طلبك بنجاح', state: ToastState.SUCCESS);
       DioHelper.sendFcmMessage(title: 'طلب عمل من ${model.name}', message: details, token: token)
           .then((value) {})
           .catchError((error) {});
@@ -420,7 +467,6 @@ class AppCubit extends Cubit<AppState> {
       emit(AppErrorSendingState());
     });
   }
-
   ///---------- get all messages ----------
 
   void getMessages({required String? receiverId}) {

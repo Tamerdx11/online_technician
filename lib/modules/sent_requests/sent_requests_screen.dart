@@ -30,8 +30,10 @@ class SentRequestsScreen extends StatelessWidget {
             }
             if(snapshot.hasData){
               Map map = snapshot.data!.data()?['sentRequests'];
-              print('=====================map test==================');
-              print(map);
+
+              if(snapshot.data!.data()?['sentRequests'].length == 0) {
+                return const Center(child: Text("لا يوجد طلبات مرسلة"));
+              }
 
               return ListView.separated(
                   itemBuilder: (context, index) {
@@ -53,38 +55,44 @@ class SentRequestsScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                InkWell(
-                                  child: Padding(
-                                    padding:const EdgeInsets.all(4.0),
-                                    child: Icon(
-                                      Icons.whatsapp,
-                                      size: 27.0,
-                                      color: HexColor('#7FB77E'),
+                                Column(
+                                  children: [
+                                    InkWell(
+                                      child: Padding(
+                                        padding:const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.whatsapp,
+                                          size: 30.0,
+                                          color: HexColor('#7FB77E'),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        AppCubit.get(context).goToChatDetails(
+                                          map.keys.toList()[index].toString(),
+                                          context,
+                                        );
+                                      },
                                     ),
-                                  ),
-                                  onTap: () {
-                                    AppCubit.get(context).goToChatDetails(
-                                      map.keys.toList()[index].toString(),
-                                      context,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(width: 5.0),
-                                InkWell(
-                                  onTap: () {
-                                    CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                    CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                    CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                    CacheHelper.savaData(key: 'latitude2', value: map[map.keys.toList()[index]]['latitude']);
-                                    CacheHelper.savaData(key: 'longitude2', value:map[map.keys.toList()[index]]['longitude']);
-                                    CacheHelper.savaData(key: 'name2', value: map[map.keys.toList()[index]]['name']);
-                                    navigateTo(context, const GoogleMaps2());
-                                  },
-                                  child: Icon(
-                                    Icons.location_on_outlined,
-                                    color: Colors.blue.withOpacity(0.8),
-                                    size: 27.0,
-                                  ),
+                                    InkWell(
+                                      onTap: () {
+                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                        CacheHelper.savaData(key: 'latitude2', value: map[map.keys.toList()[index]]['latitude']);
+                                        CacheHelper.savaData(key: 'longitude2', value:map[map.keys.toList()[index]]['longitude']);
+                                        CacheHelper.savaData(key: 'name2', value: map[map.keys.toList()[index]]['name']);
+                                        navigateTo(context, const GoogleMaps2());
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.black54,
+                                          size: 30.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const Spacer(),
                                 Column(
@@ -131,13 +139,28 @@ class SentRequestsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                      ' يقيم في ${map[map.keys.toList()[index]]['location']}',
-                                      style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          ' يقيم في ${map[map.keys.toList()[index]]['location']}',
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20.0),
+                                        Text(
+                                          '${map[map.keys.toList()[index]]['profession']}',
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0
+                                          ),
+                                        ),
+                                        const SizedBox(width: 3.0),
+                                        const Icon(Icons.workspace_premium, size: 20.0, color: Colors.green,),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -207,7 +230,7 @@ class SentRequestsScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const Text(
-                                  ' :حالة االطلب ',
+                                  ' :حالة الطلب ',
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -224,7 +247,6 @@ class SentRequestsScreen extends StatelessWidget {
                   separatorBuilder: (context, index) =>const SizedBox(height: 5.0,),
                   itemCount: snapshot.data!.data()?['sentRequests'].length,
               );
-
             }
             return const Center(child: CircularProgressIndicator(),);
           },
@@ -235,6 +257,8 @@ class SentRequestsScreen extends StatelessWidget {
   }
 
 }
+
+
 
 String getStatus({
   required bool isAccepted,

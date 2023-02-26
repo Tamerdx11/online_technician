@@ -15,8 +15,7 @@ Widget defaultButton({
   required String text,
 }) =>
     Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(30), color: color),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: color),
       width: width,
       child: MaterialButton(
         onPressed: function,
