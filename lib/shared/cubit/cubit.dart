@@ -358,6 +358,7 @@ class AppCubit extends Cubit<AppState> {
     Map<String, dynamic>? myReceivedRequests = model.receivedRequests;
     myReceivedRequests![userId]['isAccepted'] = status;
     myReceivedRequests[userId]['isRejected'] = !status;
+    myReceivedRequests[userId]['isDone'] = !status;
 
     FirebaseFirestore.instance
         .collection('person')
@@ -372,6 +373,7 @@ class AppCubit extends Cubit<AppState> {
     Map<String, dynamic>? newTechSendRequests = techSendRequests;
     newTechSendRequests![uId.toString()]['isAccepted'] = status;
     newTechSendRequests[uId.toString()]['isRejected'] = !status;
+    newTechSendRequests[uId.toString()]['isDone'] = !status;
 
     FirebaseFirestore.instance
         .collection('person')
@@ -421,7 +423,8 @@ class AppCubit extends Cubit<AppState> {
         'isAccepted':false,
         'isRejected':false,
         'isDeadline':false,
-        'isRated':false
+        'isRated':false,
+        'isDone':false
       }
     });
 
@@ -448,7 +451,8 @@ class AppCubit extends Cubit<AppState> {
         'isAccepted':false,
         'isRejected':false,
         'isDeadline':false,
-        'isRated':false
+        'isRated':false,
+        'isDone':false
       }
     });
 
@@ -467,6 +471,167 @@ class AppCubit extends Cubit<AppState> {
       emit(AppErrorSendingState());
     });
   }
+
+  ///---------- Received requests checker ---------
+
+  void receivedRequestsChecker({
+    required bool isAccepted,
+    required bool isRejected,
+    required bool isRated,
+    required bool isDeadline,
+    required String? userId,
+    required int day,
+    required int month,
+    required int year,
+}){
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userId)
+        .get()
+        .then((value) {
+      var user2 = UserModel.fromJson(value.data());
+
+      if(checkRequestDeadline(day: day, month: month, year: year)){
+        if(isDeadline == false)
+        {
+          changeReceivedRequestStates(
+              senderRequests: user2.sentRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: false,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+        if(isAccepted == true && isRejected == false)
+        {
+          DioHelper.sendFcmMessage(title: 'المجتمع المهني', message: 'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا', token: user2.token.toString());
+        }
+        else if(isAccepted == false && isRejected == true)
+        {
+          changeReceivedRequestStates(
+              senderRequests: user2.sentRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: true,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+        else if(isAccepted == false && isRejected == false)
+        {
+          changeReceivedRequestStates(
+              senderRequests: user2.sentRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: true,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+      }
+    }).catchError((error) {});
+}
+
+  ///---------- request deadline check ----------
+
+  bool checkRequestDeadline({
+    required int day,
+    required int month,
+    required int year,
+}){
+    if(DateTime.now().year > year)
+    {
+      /// change to deadlined   *******
+       return true;
+    }
+    else if(DateTime.now().year < year)
+    {
+      return false;
+    }
+    else if(DateTime.now().year == year)
+    {
+      if(DateTime.now().month > month)
+      {
+        /// change to deadlined   *******
+        return true;
+      }
+      else if(DateTime.now().month < month)
+      {
+        return false;
+      }
+      else if(DateTime.now().month == month)
+        {
+          if(DateTime.now().day > day)
+          {
+            /// change to deadlined   *******
+            return true;
+          }
+          else if(DateTime.now().day < day)
+          {
+            return false;
+          }
+          else if(DateTime.now().day == day){
+            return false;
+          }
+
+        }
+    }
+    return false;
+  }
+
+  ///***** change my received requests to deadlined *****
+
+  void changeReceivedRequestStates({
+    required String? userId,
+    required Map<String, dynamic>? senderRequests,
+    required bool deadline,
+    required bool done,
+    required bool rated,
+    required bool accepted,
+    required bool rejected,
+  }) {
+    emit(AppSendingRequestState());
+    ///------fix my requests-------
+    Map<String, dynamic>? myReceivedRequests = model.receivedRequests;
+    myReceivedRequests![userId]['isDeadline'] = deadline;
+    myReceivedRequests[userId]['isAccepted'] = accepted;
+    myReceivedRequests[userId]['isRejected'] = rejected;
+    myReceivedRequests[userId]['isRated'] = rated;
+    myReceivedRequests[userId]['isDone'] = done;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(model!.uId)
+        .update({'receivedRequests': myReceivedRequests})
+        .then((value) {})
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+
+    ///------fix tech requests------
+    Map<String, dynamic>? newTechSendRequests = senderRequests;
+    newTechSendRequests![uId.toString()]['isDeadline'] = deadline;
+    newTechSendRequests[uId.toString()]['isAccepted'] = accepted;
+    newTechSendRequests[uId.toString()]['isRejected'] = rejected;
+    newTechSendRequests[uId.toString()]['isRated'] = rated;
+    newTechSendRequests[uId.toString()]['isDone'] = done;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userId.toString())
+        .update({'sentRequests': newTechSendRequests})
+        .then((value) {
+      emit(AppChangeStatusState());
+    })
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+  }
+
   ///---------- get all messages ----------
 
   void getMessages({required String? receiverId}) {
@@ -490,8 +655,8 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get search results ---------
 
   List<dynamic> search = [];
-  Map searchunorderwd = {};
-  Map searchOrderwd = {};
+  Map searchUnordered = {};
+  Map searchOrdered = {};
   void getSearchData(String value, String key) {
     emit(AppLoadingState1());
     FirebaseFirestore.instance
@@ -500,10 +665,10 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then((value) {
       search = [];
-      searchunorderwd ={};
+      searchUnordered ={};
       value.docs.forEach((element) {
         if (element.data()['uId'] != uId) {
-          searchunorderwd.addAll({
+          searchUnordered.addAll({
             element.data()['uId']:[
               element.data()
               ,getDistance(
@@ -517,10 +682,10 @@ class AppCubit extends Cubit<AppState> {
           emit(AppLoadingState());
         }
       });
-      searchOrderwd = Map.fromEntries(
-          searchunorderwd.entries.toList()..sort((e1, e2) => e1.value[1].compareTo(e2.value[1]))
+      searchOrdered = Map.fromEntries(
+          searchUnordered.entries.toList()..sort((e1, e2) => e1.value[1].compareTo(e2.value[1]))
       );
-      searchOrderwd.forEach((key, value) {
+      searchOrdered.forEach((key, value) {
         search.add(value.first);
       });
       if(search.length == 0){

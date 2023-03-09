@@ -108,10 +108,11 @@ PreferredSizeWidget defaultAppBar({
   List<Widget>? actions,
   Color? color,
   Color? textColor,
+  double? elevation = 0,
 }) =>
     AppBar(
       backgroundColor: color,
-      elevation: 0,
+      elevation: elevation,
       title: Center(
         child: Text(
           title,
@@ -125,13 +126,17 @@ PreferredSizeWidget defaultAppBar({
       actions: actions,
       titleSpacing: 10.0,
       centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.white,
+      leading: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+            size: 30.0,
+          ),
         ),
       ),
     );

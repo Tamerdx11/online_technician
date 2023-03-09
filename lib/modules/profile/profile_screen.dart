@@ -34,13 +34,14 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: HexColor('#F9F9F9'),
             appBar: defaultAppBar(
               context: context,
-              color: HexColor('#0A81AB'),
+              color: HexColor('#864879'),
               textColor: Colors.white,
-              title: '$name',
+              elevation: 5.0,
+              title: 'صفحة شخصية',
               actions: [
                 id == CacheHelper.getData(key: 'uId')?
                   Padding(
-                    padding: const EdgeInsets.all(9.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: OutlinedButton(
                       onPressed: () {
                         navigateTo(context, EditProfileScreen());
@@ -58,14 +59,14 @@ class ProfileScreen extends StatelessWidget {
                     :IconButton(
                     onPressed: (){
                   AppCubit.get(context).goToChatDetails(
-                    '$id',
+                    id.toString(),
                     context,
                   );
                 },
                     icon:const Icon(
                       Icons.whatsapp_outlined,
-                      color: Colors.black87,
-                      size: 30.0,
+                      color: Colors.greenAccent,
+                      size: 35.0,
                     ),
                 )
               ],
@@ -83,304 +84,321 @@ class ProfileScreen extends StatelessWidget {
                   if (snapshot.hasData){
                     name = snapshot.data!.data()!['name'];
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Card(
-                          margin:const EdgeInsets.all(0),
-                          elevation: 5.0,
-                          shape: const OutlineInputBorder(
-                            borderRadius:BorderRadius.only(
-                              bottomRight: Radius.circular(50.0),
-                              bottomLeft: Radius.circular(50.0),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+                          child: Card(
+                            color: HexColor('#F7EFE5'),
+                            margin:const EdgeInsets.all(0),
+                            elevation: 5.0,
+                            shape: OutlineInputBorder(
+                              borderRadius:const BorderRadius.only(
+                                bottomRight: Radius.circular(50.0),
+                                topRight: Radius.circular(50.0),
+                              ),
+                              borderSide: BorderSide(
+                                color: HexColor('#864879'),
+                                width: 0.5,
+                              ),
                             ),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 0.05,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 280.0,
-                                child: Stack(
-                                  alignment: Alignment.bottomLeft,
+                            child: Column(
+                              children: [
+                                const SizedBox(height:25.0),
+                                Row(
                                   children: [
-                                    Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Container(
-                                        height: 160.0,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(50.0),
-                                            bottomRight: Radius.circular(50.0),
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage(snapshot.data!.data()!['coverImage'].toString()),
-                                            fit: BoxFit.cover,
-                                          ),
+                                    const SizedBox(
+                                      width: 40.0,
+                                    ),
+                                    Container(
+                                      width: 115.0,
+                                      height: 115.0,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(snapshot
+                                              .data!
+                                              .data()!['userImage']
+                                              .toString()),
+                                          fit: BoxFit.fill,
                                         ),
+                                        border: Border.all(
+                                          color: Colors.black,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(12.0)
+                                        )
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: 30.0,
-                                        ),
-                                        CircleAvatar(
-                                          radius: 66.0,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            radius: 60.3,
-                                            backgroundColor: Colors.black,
-                                            child: CircleAvatar(
-                                              radius: 60.0,
-                                              backgroundImage: NetworkImage(snapshot
-                                                  .data!
-                                                  .data()!['userImage']
-                                                  .toString()),
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data!
+                                                .data()!['name']
+                                                .toString(),
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 20.0,
+                                              color: HexColor('#864879'),
+                                              overflow: TextOverflow.clip,
                                             ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Container(
-                                            padding: const EdgeInsets.only(top: 35.0, right:0.0),
-                                            height: 180.0,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(30.0),
-                                              child: Column(
+                                          if(snapshot.data!.data()!['hasProfession'] == true)
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                    snapshot.data!
+                                                        .data()!['profession']
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 15.0,
+                                                        color: Colors.black54,
+                                                        fontStyle: FontStyle.italic
+                                                    )),
+                                                const SizedBox(width: 3.0,),
+                                                const Icon(
+                                                  Icons.handyman_sharp,
+                                                  size: 18.0,
+                                                  color: Colors.black87,
+                                                ),
+                                              ],
+                                            ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              if(id != CacheHelper.getData(key: 'uId'))
+                                                Text(
+                                                  AppCubit.get(context).getDistance(
+                                                    lat1: AppCubit.get(context).model.latitude,
+                                                    long1: AppCubit.get(context).model.longitude,
+                                                    lat2: snapshot.data!.data()!['latitude'],
+                                                    long2: snapshot.data!.data()!['longitude'],
+                                                  ).toInt()==0?'يبعد عنك ${(AppCubit.get(context).getDistance(
+                                                    lat1: AppCubit.get(context).model.latitude,
+                                                    long1: AppCubit.get(context).model.longitude,
+                                                    lat2: snapshot.data!.data()!['latitude'],
+                                                    long2: snapshot.data!.data()!['longitude'],
+                                                  )*1000).toInt()} م':'يبعد عنك ${AppCubit.get(context).getDistance(
+                                                    lat1: AppCubit.get(context).model.latitude,
+                                                    long1: AppCubit.get(context).model.longitude,
+                                                    lat2: snapshot.data!.data()!['latitude'],
+                                                    long2: snapshot.data!.data()!['longitude'],
+                                                  ).toInt()} كم',
+                                                  style:const  TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13.0,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ),
+                                              if(id != CacheHelper.getData(key: 'uId'))
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                                                  child: Container(
+                                                    width: 1.0,
+                                                    height: 20.0,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     snapshot.data!
-                                                        .data()!['name']
+                                                        .data()!['location']
                                                         .toString(),
-                                                    maxLines: 1,
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.w900,
-                                                      fontSize: 20.0,
-                                                      color: Colors.black87,
-                                                      overflow: TextOverflow.clip,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 13.0,
+                                                        color: Colors.grey,
+                                                        fontStyle: FontStyle.italic
                                                     ),
                                                   ),
-                                                  if(snapshot.data!.data()!['hasProfession'] == true)
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                            snapshot.data!
-                                                                .data()!['profession']
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 14.0,
-                                                                color: Colors.grey,
-                                                                fontStyle: FontStyle.italic
-                                                            )),
-                                                        const SizedBox(width: 2.0,),
-                                                        const Icon(Icons.handyman_sharp, size: 17.0, color: Colors.black54,),
-                                                      ],
-                                                    ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      if(id != CacheHelper.getData(key: 'uId'))
-                                                        Text(
-                                                          AppCubit.get(context).getDistance(
-                                                            lat1: AppCubit.get(context).model.latitude,
-                                                            long1: AppCubit.get(context).model.longitude,
-                                                            lat2: snapshot.data!.data()!['latitude'],
-                                                            long2: snapshot.data!.data()!['longitude'],
-                                                          ).toInt()==0?'يبعد عنك ${(AppCubit.get(context).getDistance(
-                                                            lat1: AppCubit.get(context).model.latitude,
-                                                            long1: AppCubit.get(context).model.longitude,
-                                                            lat2: snapshot.data!.data()!['latitude'],
-                                                            long2: snapshot.data!.data()!['longitude'],
-                                                          )*1000).toInt()} م':'يبعد عنك ${AppCubit.get(context).getDistance(
-                                                            lat1: AppCubit.get(context).model.latitude,
-                                                            long1: AppCubit.get(context).model.longitude,
-                                                            lat2: snapshot.data!.data()!['latitude'],
-                                                            long2: snapshot.data!.data()!['longitude'],
-                                                          ).toInt()} كم',
-                                                          style:const  TextStyle(
-                                                            fontWeight: FontWeight.bold,
-                                                            fontSize: 12.0,
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ),
-                                                      if(id != CacheHelper.getData(key: 'uId'))
-                                                         Padding(
-                                                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                                           child: Container(
-                                                             width: 1.0,
-                                                             height: 20.0,
-                                                             color: Colors.black54,
-                                                           ),
-                                                         ),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Text(
-                                                            snapshot.data!
-                                                                .data()!['location']
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 12.0,
-                                                                color: Colors.grey,
-                                                                fontStyle: FontStyle.italic
-                                                            ),
-                                                          ),
-                                                          const Icon(
-                                                            Icons.gpp_good_sharp,
-                                                            color: Colors.green,
-                                                            size: 18.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                  const Icon(
+                                                    Icons.gpp_good_sharp,
+                                                    color: Colors.green,
+                                                    size: 18.0,
                                                   ),
                                                 ],
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              if(snapshot.data!.data()!['hasProfession'] == true)
-                                Center(
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 0.0),
-                                    child: Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            overflow: TextOverflow.clip,
-                                            snapshot.data!.data()!['bio'].toString(),
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14.0,
-                                              overflow: TextOverflow.ellipsis,
+                                if(snapshot.data!.data()!['hasProfession'] == true)
+                                  Center(
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 25.0, right: 25.0),
+                                      child: Expanded(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              overflow: TextOverflow.clip,
+                                              snapshot.data!.data()!['bio'].toString(),
+                                              style: TextStyle(
+                                                color: HexColor('#864879'),
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                                overflow: TextOverflow.ellipsis,
 
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 10.0,),
-                                          const Icon(Icons.edit_note_rounded, color: Colors.grey,size: 20.0,)
-                                        ],
+                                            const SizedBox(width: 5.0,),
+                                            const Icon(
+                                              Icons.edit_note_rounded,
+                                              color: Colors.black,
+                                              size: 25.0,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if(snapshot.data!.data()!['hasProfession'] == true)
-                                      Expanded(
-                                      child: Column(
-                                        children: const [
-                                          Text(
-                                            'تقييم المهارة',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87,
-                                              fontSize: 18.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            '7.9',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87,
-                                              fontSize: 20.0,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                    await AppCubit.get(context).getUser(
-                                    snapshot.data!.data()!['uId'].toString());
-                                    CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                    CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                    CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                    CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
-                                    CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
-                                    CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
-                                    navigateTo(context, GoogleMaps2());
-                                    },
-                                      child: Container(
-                                        width: 40,
-                                        height: 47.0,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: Colors.green,
-                                        ),
-                                        child: Icon(
-                                          Icons.location_on,
-                                          color: Colors.redAccent.withOpacity(0.8),
-                                          size: 25.0,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5.0,),
-                                    ///===== add طلب للعمل
-                                    if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: Colors.green,
-                                        ),
-                                        child: MaterialButton(
-                                          onPressed: () {
-                                            ///navigation here
-                                            navigateTo(context, SendRequestToTechScreen(
-                                              id: id,
-                                              name: snapshot.data!.data()!['name'],
-                                              profession: snapshot.data!.data()!['profession'],
-                                              token: snapshot.data!.data()!['token'],
-                                              receivedRequests: snapshot.data!.data()!['receivedRequests'],
-                                              userImage: snapshot.data!.data()!['userImage'],
-                                              latitude: snapshot.data!.data()!['latitude'],
-                                              longitude:  snapshot.data!.data()!['longitude'],
-                                              location: snapshot.data!.data()!['location'],
-                                            ));
-                                          },
-                                          child: Row(
-                                            children:const [
-                                              Icon(
-                                                Icons.work_history,
-                                                color: Colors.lightGreenAccent,
-                                                size: 25.0,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if(snapshot.data!.data()!['hasProfession'] == true)
+                                        Expanded(
+                                        child: Column(
+                                          children:  [
+                                            Text(
+                                              'تقييم المهارة',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: HexColor('#864879'),
+                                                fontSize: 18.0,
                                               ),
-                                              SizedBox(width: 8.0,),
-                                              Text(
-                                                'طلب للعمل',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.black87,
-                                                  fontSize: 15.0,
+                                            ),
+                                            const Text(
+                                              '7.9',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.orange,
+                                                fontSize: 20.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                      await AppCubit.get(context).getUser(
+                                      snapshot.data!.data()!['uId'].toString());
+                                      CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                      CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                      CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                      CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                      CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                      CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
+                                      navigateTo(context, GoogleMaps2());
+                                      },
+                                        child: Container(
+                                          width: 40,
+                                          height: 47.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: HexColor('#864879'),
+                                          ),
+                                          child: Icon(
+                                            Icons.location_on,
+                                            color: Colors.redAccent.withOpacity(0.8),
+                                            size: 25.0,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5.0,),
+                                      if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20.0),
+                                            color: HexColor('#864879'),
+                                          ),
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              ///navigation here
+                                              navigateTo(context, SendRequestToTechScreen(
+                                                id: id,
+                                                name: snapshot.data!.data()!['name'],
+                                                profession: snapshot.data!.data()!['profession'],
+                                                token: snapshot.data!.data()!['token'],
+                                                receivedRequests: snapshot.data!.data()!['receivedRequests'],
+                                                userImage: snapshot.data!.data()!['userImage'],
+                                                latitude: snapshot.data!.data()!['latitude'],
+                                                longitude:  snapshot.data!.data()!['longitude'],
+                                                location: snapshot.data!.data()!['location'],
+                                              ));
+                                            },
+                                            child: Row(
+                                              children:const [
+                                                Icon(
+                                                  Icons.work_history,
+                                                  color: Colors.orange,
+                                                  size: 25.0,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                                SizedBox(width: 8.0,),
+                                                Text(
+                                                  'طلب للعمل',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
 
+                                          ),
                                         ),
-                                      ),
-                                    const SizedBox(width: 25.0,)
-                                  ],
+                                      const SizedBox(width: 25.0,)
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 30.0,),
+                        if(snapshot.data!.data()!['hasProfession'] == true)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Card(
+                              color: HexColor('#F7EFE5'),
+                              margin:const EdgeInsets.all(0),
+                              elevation: 5.0,
+                              shape: OutlineInputBorder(
+                                borderRadius:const BorderRadius.only(
+                                  topLeft: Radius.circular(80.0),
+                                  bottomLeft: Radius.circular(80.0),
+                                ),
+                                borderSide: BorderSide(
+                                  color: HexColor('#864879'),
+                                  width: 0.5,
+                                ),
+                              ),
+                              child:const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                child:  Text(
+                                    'أعمال سابقة',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.black87
+                                  ),
+                                ),
+                              ),
+
+                            ),
+                          ),
+
+                        const SizedBox(height: 15.0,),
                         StreamBuilder(
                           stream:  FirebaseFirestore.instance
                               .collection('posts')
