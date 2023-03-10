@@ -93,7 +93,7 @@ class EditProfileScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: HexColor('#ebebeb'),
           appBar: AppBar(
-            backgroundColor: HexColor('#0A81AB'),
+            backgroundColor: HexColor('#1d2021'),
             title:const Center(
               child: Text(
                 'تعديل الحساب',
@@ -148,74 +148,43 @@ class EditProfileScreen extends StatelessWidget {
                 children: [
                   if(state is AppTechnicianUpdateLoadingState)
                     const LinearProgressIndicator(color: Colors.greenAccent),
-                  SizedBox(
-                    height: 205,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Stack(
-                            alignment: AlignmentDirectional.topEnd,
-                            children: [
-                              Container(
-                                height: 140.0,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      const BorderRadius.only(bottomRight: Radius.circular(30),bottomLeft:Radius.circular(30) ),
-                                  image: DecorationImage(
-                                    image: image_cover,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).getCoverImage();
-                                },
-                                icon: CircleAvatar(
-                                  backgroundColor:
-                                      Colors.black.withOpacity(0.4),
-                                  child: const Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Colors.white,
-                                    size: 15.0,
-                                  ),
-                                ),
-                              ),
-                            ],
+                  const SizedBox(height: 25.0,),
+                  Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Container(
+                        width: 120.0,
+                        height: 120.0,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: image_profile,
+                              fit: BoxFit.fill,
+                            ),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                            ),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(12.0)
+                            )
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          AppCubit.get(context).getProfileImage();
+                        },
+                        icon: CircleAvatar(
+                          radius: 24.0,
+                          backgroundColor:
+                              Colors.black.withOpacity(0.5),
+                          child: const Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white,
+                            size: 23.0,
                           ),
                         ),
-                        Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            CircleAvatar(
-                              radius: 66.0,
-                              backgroundColor: HexColor('#ebebeb'),
-                              child: CircleAvatar(
-                                radius: 60.0,
-                                backgroundImage: image_profile,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                AppCubit.get(context).getProfileImage();
-                              },
-                              icon: CircleAvatar(
-                                backgroundColor:
-                                    Colors.black.withOpacity(0.4),
-                                child: const Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: Colors.white,
-                                  size: 15.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 25.0,

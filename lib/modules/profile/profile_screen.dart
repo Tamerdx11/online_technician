@@ -90,17 +90,17 @@ class ProfileScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 20.0, top: 16.0),
                           child: Card(
-                            color: HexColor('#F1F6F9'),
+                            color: Colors.white,
                             margin:const EdgeInsets.all(0),
                             elevation: 5.0,
-                            shape: OutlineInputBorder(
-                              borderRadius:const BorderRadius.only(
+                            shape:const OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(50.0),
                                 topRight: Radius.circular(50.0),
                               ),
                               borderSide: BorderSide(
-                                color: HexColor('#1d2021'),
-                                width: 0.05,
+                                color: Colors.black54,
+                                width: 0.2,
                               ),
                             ),
                             child: Column(
