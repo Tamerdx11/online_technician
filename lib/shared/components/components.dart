@@ -109,6 +109,7 @@ PreferredSizeWidget defaultAppBar({
   Color? color,
   Color? textColor,
   double? elevation = 0,
+  Color? arrowColor = Colors.black,
 }) =>
     AppBar(
       backgroundColor: color,
@@ -132,9 +133,9 @@ PreferredSizeWidget defaultAppBar({
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
-            color: Colors.white,
+            color: arrowColor,
             size: 30.0,
           ),
         ),

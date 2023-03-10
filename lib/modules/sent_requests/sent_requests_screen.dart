@@ -36,7 +36,24 @@ class SentRequestsScreen extends StatelessWidget {
               }
 
               return ListView.separated(
+                reverse: true,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
+                    if(map[map.keys.toList()[index]]['isDone'] == false){
+                      AppCubit.get(context).sendRequestsChecker(
+                        isAccepted: map[map.keys.toList()[index]]['isAccepted'],
+                        isRejected: map[map.keys.toList()[index]]['isRejected'],
+                        isRated: map[map.keys.toList()[index]]['isRated'],
+                        isDeadline: map[map.keys.toList()[index]]['isDeadline'],
+                        userId: map.keys.toList()[index].toString(),
+                        day: map[map.keys.toList()[index]]['deadline'][2],
+                        month: map[map.keys.toList()[index]]['deadline'][1],
+                        year: map[map.keys.toList()[index]]['deadline'][0],
+                      );
+                    }
+
                     return Card(
                       elevation: 3.0,
                       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -196,6 +213,15 @@ class SentRequestsScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                if(map[map.keys.toList()[index]]['isDeadline']==true)
+                                  const Text(
+                                    ' (منتهي)',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
                                 Text(
                                   ' ${map[map.keys.toList()[index]]['deadline'][0]}-${map[map.keys.toList()[index]]['deadline'][1]}-${map[map.keys.toList()[index]]['deadline'][2]}',
                                   maxLines: 3,
@@ -239,6 +265,61 @@ class SentRequestsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            if(map[map.keys.toList()[index]]['isAccepted']==true && map[map.keys.toList()[index]]['isDeadline']==true && map[map.keys.toList()[index]]['isRated']==false)
+                              Center(
+                                child: Column(
+                                  children: [
+                                    const Padding(
+                                      padding:  EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                      child:  Text(
+                                          'في حالة قيام الحِرَفِي بعمله في الوقت المحدد يتوجب عليك تقييم عمله لنستمر في تقديم الأفضل لك دائما, وفي حالة لم يلتزم بالمواعيد المحدد يمكنك الإبلاغ حتي نتمكن من تحسين بيئة العمل هنا.',
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.black87
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.redAccent,),
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              /// *** *** ss ابلاغ
+                                            },
+                                            child:const Text(
+                                              ' الإبلاغ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20.0,),
+                                        Container(
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.green,),
+                                          child: MaterialButton(
+                                            onPressed: () {
+                                              /// *** *** ss تقييم
+                                            },
+                                            child:const Text(
+                                              ' تقييم عمل الحِرَفِي',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5.0,)
+                                  ],
+                                ),
+                              ),
                           ],
                         ),
                       ),

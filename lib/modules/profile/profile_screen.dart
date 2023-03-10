@@ -34,9 +34,10 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: HexColor('#F9F9F9'),
             appBar: defaultAppBar(
               context: context,
-              color: HexColor('#864879'),
+              color: HexColor('#1d2021'),
               textColor: Colors.white,
-              elevation: 5.0,
+              elevation: 2.0,
+              arrowColor: Colors.white,
               title: 'صفحة شخصية',
               actions: [
                 id == CacheHelper.getData(key: 'uId')?
@@ -87,9 +88,9 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 12.0, top: 12.0),
+                          padding: const EdgeInsets.only(right: 20.0, top: 16.0),
                           child: Card(
-                            color: HexColor('#F7EFE5'),
+                            color: HexColor('#F1F6F9'),
                             margin:const EdgeInsets.all(0),
                             elevation: 5.0,
                             shape: OutlineInputBorder(
@@ -98,8 +99,8 @@ class ProfileScreen extends StatelessWidget {
                                 topRight: Radius.circular(50.0),
                               ),
                               borderSide: BorderSide(
-                                color: HexColor('#864879'),
-                                width: 0.5,
+                                color: HexColor('#1d2021'),
+                                width: 0.05,
                               ),
                             ),
                             child: Column(
@@ -108,11 +109,11 @@ class ProfileScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     const SizedBox(
-                                      width: 40.0,
+                                      width: 35.0,
                                     ),
                                     Container(
-                                      width: 115.0,
-                                      height: 115.0,
+                                      width: 110.0,
+                                      height: 110.0,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
                                           image: NetworkImage(snapshot
@@ -307,7 +308,7 @@ class ProfileScreen extends StatelessWidget {
                                           height: 47.0,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20),
-                                            color: HexColor('#864879'),
+                                            color: HexColor('#1d2021'),
                                           ),
                                           child: Icon(
                                             Icons.location_on,
@@ -321,7 +322,7 @@ class ProfileScreen extends StatelessWidget {
                                         Container(
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20.0),
-                                            color: HexColor('#864879'),
+                                            color: HexColor('#1d2021'),
                                           ),
                                           child: MaterialButton(
                                             onPressed: () {
@@ -369,9 +370,9 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         if(snapshot.data!.data()!['hasProfession'] == true)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(vertical: 13.0),
                             child: Card(
-                              color: HexColor('#F7EFE5'),
+                              color: HexColor('#1d2021'),
                               margin:const EdgeInsets.all(0),
                               elevation: 5.0,
                               shape: OutlineInputBorder(
@@ -380,17 +381,18 @@ class ProfileScreen extends StatelessWidget {
                                   bottomLeft: Radius.circular(80.0),
                                 ),
                                 borderSide: BorderSide(
-                                  color: HexColor('#864879'),
-                                  width: 0.5,
+                                  color: HexColor('#1d2021'),
+                                  width: 0.05,
                                 ),
                               ),
                               child:const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
                                 child:  Text(
                                     'أعمال سابقة',
                                   style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black87
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white
                                   ),
                                 ),
                               ),

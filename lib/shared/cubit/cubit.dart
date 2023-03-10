@@ -472,7 +472,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- Received requests checker ---------
+  ///-------------------------------------- Received requests checker ---------------------------------
 
   void receivedRequestsChecker({
     required bool isAccepted,
@@ -490,7 +490,6 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then((value) {
       var user2 = UserModel.fromJson(value.data());
-
       if(checkRequestDeadline(day: day, month: month, year: year)){
         if(isDeadline == false)
         {
@@ -536,7 +535,7 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
 }
 
-  ///---------- request deadline check ----------
+  ///***request deadline check***
 
   bool checkRequestDeadline({
     required int day,
@@ -612,18 +611,131 @@ class AppCubit extends Cubit<AppState> {
       emit(AppErrorSendingState());
     });
 
-    ///------fix tech requests------
-    Map<String, dynamic>? newTechSendRequests = senderRequests;
-    newTechSendRequests![uId.toString()]['isDeadline'] = deadline;
-    newTechSendRequests[uId.toString()]['isAccepted'] = accepted;
-    newTechSendRequests[uId.toString()]['isRejected'] = rejected;
-    newTechSendRequests[uId.toString()]['isRated'] = rated;
-    newTechSendRequests[uId.toString()]['isDone'] = done;
+    ///------fix user requests------
+    Map<String, dynamic>? newSendRequests = senderRequests;
+    newSendRequests![uId.toString()]['isDeadline'] = deadline;
+    newSendRequests[uId.toString()]['isAccepted'] = accepted;
+    newSendRequests[uId.toString()]['isRejected'] = rejected;
+    newSendRequests[uId.toString()]['isRated'] = rated;
+    newSendRequests[uId.toString()]['isDone'] = done;
 
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId.toString())
-        .update({'sentRequests': newTechSendRequests})
+        .update({'sentRequests': newSendRequests})
+        .then((value) {
+      emit(AppChangeStatusState());
+    })
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+  }
+
+  ///-------------------------------------- Send requests checker ---------------------------------
+
+  void sendRequestsChecker({
+    required bool isAccepted,
+    required bool isRejected,
+    required bool isRated,
+    required bool isDeadline,
+    required String? userId,
+    required int day,
+    required int month,
+    required int year,
+  }){
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userId)
+        .get()
+        .then((value) {
+      TechnicianModel tech = TechnicianModel.fromJson(value.data());
+      if(checkRequestDeadline(day: day, month: month, year: year)){
+        if(isDeadline == false)
+        {
+          changeSendRequestStates(
+              techReceivedRequests: tech.receivedRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: false,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+        if(isAccepted == true && isRejected == false &&isRated==false)
+        {
+          showToast(text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها', state: ToastState.WORNING);
+
+        }
+        else if(isAccepted == false && isRejected == true)
+        {
+          changeSendRequestStates(
+              techReceivedRequests: tech.receivedRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: true,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+        else if(isAccepted == false && isRejected == false)
+        {
+          changeSendRequestStates(
+              techReceivedRequests: tech.receivedRequests,
+              userId: userId,
+              deadline: true,
+              accepted: isAccepted,
+              done: true,
+              rated: isRated,
+              rejected: isRejected
+          );
+        }
+      }
+    }).catchError((error) {});
+  }
+
+  ///***** change my send requests to deadlined *****
+
+  void changeSendRequestStates({
+    required String? userId,
+    required Map<String, dynamic>? techReceivedRequests,
+    required bool deadline,
+    required bool done,
+    required bool rated,
+    required bool accepted,
+    required bool rejected,
+  }) {
+    emit(AppSendingRequestState());
+    ///------fix send my requests-------
+    Map<String, dynamic>? sentRequests = model.sentRequests;
+    sentRequests![userId]['isDeadline'] = deadline;
+    sentRequests[userId]['isAccepted'] = accepted;
+    sentRequests[userId]['isRejected'] = rejected;
+    sentRequests[userId]['isRated'] = rated;
+    sentRequests[userId]['isDone'] = done;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(model!.uId)
+        .update({'sentRequests': sentRequests})
+        .then((value) {})
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+
+    ///------fix tech requests------
+    Map<String, dynamic>? techReceivedRequests2 = techReceivedRequests;
+    techReceivedRequests2![uId.toString()]['isDeadline'] = deadline;
+    techReceivedRequests2[uId.toString()]['isAccepted'] = accepted;
+    techReceivedRequests2[uId.toString()]['isRejected'] = rejected;
+    techReceivedRequests2[uId.toString()]['isRated'] = rated;
+    techReceivedRequests2[uId.toString()]['isDone'] = done;
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userId.toString())
+        .update({'receivedRequests': techReceivedRequests2})
         .then((value) {
       emit(AppChangeStatusState());
     })

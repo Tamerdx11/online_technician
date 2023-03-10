@@ -35,6 +35,10 @@ class ReceivedRequestsScreen extends StatelessWidget {
               }
 
               return ListView.separated(
+                reverse: true,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   if(map[map.keys.toList()[index]]['isDone'] == false){
                     AppCubit.get(context).receivedRequestsChecker(
@@ -193,6 +197,16 @@ class ReceivedRequestsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              if(map[map.keys.toList()[index]]['isDeadline'])
+                                const Text(
+                                  ' (منتهي)',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              const SizedBox(width: 5.0,),
                               Text(
                                 ' ${map[map.keys.toList()[index]]['deadline'][0]}-${map[map.keys.toList()[index]]['deadline'][1]}-${map[map.keys.toList()[index]]['deadline'][2]}',
                                 maxLines: 3,
@@ -213,7 +227,7 @@ class ReceivedRequestsScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 20.0,),
-                          if(map[map.keys.toList()[index]]['isAccepted'] == false && map[map.keys.toList()[index]]['isRejected'] == false )
+                          if(map[map.keys.toList()[index]]['isAccepted'] == false && map[map.keys.toList()[index]]['isRejected'] == false &&map[map.keys.toList()[index]]['isDone'] == false )
                             Row(
                               children: [
                                 const Spacer(),
