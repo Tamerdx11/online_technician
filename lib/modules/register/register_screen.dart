@@ -106,23 +106,6 @@ class RegisterScreen extends StatelessWidget {
                         const SizedBox(
                           height: 40.0,
                         ),
-                        defaultFormText(
-                          validate: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'يرجي تحديد موقعك';
-                            }
-                            return null;
-                          },
-                          controller: locationController,
-                          onSubmitted: (value) {},
-                          onchange: (value) {},
-                          label: 'أكتب موقعك بالتحديد',
-                          keyboardType: TextInputType.text,
-                          prefixIcon: const Icon(Icons.add_location_rounded),
-                        ),
-                        const SizedBox(
-                          height: 50.0,
-                        ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -180,7 +163,6 @@ class RegisterScreen extends StatelessWidget {
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 AppRegisterCubit.get(context).userRegister(
-                                  location: locationController.text,
                                   name: usernameController.text,
                                   phone: CacheHelper.getData(key: 'phoneNumber'),
                                   password: passwordController.text,

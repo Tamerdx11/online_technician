@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/message.dart';
@@ -22,6 +23,9 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
+import '../../models/report.dart';
+import '../../modules/login/login_screen.dart';
+import '../../modules/report/report.dart';
 import '../components/components.dart';
 
 class AppCubit extends Cubit<AppState> {
@@ -78,6 +82,47 @@ class AppCubit extends Cubit<AppState> {
       );
     }).catchError((error) {});
   }
+
+  ///---------- get data for report person ----------
+  void goToReportScreen(String id, BuildContext context) {
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(id.toString())
+        .get()
+        .then((value) {
+      navigateTo(
+        context,
+        ReportScreen(
+          userModel: UserModel.fromJson(value.data()),
+        ),
+      );
+    }).catchError((error) {});
+  }
+
+  ///--------------------------
+  void createreprotedUser({
+    required String uId,
+    required String name,
+    required String notes1,
+    required BuildContext context
+  }) {
+    ReportModel newreportmodel = ReportModel(
+      name: name,
+      uId: uId,
+      notes: notes1,
+    );
+    FirebaseFirestore.instance
+        .collection('reports')
+        .add(newreportmodel.toMap())
+        .then((value) {
+      emit(CreatReportedUserSuccessState());
+      Navigator.pop(context);
+    }).catchError((error) {
+      emit(CreatReportedUserSuccessState());
+    });
+  }
+////////////////////////////
+
 
   ///---------- main layout navigation ----------
 

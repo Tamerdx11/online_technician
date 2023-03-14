@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:online_technician/shared/components/constants.dart';
@@ -67,6 +68,7 @@ class _GoogleMapsState extends State<GoogleMaps> {
     _setMarker(current);
     latitude  = _myLocation.latitude;
     longitude = _myLocation.longitude;
+    test(latitude!,longitude!);
     CacheHelper.savaData(key: 'latitude1', value: _myLocation.latitude);
     CacheHelper.savaData(key: 'longitude1', value: _myLocation.longitude);
     print('============================================///////////////');
@@ -104,6 +106,21 @@ class _GoogleMapsState extends State<GoogleMaps> {
     setState(() {
     });
   }
+
+  Future<void> test(double lat,double long) async {
+    List<Placemark> placemarks =
+    await placemarkFromCoordinates(lat, long,localeIdentifier: 'ar_EG');
+    Placemark place1 = placemarks[0];
+    Placemark place2 = placemarks[1];
+    String _currentAddress = "${place1.subAdministrativeArea}";
+    location=_currentAddress;
+    ///print("****************////////////*****************************");
+    ///print(place1.name);
+    ///print(place2.name);
+    ///print(place2.subAdministrativeArea);
+    ///print(place1.postalCode);
+  }
+
 }
 
 /// google map ==> الخريطة

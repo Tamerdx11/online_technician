@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
@@ -61,7 +62,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
   void userRegister({
     required String name,
     required String password,
-    required String location,
     required String phone,
   }) {
     if (profileImage != null) {
@@ -79,7 +79,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
           createUser(
             name: name,
             userImage: imageUrl,
-            location: location,
             token: token.toString(),
             phone: phone,
             uId: uId,);
@@ -94,7 +93,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
   void createUser({
     required String name,
     required String userImage,
-    required String location,
     required String phone,
     required String token,
     required String uId,
@@ -126,6 +124,7 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       });
     });
   }
+
 
   bool isPassword = true;
   void showPassword() {

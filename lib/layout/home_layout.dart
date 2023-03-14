@@ -12,6 +12,8 @@ import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
+import '../modules/login/login_screen.dart';
+
 // ignore: must_be_immutable
 class AppLayout extends StatelessWidget {
   AppLayout({Key? key}) : super(key: key);
@@ -163,7 +165,20 @@ class AppLayout extends StatelessWidget {
                         ),
                         onTap: () {
                           ///update state
-                          Navigator.pop(context);
+                          CacheHelper.clearData(key: 'latitude1');
+                          CacheHelper.clearData(key: 'longitude1');
+                          CacheHelper.clearData(key: 'name1');
+                          CacheHelper.clearData(key: 'latitude2');
+                          CacheHelper.clearData(key: 'longitude2');
+                          CacheHelper.clearData(key: 'name2');
+                          CacheHelper.clearData(key: 'dis');
+                          CacheHelper.clearData(key: 'phoneNumber');
+                          CacheHelper.clearData(key: 'uId');
+                          CacheHelper.clearData(key: 'hasProfession');
+                          CacheHelper.clearData(key: 'onBoarding');
+                          CacheHelper.clearData(key: 'imageUrl');
+                          CacheHelper.clearData(key: 'token');
+                          navigateToAndFinish(context, LoginScreen());
                         },
                       ),
                       Padding(

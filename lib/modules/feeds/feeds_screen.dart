@@ -10,7 +10,10 @@ import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../google_map2/GoogleMaps2.dart';
-
+import '../report/report.dart';
+enum _menuval{
+  report,
+}
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
 
@@ -19,6 +22,7 @@ class FeedsScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
+
         return Container(
           color:  HexColor('#FAF7F0'),
           child: SingleChildScrollView(
@@ -81,6 +85,26 @@ class FeedsScreen extends StatelessWidget {
                                           : Row(
                                               children: [
                                                 InkWell(
+                                                  child: PopupMenuButton<_menuval>(itemBuilder: (BuildContext context)=>[
+                                                    const PopupMenuItem(value: _menuval.report, child: Text("ابلاغ")),
+                                                  ],
+                                                  onSelected: (value){
+                                                    switch (value){
+                                                      case _menuval.report:
+                                                        AppCubit.get(context)
+                                                            .goToReportScreen(
+                                                          snapshot.data!.docs[index].data()['uId'],
+                                                          context,
+                                                        );
+                                                        break;
+                                                    }
+                                                  },
+                                                    position: PopupMenuPosition.under,
+                                                    icon: const Icon(Icons.more_horiz,size: 25),
+                                                  ),
+
+                                                ),
+                                                InkWell(
                                                   onTap: () {
                                                     AppCubit.get(context)
                                                         .goToChatDetails(
@@ -88,17 +112,14 @@ class FeedsScreen extends StatelessWidget {
                                                             context,
                                                     );
                                                   },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(6.0),
-                                                    child: Icon(
-                                                      Icons.whatsapp_rounded,
-                                                      color: HexColor('#7FB77E'),
-                                                      size: 27.0,
-                                                    ),
+                                                  child: Icon(
+                                                    Icons.whatsapp_rounded,
+                                                    color: HexColor('#7FB77E'),
+                                                    size: 27.0,
                                                   ),
                                                 ),
                                                 const SizedBox(
-                                                  width: 2.0,
+                                                  width: 5,
                                                 ),
                                                 InkWell(
                                                   onTap: () {
@@ -128,18 +149,11 @@ class FeedsScreen extends StatelessWidget {
                                                         key: 'name2',
                                                         value: AppCubit.get(context).user?.name);
                                                   },
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(6.0),
-                                                    child: Icon(
-                                                      Icons.location_on_outlined,
-                                                      color: Colors.black54,
-                                                      size: 27.0,
-                                                    ),
+                                                  child: const Icon(
+                                                    Icons.location_on_outlined,
+                                                    color: Colors.black54,
+                                                    size: 27.0,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10.0,
                                                 ),
                                               ],
                                             ),
