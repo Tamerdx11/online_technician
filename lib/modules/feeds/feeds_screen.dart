@@ -14,6 +14,9 @@ import '../report/report.dart';
 enum _menuval{
   report,
 }
+enum MenuValuesMyPosts {
+  delete,
+}
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
 
@@ -73,15 +76,27 @@ class FeedsScreen extends StatelessWidget {
                                       snapshot.data!.docs[index]
                                                   .data()['uId'] ==
                                               uId
-                                          ? IconButton(
-                                              onPressed: () {
-                                                /// update post
-                                                /// delete post
-                                              },
-                                              icon: const Icon(
-                                                Icons.more_horiz,
-                                              ),
-                                            )
+                                          ? PopupMenuButton<MenuValuesMyPosts>(
+                                        itemBuilder: (BuildContext context)=> [
+                                          const PopupMenuItem(
+                                            value: MenuValuesMyPosts.delete,
+                                            child: Text('ازاله البوست'),
+                                          ),
+                                        ],
+                                        onSelected: (value) {
+                                          switch(value){
+                                            case MenuValuesMyPosts.delete:
+                                              FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
+                                                      (onvalue){
+                                                    showToast(text: 'تم الازاله', state: ToastState.SUCCESS);
+                                                  }
+                                              );
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                        ),
+                                      )
                                           : Row(
                                               children: [
                                                 InkWell(
