@@ -96,6 +96,7 @@ class FeedsScreen extends StatelessWidget {
                                         icon: const Icon(
                                           Icons.more_horiz,
                                         ),
+                                        position: PopupMenuPosition.under,
                                       )
                                           : Row(
                                               children: [
@@ -203,7 +204,7 @@ class FeedsScreen extends StatelessWidget {
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                                 children: [
                                                   Text(
                                                     snapshot.data!.docs[index]
@@ -213,19 +214,22 @@ class FeedsScreen extends StatelessWidget {
                                                         .caption!
                                                         .copyWith(
                                                       color: Colors.grey,
-                                                          height: 1.6,
-                                                        ),
+                                                      height: 1.6,
+                                                    ),
                                                     textDirection:
-                                                        TextDirection.rtl,
+                                                    TextDirection.rtl,
                                                   ),
                                                   const Icon(
                                                     Icons.where_to_vote,
                                                     color: Colors.grey,
                                                     size: 17.0,
                                                   ),
-                                                  const SizedBox(
-                                                    width: 7.0,
-                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                                children: [
                                                   Text(
                                                     snapshot.data!.docs[index]
                                                         .data()['dateTime'],
@@ -233,8 +237,9 @@ class FeedsScreen extends StatelessWidget {
                                                         .textTheme
                                                         .caption!
                                                         .copyWith(
-                                                          height: 1.6,
-                                                        ),
+                                                      height: 1.6,
+                                                      fontSize: 10,
+                                                    ),
                                                   ),
                                                 ],
                                               ),

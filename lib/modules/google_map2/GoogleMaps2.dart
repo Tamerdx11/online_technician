@@ -20,8 +20,8 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
   LatLng from=LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1')));
   LatLng to=LatLng(double.parse(CacheHelper.getData(key: 'latitude2')) , double.parse(CacheHelper.getData(key: 'longitude2')));
   static final CameraPosition _initialCameraPosition =  CameraPosition(
-    target: LatLng(double.parse(CacheHelper.getData(key: 'latitude1')) , double.parse(CacheHelper.getData(key: 'longitude1'))),
-    zoom: 14.4746,
+    target: LatLng((double.parse(CacheHelper.getData(key: 'latitude1'))+double.parse(CacheHelper.getData(key: 'latitude2')))/2 , (double.parse(CacheHelper.getData(key: 'longitude1'))+double.parse(CacheHelper.getData(key: 'longitude2')))/2),
+    zoom: 10,
   );
   LatLng currentLocation = _initialCameraPosition.target;
   final HaversineDistance distance=HaversineDistance(4,5,6,7);
@@ -227,7 +227,6 @@ class HaversineDistance {
     CacheHelper.savaData(key: 'dis', value: d.toStringAsFixed(2));
     return d;
   }
-
 }
 
 
