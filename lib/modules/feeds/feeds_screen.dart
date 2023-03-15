@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -80,17 +81,27 @@ class FeedsScreen extends StatelessWidget {
                                         itemBuilder: (BuildContext context)=> [
                                           const PopupMenuItem(
                                             value: MenuValuesMyPosts.delete,
-                                            child: Text('ازاله البوست'),
+                                            child: Text('حذف البوست'),
                                           ),
                                         ],
-                                        onSelected: (value) {
+                                        onSelected: (value) async {
                                           switch(value){
                                             case MenuValuesMyPosts.delete:
-                                              FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
-                                                      (onvalue){
-                                                    showToast(text: 'تم الازاله', state: ToastState.SUCCESS);
-                                                  }
+                                              await FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
+                                                      (onvalue) async {
+                                                    showToast(text: 'تم الحذف', state: ToastState.SUCCESS);
+                                                      }
                                               );
+                                              for(int i=0;i<snapshot.data!.docs[index]['postImages'].toString().length;i++) {
+                                                await FirebaseStorage.instance
+                                                    .refFromURL(snapshot.data!
+                                                    .docs[index]['postImages']['$i'])
+                                                    .delete()
+                                                    .then((value) {
+                                                  print(snapshot.data!
+                                                      .docs[index]['postImages']['$i']);
+                                                });
+                                              }
                                           }
                                         },
                                         icon: const Icon(
