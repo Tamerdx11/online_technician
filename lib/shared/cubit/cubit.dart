@@ -91,7 +91,8 @@ class AppCubit extends Cubit<AppState> {
     required String senderUId,
     required String reportedUsername,
     required String senderUsername,
-    required BuildContext context
+    required BuildContext context,
+    required String dateReport
   }) {
     ReportModel newReport = ReportModel(
       notes: notes,
@@ -99,6 +100,7 @@ class AppCubit extends Cubit<AppState> {
       senderUId: senderUId ,
       reportedUsername: reportedUsername ,
       senderUsername: senderUsername,
+      dateReport:dateReport,
     );
     FirebaseFirestore.instance
         .collection('reports')

@@ -84,6 +84,7 @@ class ReportScreen extends StatelessWidget {
                         function: () {
                           if (formKey.currentState!.validate()) {
                             AppCubit.get(context).createReprotedUser(
+                              dateReport:'${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
                               reportedUId: reportUserId,
                               reportedUsername: reportUsername,
                               senderUId: uId,

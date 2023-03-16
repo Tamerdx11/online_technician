@@ -6,6 +6,7 @@ class ReportModel {
   String? reportedUsername;
   String? senderUId;
   String? reportedUId;
+  String? dateReport;
 
   ReportModel({
     this.notes,
@@ -13,6 +14,7 @@ class ReportModel {
     this.reportedUsername,
     this.senderUId,
     this.reportedUId,
+    this.dateReport,
   });
 
   ReportModel.fromJson(Map<String, dynamic>? json) {
@@ -21,6 +23,7 @@ class ReportModel {
     reportedUsername = json['reportedUsername'];
     senderUId = json['senderUId'];
     reportedUId = json['reportedUId'];
+    dateReport = json['dateReport'];
   }
 
   Map<String, dynamic> toMap() {
@@ -30,6 +33,7 @@ class ReportModel {
       'reportedUsername': reportedUsername,
       'senderUId': senderUId,
       'reportedUId': reportedUId,
+      'dateReport': dateReport,
     };
   }
 }

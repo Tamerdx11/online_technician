@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/edit-profile/edit_profile_screen.dart';
 import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
+import 'package:online_technician/modules/report/report.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
@@ -13,7 +15,13 @@ import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 
 import '../send_request_to_tech/send_request_to_tech_screen.dart';
+enum MenuValue{
+  report,
+}
 
+enum MenuValuesMyPostsProfile {
+  delete,
+}
 class ProfileScreen extends StatelessWidget {
   String id;
   String name;
@@ -438,14 +446,113 @@ class ProfileScreen extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                         child: Row(
                                           children: [
-                                            IconButton(
-                                              onPressed: () {
-                                                /// update post
-                                                /// delete post
+                                            snapshot.data!.docs[index]
+                                                .data()['uId'] == uId ?
+                                            PopupMenuButton<MenuValuesMyPostsProfile>(
+                                              itemBuilder: (BuildContext context)=> [
+                                                const PopupMenuItem(
+                                                  value: MenuValuesMyPostsProfile.delete,
+                                                  child: Text('حذف البوست'),
+                                                ),
+                                              ],
+                                              onSelected: (value) async {
+                                                switch(value){
+                                                  case MenuValuesMyPostsProfile.delete:
+                                                    await FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
+                                                            (onvalue) async {
+                                                          showToast(text: 'تم الحذف', state: ToastState.SUCCESS);
+                                                        }
+                                                    );
+                                                    for(int i=0;i<snapshot.data!.docs[index]['postImages'].toString().length;i++) {
+                                                      await FirebaseStorage.instance
+                                                          .refFromURL(snapshot.data!
+                                                          .docs[index]['postImages']['$i'])
+                                                          .delete()
+                                                          .then((value) {
+                                                        print(snapshot.data!
+                                                            .docs[index]['postImages']['$i']);
+                                                      });
+                                                    }
+                                                }
                                               },
                                               icon: const Icon(
                                                 Icons.more_horiz,
                                               ),
+                                              position: PopupMenuPosition.under,
+                                            )
+                                                :Row(
+                                              children: [
+                                                InkWell(
+                                                  child: PopupMenuButton<MenuValue>(itemBuilder: (BuildContext context)=>[
+                                                    const PopupMenuItem(value: MenuValue.report, child: Text("ابلاغ")),
+                                                  ],
+                                                    onSelected: (value){
+                                                      switch (value){
+                                                        case MenuValue.report:
+                                                          navigateTo(context, ReportScreen(
+                                                            reportUserId:snapshot.data!.docs[index].data()['uId'] ,
+                                                            reportUsername: snapshot.data!.docs[index].data()['name'],
+                                                          ));
+                                                          break;
+                                                      }
+                                                    },
+                                                    position: PopupMenuPosition.under,
+                                                    icon: const Icon(Icons.more_horiz,size: 25),
+                                                  ),
+
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    AppCubit.get(context)
+                                                        .goToChatDetails(
+                                                      snapshot.data!.docs[index].data()['uId'],
+                                                      context,
+                                                    );
+                                                  },
+                                                  child: Icon(
+                                                    Icons.whatsapp_rounded,
+                                                    color: HexColor('#7FB77E'),
+                                                    size: 27.0,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    AppCubit.get(context).getUser(snapshot
+                                                        .data!.docs[index]
+                                                        .data()['uId']).then((value){
+                                                      navigateTo(context, const GoogleMaps2());
+                                                    });
+                                                    CacheHelper.savaData(
+                                                        key: 'latitude1',
+                                                        value: AppCubit.get(context).model.latitude);
+                                                    CacheHelper.savaData(
+                                                        key: 'longitude1',
+                                                        value: AppCubit.get(context).model.longitude);
+                                                    CacheHelper.savaData(
+                                                        key: 'name1',
+                                                        value: AppCubit.get(context).model.name);
+                                                    CacheHelper.savaData(
+                                                        key: 'latitude2',
+                                                        value:
+                                                        AppCubit.get(context).user?.latitude);
+                                                    CacheHelper.savaData(
+                                                        key: 'longitude2',
+                                                        value:
+                                                        AppCubit.get(context).user?.longitude);
+                                                    CacheHelper.savaData(
+                                                        key: 'name2',
+                                                        value: AppCubit.get(context).user?.name);
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.location_on_outlined,
+                                                    color: Colors.black54,
+                                                    size: 27.0,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             Expanded(
                                               child: Padding(
@@ -485,9 +592,12 @@ class ProfileScreen extends StatelessWidget {
                                                           color: Colors.grey,
                                                           size: 17.0,
                                                         ),
-                                                        const SizedBox(
-                                                          width: 7.0,
-                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                      children: [
                                                         Text(
                                                           snapshot.data!.docs[index].data()['dateTime'].toString(),
                                                           style: Theme.of(context)
