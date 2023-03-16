@@ -51,6 +51,8 @@ class ChatsScreen extends StatelessWidget {
                 Map map = snapshot.data!.data()?['chatList'];
                 Map chatData = Map.fromEntries(map.entries.toList()
                   ..sort((e1, e2) => e2.value[1].compareTo(e1.value[1])));
+                print('=======================chat=====================');
+                print(map.length);
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),

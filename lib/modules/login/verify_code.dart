@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,11 +11,9 @@ import '../../shared/cubit/cubit.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../register/register_screen.dart';
 import 'cubit/states.dart';
-import 'login_screen.dart';
 
 class verifyCodeScreen extends StatelessWidget {
 
-  final TextEditingController _pintotpcontrol = TextEditingController();
   final FocusNode _pintptofoucus = FocusNode();
   String? verificationCode;
   String phoneNumber;
@@ -103,7 +100,7 @@ class verifyCodeScreen extends StatelessWidget {
                               eachFieldWidth: 30,
                               eachFieldPadding:const EdgeInsets.all(5),
                               focusNode: _pintptofoucus,
-                              controller: _pintotpcontrol,
+                              controller: AppLoginCubit.get(context).pintotpcontrol,
                               cursorColor: Colors.white,
                               cursorHeight: 15,
                               submittedFieldDecoration: PinOtpDeco1,
@@ -112,7 +109,7 @@ class verifyCodeScreen extends StatelessWidget {
                               onSubmit: (pin) {
                               AppLoginCubit.get(context).checkCode(
                                   id: AppLoginCubit.verify.toString(),
-                                  code: _pintotpcontrol.text);
+                                  code: AppLoginCubit.get(context).pintotpcontrol.text);
                             }
                         ),
                         const SizedBox(height: 20,),

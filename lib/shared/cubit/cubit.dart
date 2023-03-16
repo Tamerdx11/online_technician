@@ -84,45 +84,40 @@ class AppCubit extends Cubit<AppState> {
   }
 
   ///---------- get data for report person ----------
-  void goToReportScreen(String id, BuildContext context) {
-    FirebaseFirestore.instance
-        .collection('person')
-        .doc(id.toString())
-        .get()
-        .then((value) {
-      navigateTo(
-        context,
-        ReportScreen(
-          userModel: UserModel.fromJson(value.data()),
-        ),
-      );
-    }).catchError((error) {});
-  }
 
-  ///--------------------------
-  void createreprotedUser({
-    required String uId,
-    required String name,
-    required String notes1,
+  void createReprotedUser({
+    required String notes,
+    required String reportedUId,
+    required String senderUId,
+    required String reportedUsername,
+    required String senderUsername,
     required BuildContext context
   }) {
-    ReportModel newreportmodel = ReportModel(
-      name: name,
-      uId: uId,
-      notes: notes1,
+    ReportModel newReport = ReportModel(
+      notes: notes,
+      reportedUId: reportedUId,
+      senderUId: senderUId ,
+      reportedUsername: reportedUsername ,
+      senderUsername: senderUsername,
     );
     FirebaseFirestore.instance
         .collection('reports')
-        .add(newreportmodel.toMap())
+        .add(newReport.toMap())
         .then((value) {
-      emit(CreatReportedUserSuccessState());
       Navigator.pop(context);
+      pushNotification(
+          id: uId,
+          notificationList: model!.notificationList,
+          isClickable: false,
+          notificationId: '5$uId',
+          navigateTo: '',
+          text: 'تم تلقي بلاغك عن $reportedUsername وسوف نقوم بمراجعة بلاغك '
+      );
+      emit(CreatReportedUserSuccessState());
     }).catchError((error) {
       emit(CreatReportedUserSuccessState());
     });
   }
-////////////////////////////
-
 
   ///---------- main layout navigation ----------
 
@@ -363,6 +358,8 @@ class AppCubit extends Cubit<AppState> {
           print(e.toString());
         });
 
+    ///**************re***********
+
     FirebaseFirestore.instance
         .collection('person')
         .doc(receiverId)
@@ -551,6 +548,14 @@ class AppCubit extends Cubit<AppState> {
         if(isAccepted == true && isRejected == false)
         {
           DioHelper.sendFcmMessage(title: 'المجتمع المهني', message: 'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا', token: user2.token.toString());
+          pushNotification(
+              id: userId,
+              notificationList: user2.notificationList,
+              notificationId: '6$userId',
+              text: 'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا الي ${model.name}',
+              isClickable: true,
+              navigateTo: "ReceivedRequestsScreen",
+          );
         }
         else if(isAccepted == false && isRejected == true)
         {
@@ -710,6 +715,14 @@ class AppCubit extends Cubit<AppState> {
         if(isAccepted == true && isRejected == false &&isRated==false)
         {
           showToast(text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها', state: ToastState.WORNING);
+          pushNotification(
+            id: uId,
+            text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
+            notificationId: '8$uId',
+            isClickable: true,
+            navigateTo: 'SentRequestsScreen',
+            notificationList: model.notificationList,
+          );
 
         }
         else if(isAccepted == false && isRejected == true)
@@ -1018,6 +1031,7 @@ class AppCubit extends Cubit<AppState> {
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
           sentRequests: model.sentRequests??{},
           receivedRequests: model.receivedRequests??{},
+          notificationList: model.notificationList??{},
         );
         if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
@@ -1053,6 +1067,7 @@ class AppCubit extends Cubit<AppState> {
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
           sentRequests: model.sentRequests??{},
           receivedRequests: model.receivedRequests??{},
+          notificationList: model.notificationList??{},
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -1083,4 +1098,36 @@ class AppCubit extends Cubit<AppState> {
     double distance = g.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
     return distance;
   }
+
+  ///---------- push notification ----------
+
+  void pushNotification({
+    required String? id,
+    required notificationId,
+    required Map<String, dynamic>? notificationList,
+    required String? text,
+    required bool isClickable,
+    required String? navigateTo,
+  }) {
+
+    var newNotificationList = notificationList;
+    newNotificationList!.addAll({
+      notificationId.toString(): {
+        'text': text,
+        'isClickable': isClickable,
+        'navigateTo': navigateTo,
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(id.toString())
+        .update({'notificationList': newNotificationList})
+        .then((value) {
+    })
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
 }
+

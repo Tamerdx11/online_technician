@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
@@ -10,6 +11,8 @@ class AppLoginCubit extends Cubit<AppLoginState> {
   static AppLoginCubit get(context) => BlocProvider.of(context);
   static String verify="";
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  TextEditingController pintotpcontrol = TextEditingController();
 
   void userLogin({
     required String phone,
@@ -60,9 +63,4 @@ class AppLoginCubit extends Cubit<AppLoginState> {
     }
   }
 
-  bool isPassword = true;
-  void showPassword() {
-    isPassword = !isPassword;
-    emit(AppLoginPasswordState());
-  }
 }

@@ -1,25 +1,35 @@
 import 'package:online_technician/models/person.dart';
 
-class ReportModel extends PersonModel {
+class ReportModel {
   String? notes;
+  String? senderUsername;
+  String? reportedUsername;
+  String? senderUId;
+  String? reportedUId;
+
   ReportModel({
-    String? name,
-    String? uId,
     this.notes,
+    this.senderUsername,
+    this.reportedUsername,
+    this.senderUId,
+    this.reportedUId,
+  });
 
-  }) : super(name: name, uId: uId,);
-
-  ReportModel.fromJson(Map<String, dynamic>? json)
-      : super(
-      name: json!['name'],
-      uId: json['uId'],){
-    notes = json['notes'];
+  ReportModel.fromJson(Map<String, dynamic>? json) {
+    notes = json!['notes'];
+    senderUsername = json['senderUsername'];
+    reportedUsername = json['reportedUsername'];
+    senderUId = json['senderUId'];
+    reportedUId = json['reportedUId'];
   }
+
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'uId': uId,
       'notes': notes,
+      'senderUsername': senderUsername,
+      'reportedUsername': reportedUsername,
+      'senderUId': senderUId,
+      'reportedUId': reportedUId,
     };
   }
 }

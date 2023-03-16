@@ -21,7 +21,6 @@ class ChatDetailsScreen extends StatelessWidget {
 
   var messageController = TextEditingController();
   ScrollController listViewScrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
 
@@ -204,6 +203,7 @@ class ChatDetailsScreen extends StatelessWidget {
       },
     );
   }
+
 
   Widget buildMessage(MessageModel model) => Align(
         alignment: AlignmentDirectional.centerStart,

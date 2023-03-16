@@ -5,19 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
+import 'package:online_technician/modules/report/report.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../google_map2/GoogleMaps2.dart';
-import '../report/report.dart';
+
 enum _menuval{
   report,
 }
+
 enum MenuValuesMyPosts {
   delete,
 }
+
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
 
@@ -75,9 +78,8 @@ class FeedsScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       snapshot.data!.docs[index]
-                                                  .data()['uId'] ==
-                                              uId
-                                          ? PopupMenuButton<MenuValuesMyPosts>(
+                                                  .data()['uId'] == uId ?
+                                      PopupMenuButton<MenuValuesMyPosts>(
                                         itemBuilder: (BuildContext context)=> [
                                           const PopupMenuItem(
                                             value: MenuValuesMyPosts.delete,
@@ -118,11 +120,10 @@ class FeedsScreen extends StatelessWidget {
                                                   onSelected: (value){
                                                     switch (value){
                                                       case _menuval.report:
-                                                        AppCubit.get(context)
-                                                            .goToReportScreen(
-                                                          snapshot.data!.docs[index].data()['uId'],
-                                                          context,
-                                                        );
+                                                        navigateTo(context, ReportScreen(
+                                                          reportUserId:snapshot.data!.docs[index].data()['uId'] ,
+                                                          reportUsername: snapshot.data!.docs[index].data()['name'],
+                                                        ));
                                                         break;
                                                     }
                                                   },

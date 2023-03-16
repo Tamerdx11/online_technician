@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/register/cubit/states.dart';
@@ -106,11 +105,15 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       userImage: userImage,
       hasProfession: false,
       token: token,
+      receivedRequests: {},
+      sentRequests: {},
+      notificationList: {},
       latitude: latitude.toString(),
       longitude: longitude.toString(),
       coverImage:
           'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
     );
+
     Timer(const Duration(seconds: 5),() {
       FirebaseFirestore.instance
           .collection("person")
@@ -125,10 +128,4 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     });
   }
 
-
-  bool isPassword = true;
-  void showPassword() {
-    isPassword = !isPassword;
-    emit(AppRegisterPasswordState());
-  }
 }

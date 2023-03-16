@@ -11,7 +11,6 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-
 import '../modules/login/login_screen.dart';
 
 // ignore: must_be_immutable
@@ -32,7 +31,7 @@ class AppLayout extends StatelessWidget {
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: HexColor('#FAF7F0'),
           drawer: cubit.currentIndex == 0
               ? Drawer(
                   backgroundColor: HexColor('#ebebeb'),

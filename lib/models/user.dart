@@ -16,6 +16,7 @@ class UserModel extends PersonModel {
     Map<String, dynamic>? chatList,
     Map<String, dynamic>? sentRequests,
     Map<String, dynamic>? receivedRequests,
+    Map<String, dynamic>? notificationList,
     this.phone,
     this.token,
     this.coverImage,
@@ -29,7 +30,9 @@ class UserModel extends PersonModel {
             userImage: userImage,
             location: location,
             receivedRequests: receivedRequests,
-            sentRequests: sentRequests);
+            sentRequests: sentRequests,
+            notificationList: notificationList
+  );
 
   UserModel.fromJson(Map<String, dynamic>? json)
       : super(
@@ -40,6 +43,7 @@ class UserModel extends PersonModel {
           userImage: json['userImage'],
           sentRequests: json['sentRequests'],
           receivedRequests: json['receivedRequests'],
+          notificationList: json['notificationList'],
         ) {
     phone = json['phone'];
     coverImage = json['coverImage'];
@@ -64,6 +68,7 @@ class UserModel extends PersonModel {
       'token': token,
       'sentRequests': sentRequests,
       'receivedRequests': receivedRequests,
+      'notificationList': notificationList,
     };
   }
 }

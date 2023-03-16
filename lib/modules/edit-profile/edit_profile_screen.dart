@@ -187,7 +187,7 @@ class EditProfileScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 25.0,
+                    height: 30.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -201,67 +201,56 @@ class EditProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: defaultFormText(
-                      validate: (value) =>
-                          value.isEmpty ? "يرجي كتابة الموقع" : null,
-                      controller: locationController,
-                      keyboardType: TextInputType.name,
-                      suffixIcon: const Icon(Icons.location_on),
-                      label: 'الموقع',
-                    ),
-                  ),
-                  const SizedBox(
                     height: 10.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          navigateTo(context,const GoogleMaps());
-                        },
-                        child: Container(
-                          padding:const EdgeInsets.symmetric(vertical: 3.0,horizontal: 6.0),
-                          decoration: BoxDecoration(
-                            color: HexColor('#dedded'),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 0.3,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              30.0,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.my_location_rounded,color: HexColor('#59c9b0'),),
-                              const SizedBox(width: 2.0,),
-                              Text(
-                                "تحديد موقعي",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  color: HexColor('#59c9b0'),
-                                  fontSize: 16.0,
-                                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            navigateTo(context,const GoogleMaps());
+                          },
+                          child: Container(
+                            padding:const EdgeInsets.symmetric(vertical: 3.0,horizontal: 6.0),
+                            decoration: BoxDecoration(
+                              color: HexColor('#dedded'),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 0.3,
                               ),
-                            ],
+                              borderRadius: BorderRadius.circular(
+                                30.0,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.my_location_rounded,color: HexColor('#59c9b0'),),
+                                const SizedBox(width: 2.0,),
+                                Text(
+                                  "تغيير موقعي",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    color: HexColor('#59c9b0'),
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 20.0,),
-                      const Text(
-                        "يرجي تحديد موقعك علي الخريطة ",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
+                        const SizedBox(width: 20.0,),
+                        Text(
+                          locationController.text,
+                          style:const TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10.0,

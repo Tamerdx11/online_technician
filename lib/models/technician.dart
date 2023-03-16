@@ -20,6 +20,7 @@ class TechnicianModel extends UserModel {
     String? token,
     Map<String, dynamic>? sentRequests,
     Map<String, dynamic>? receivedRequests,
+    Map<String, dynamic>? notificationList,
     this.bio,
     this.profession,
     this.nationalId,
@@ -37,7 +38,9 @@ class TechnicianModel extends UserModel {
             longitude: longitude,
             token: token,
             receivedRequests: receivedRequests,
-            sentRequests: sentRequests);
+            sentRequests: sentRequests,
+            notificationList: notificationList
+  );
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(
@@ -54,6 +57,7 @@ class TechnicianModel extends UserModel {
           token: json['token'],
           sentRequests: json['sentRequests'],
           receivedRequests: json['receivedRequests'],
+          notificationList: json['notificationList'],
         ) {
     bio = json['bio'];
     profession = json['profession'];
@@ -81,6 +85,7 @@ class TechnicianModel extends UserModel {
       'token': token,
       'sentRequests': sentRequests,
       'receivedRequests': receivedRequests,
+      'notificationList': notificationList,
     };
   }
 }
