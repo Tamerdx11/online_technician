@@ -96,15 +96,17 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 20.0, top: 16.0),
+                          padding: const EdgeInsets.only(right: 4.0, left: 4.0, top: 16.0),
                           child: Card(
                             color: Colors.white,
                             margin:const EdgeInsets.all(0),
-                            elevation: 5.0,
+                            elevation: 10.0,
                             shape:const OutlineInputBorder(
                               borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(50.0),
-                                topRight: Radius.circular(50.0),
+                                bottomRight: Radius.circular(20.0),
+                                topLeft: Radius.circular(20.0),
+                                bottomLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
                               ),
                               borderSide: BorderSide(
                                 color: Colors.black54,
@@ -378,7 +380,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         if(snapshot.data!.data()!['hasProfession'] == true)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 13.0),
+                            padding: const EdgeInsets.only(top: 13.0, bottom: 13.0, right: 8.0),
                             child: Card(
                               color: HexColor('#1d2021'),
                               margin:const EdgeInsets.all(0),
@@ -387,6 +389,8 @@ class ProfileScreen extends StatelessWidget {
                                 borderRadius:const BorderRadius.only(
                                   topLeft: Radius.circular(80.0),
                                   bottomLeft: Radius.circular(80.0),
+                                  topRight: Radius.circular(80.0),
+                                  bottomRight: Radius.circular(80.0),
                                 ),
                                 borderSide: BorderSide(
                                   color: HexColor('#1d2021'),

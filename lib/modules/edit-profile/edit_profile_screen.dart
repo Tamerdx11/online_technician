@@ -118,7 +118,7 @@ class EditProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8.0),
                 child: OutlinedButton(
                   onPressed: () {
-                    AppCubit.get(context).updateProfileDate(
+                    AppCubit.get(context).updateProfileData(
                       context: context,
                       name: nameController.text,
                       location: locationController.text,

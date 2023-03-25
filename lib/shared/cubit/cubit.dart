@@ -51,6 +51,7 @@ class AppCubit extends Cubit<AppState> {
         model = UserModel.fromJson(value.data());
         emit(AppGetUserSuccessState());
       }
+      requestsChecker();
       FirebaseMessaging.instance.getToken().then((token) {
         if (model.token.toString() != token.toString()) {
           FirebaseFirestore.instance
@@ -85,22 +86,19 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get data for report person ----------
 
-  void createReprotedUser({
-    required String notes,
-    required String reportedUId,
-    required String senderUId,
-    required String reportedUsername,
-    required String senderUsername,
-    required BuildContext context,
-    required String dateReport
-  }) {
+  void createReprotedUser(
+      {required String notes,
+      required String reportedUId,
+      required String senderUId,
+      required String reportedUsername,
+      required String senderUsername,
+      required BuildContext context}) {
     ReportModel newReport = ReportModel(
       notes: notes,
       reportedUId: reportedUId,
-      senderUId: senderUId ,
-      reportedUsername: reportedUsername ,
+      senderUId: senderUId,
+      reportedUsername: reportedUsername,
       senderUsername: senderUsername,
-      dateReport:dateReport,
     );
     FirebaseFirestore.instance
         .collection('reports')
@@ -113,8 +111,7 @@ class AppCubit extends Cubit<AppState> {
           isClickable: false,
           notificationId: '5$uId',
           navigateTo: '',
-          text: 'تم تلقي بلاغك عن $reportedUsername وسوف نقوم بمراجعة بلاغك '
-      );
+          text: 'تم تلقي بلاغك عن $reportedUsername وسوف نقوم بمراجعة بلاغك ');
       emit(CreatReportedUserSuccessState());
     }).catchError((error) {
       emit(CreatReportedUserSuccessState());
@@ -297,7 +294,7 @@ class AppCubit extends Cubit<AppState> {
   ///---------- get one users ----------
 
   UserModel? user;
-  Map<String, dynamic>? userSendRequests ={};
+  Map<String, dynamic>? userSendRequests = {};
   Future<void> getUser(String id) async {
     await FirebaseFirestore.instance
         .collection('person')
@@ -398,6 +395,7 @@ class AppCubit extends Cubit<AppState> {
     required bool status,
   }) {
     emit(AppSendingRequestState());
+
     ///------fix my requests-------
     Map<String, dynamic>? myReceivedRequests = model.receivedRequests;
     myReceivedRequests![userId]['isAccepted'] = status;
@@ -410,8 +408,8 @@ class AppCubit extends Cubit<AppState> {
         .update({'receivedRequests': myReceivedRequests})
         .then((value) {})
         .catchError((e) {
-      emit(AppErrorSendingState());
-    });
+          emit(AppErrorSendingState());
+        });
 
     ///------fix tech requests------
     Map<String, dynamic>? newTechSendRequests = techSendRequests;
@@ -422,14 +420,17 @@ class AppCubit extends Cubit<AppState> {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId.toString())
-        .update({'sentRequests': newTechSendRequests})
-        .then((value) {
+        .update({'sentRequests': newTechSendRequests}).then((value) {
       emit(AppChangeStatusState());
-      DioHelper.sendFcmMessage(title:status? 'تم الموافقة علي طلب العمل من  ${model.name}':'تم رفض طلبك من قبل  ${model.name}', message: ' ', token: token)
+      DioHelper.sendFcmMessage(
+              title: status
+                  ? 'تم الموافقة علي طلب العمل من  ${model.name}'
+                  : 'تم رفض طلبك من قبل  ${model.name}',
+              message: ' ',
+              token: token)
           .then((value) {})
           .catchError((error) {});
-    })
-        .catchError((e) {
+    }).catchError((e) {
       emit(AppErrorSendingState());
     });
   }
@@ -452,23 +453,24 @@ class AppCubit extends Cubit<AppState> {
     required String? token,
   }) {
     emit(AppSendingRequestState());
+
     ///------fix my requests-------
     Map<String, dynamic>? mySendRequests = model.sentRequests;
     mySendRequests?.addAll({
       techId.toString(): {
-        'name':name,
-        'image':image,
-        'deadline':[fYear,fMonth,fDay],
-        'details':details,
-        'location':location,
-        'latitude':latitude,
-        'longitude':longitude,
-        'profession':profession,
-        'isAccepted':false,
-        'isRejected':false,
-        'isDeadline':false,
-        'isRated':false,
-        'isDone':false
+        'name': name,
+        'image': image,
+        'deadline': [fYear, fMonth, fDay],
+        'details': details,
+        'location': location,
+        'latitude': latitude,
+        'longitude': longitude,
+        'profession': profession,
+        'isAccepted': false,
+        'isRejected': false,
+        'isDeadline': false,
+        'isRated': false,
+        'isDone': false
       }
     });
 
@@ -478,40 +480,39 @@ class AppCubit extends Cubit<AppState> {
         .update({'sentRequests': mySendRequests})
         .then((value) {})
         .catchError((e) {
-      emit(AppErrorSendingState());
-    });
+          emit(AppErrorSendingState());
+        });
 
     ///------fix tech requests------
     Map<String, dynamic>? receivedRequests = techReceivedRequests;
     receivedRequests?.addAll({
       uId.toString(): {
-        'name':model.name,
-        'image':model.userImage,
-        'deadline':[fYear,fMonth,fDay],
-        'details':details,
-        'location':model.location,
-        'latitude':model.latitude,
-        'longitude':model.longitude,
-        'isAccepted':false,
-        'isRejected':false,
-        'isDeadline':false,
-        'isRated':false,
-        'isDone':false
+        'name': model.name,
+        'image': model.userImage,
+        'deadline': [fYear, fMonth, fDay],
+        'details': details,
+        'location': model.location,
+        'latitude': model.latitude,
+        'longitude': model.longitude,
+        'isAccepted': false,
+        'isRejected': false,
+        'isDeadline': false,
+        'isRated': false,
+        'isDone': false
       }
     });
 
     FirebaseFirestore.instance
         .collection('person')
         .doc(techId.toString())
-        .update({'receivedRequests': receivedRequests})
-        .then((value) {
+        .update({'receivedRequests': receivedRequests}).then((value) {
       emit(AppSuccessSendingState());
       showToast(text: 'تم ارسال طلبك بنجاح', state: ToastState.SUCCESS);
-      DioHelper.sendFcmMessage(title: 'طلب عمل من ${model.name}', message: details, token: token)
+      DioHelper.sendFcmMessage(
+              title: 'طلب عمل من ${model.name}', message: details, token: token)
           .then((value) {})
           .catchError((error) {});
-    })
-        .catchError((e) {
+    }).catchError((e) {
       emit(AppErrorSendingState());
     });
   }
@@ -527,16 +528,15 @@ class AppCubit extends Cubit<AppState> {
     required int day,
     required int month,
     required int year,
-}){
+  }) {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId)
         .get()
         .then((value) {
       var user2 = UserModel.fromJson(value.data());
-      if(checkRequestDeadline(day: day, month: month, year: year)){
-        if(isDeadline == false)
-        {
+      if (checkRequestDeadline(day: day, month: month, year: year)) {
+        if (isDeadline == false) {
           changeReceivedRequestStates(
               senderRequests: user2.sentRequests,
               userId: userId,
@@ -544,23 +544,24 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: false,
               rated: isRated,
-              rejected: isRejected
-          );
+              rejected: isRejected);
         }
-        if(isAccepted == true && isRejected == false)
-        {
-          DioHelper.sendFcmMessage(title: 'المجتمع المهني', message: 'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا', token: user2.token.toString());
+        if (isAccepted == true && isRejected == false) {
+          DioHelper.sendFcmMessage(
+            title: 'المجتمع المهني',
+            message:
+                'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا الي ${user2.name}',
+            token: user2.token.toString(),
+          );
           pushNotification(
-              id: userId,
-              notificationList: user2.notificationList,
-              notificationId: '6$userId',
-              text: 'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا الي ${model.name}',
-              isClickable: true,
-              navigateTo: "ReceivedRequestsScreen",
+            id: userId,
+            notificationList: user2.notificationList,
+            notificationId: '6$userId',
+            text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
+            isClickable: true,
+            navigateTo: "ReceivedRequestsScreen",
           );
-        }
-        else if(isAccepted == false && isRejected == true)
-        {
+        } else if (isAccepted == false && isRejected == true) {
           changeReceivedRequestStates(
               senderRequests: user2.sentRequests,
               userId: userId,
@@ -568,11 +569,8 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: true,
               rated: isRated,
-              rejected: isRejected
-          );
-        }
-        else if(isAccepted == false && isRejected == false)
-        {
+              rejected: isRejected);
+        } else if (isAccepted == false && isRejected == false) {
           changeReceivedRequestStates(
               senderRequests: user2.sentRequests,
               userId: userId,
@@ -580,12 +578,11 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: true,
               rated: isRated,
-              rejected: isRejected
-          );
+              rejected: isRejected);
         }
       }
     }).catchError((error) {});
-}
+  }
 
   ///***request deadline check***
 
@@ -593,43 +590,26 @@ class AppCubit extends Cubit<AppState> {
     required int day,
     required int month,
     required int year,
-}){
-    if(DateTime.now().year > year)
-    {
-      /// change to deadlined   *******
-       return true;
-    }
-    else if(DateTime.now().year < year)
-    {
+  }) {
+    if (DateTime.now().year > year) {
+      return true;
+    } else if (DateTime.now().year < year) {
       return false;
-    }
-    else if(DateTime.now().year == year)
-    {
-      if(DateTime.now().month > month)
-      {
+    } else if (DateTime.now().year == year) {
+      if (DateTime.now().month > month) {
         /// change to deadlined   *******
         return true;
-      }
-      else if(DateTime.now().month < month)
-      {
+      } else if (DateTime.now().month < month) {
         return false;
-      }
-      else if(DateTime.now().month == month)
-        {
-          if(DateTime.now().day > day)
-          {
-            /// change to deadlined   *******
-            return true;
-          }
-          else if(DateTime.now().day < day)
-          {
-            return false;
-          }
-          else if(DateTime.now().day == day){
-            return false;
-          }
-
+      } else if (DateTime.now().month == month) {
+        if (DateTime.now().day > day) {
+          return true;
+        } else if (DateTime.now().day < day) {
+          return false;
+        } else if (DateTime.now().day == day) {
+          return false;
         }
+      }
     }
     return false;
   }
@@ -646,6 +626,7 @@ class AppCubit extends Cubit<AppState> {
     required bool rejected,
   }) {
     emit(AppSendingRequestState());
+
     ///------fix my requests-------
     Map<String, dynamic>? myReceivedRequests = model.receivedRequests;
     myReceivedRequests![userId]['isDeadline'] = deadline;
@@ -660,8 +641,8 @@ class AppCubit extends Cubit<AppState> {
         .update({'receivedRequests': myReceivedRequests})
         .then((value) {})
         .catchError((e) {
-      emit(AppErrorSendingState());
-    });
+          emit(AppErrorSendingState());
+        });
 
     ///------fix user requests------
     Map<String, dynamic>? newSendRequests = senderRequests;
@@ -674,11 +655,9 @@ class AppCubit extends Cubit<AppState> {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId.toString())
-        .update({'sentRequests': newSendRequests})
-        .then((value) {
+        .update({'sentRequests': newSendRequests}).then((value) {
       emit(AppChangeStatusState());
-    })
-        .catchError((e) {
+    }).catchError((e) {
       emit(AppErrorSendingState());
     });
   }
@@ -694,16 +673,15 @@ class AppCubit extends Cubit<AppState> {
     required int day,
     required int month,
     required int year,
-  }){
+  }) {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId)
         .get()
         .then((value) {
       TechnicianModel tech = TechnicianModel.fromJson(value.data());
-      if(checkRequestDeadline(day: day, month: month, year: year)){
-        if(isDeadline == false)
-        {
+      if (checkRequestDeadline(day: day, month: month, year: year)) {
+        if (isDeadline == false) {
           changeSendRequestStates(
               techReceivedRequests: tech.receivedRequests,
               userId: userId,
@@ -711,12 +689,12 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: false,
               rated: isRated,
-              rejected: isRejected
-          );
+              rejected: isRejected);
         }
-        if(isAccepted == true && isRejected == false &&isRated==false)
-        {
-          showToast(text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها', state: ToastState.WORNING);
+        if (isAccepted == true && isRejected == false && isRated == false) {
+          showToast(
+              text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
+              state: ToastState.WORNING);
           pushNotification(
             id: uId,
             text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
@@ -725,10 +703,7 @@ class AppCubit extends Cubit<AppState> {
             navigateTo: 'SentRequestsScreen',
             notificationList: model.notificationList,
           );
-
-        }
-        else if(isAccepted == false && isRejected == true)
-        {
+        } else if (isAccepted == false && isRejected == true) {
           changeSendRequestStates(
               techReceivedRequests: tech.receivedRequests,
               userId: userId,
@@ -736,11 +711,8 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: true,
               rated: isRated,
-              rejected: isRejected
-          );
-        }
-        else if(isAccepted == false && isRejected == false)
-        {
+              rejected: isRejected);
+        } else if (isAccepted == false && isRejected == false) {
           changeSendRequestStates(
               techReceivedRequests: tech.receivedRequests,
               userId: userId,
@@ -748,8 +720,7 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: true,
               rated: isRated,
-              rejected: isRejected
-          );
+              rejected: isRejected);
         }
       }
     }).catchError((error) {});
@@ -767,6 +738,7 @@ class AppCubit extends Cubit<AppState> {
     required bool rejected,
   }) {
     emit(AppSendingRequestState());
+
     ///------fix send my requests-------
     Map<String, dynamic>? sentRequests = model.sentRequests;
     sentRequests![userId]['isDeadline'] = deadline;
@@ -781,8 +753,8 @@ class AppCubit extends Cubit<AppState> {
         .update({'sentRequests': sentRequests})
         .then((value) {})
         .catchError((e) {
-      emit(AppErrorSendingState());
-    });
+          emit(AppErrorSendingState());
+        });
 
     ///------fix tech requests------
     Map<String, dynamic>? techReceivedRequests2 = techReceivedRequests;
@@ -795,11 +767,9 @@ class AppCubit extends Cubit<AppState> {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userId.toString())
-        .update({'receivedRequests': techReceivedRequests2})
-        .then((value) {
+        .update({'receivedRequests': techReceivedRequests2}).then((value) {
       emit(AppChangeStatusState());
-    })
-        .catchError((e) {
+    }).catchError((e) {
       emit(AppErrorSendingState());
     });
   }
@@ -837,42 +807,40 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then((value) {
       search = [];
-      searchUnordered ={};
+      searchUnordered = {};
       value.docs.forEach((element) {
         if (element.data()['uId'] != uId) {
           searchUnordered.addAll({
-            element.data()['uId']:[
-              element.data()
-              ,getDistance(
-                  lat1: model.latitude,
-                  long1: model.longitude,
-                  lat2: element.data()['latitude'],
-                  long2: element.data()['longitude'],
+            element.data()['uId']: [
+              element.data(),
+              getDistance(
+                lat1: model.latitude,
+                long1: model.longitude,
+                lat2: element.data()['latitude'],
+                long2: element.data()['longitude'],
               )
             ]
           });
           emit(AppLoadingState());
         }
       });
-      searchOrdered = Map.fromEntries(
-          searchUnordered.entries.toList()..sort((e1, e2) => e1.value[1].compareTo(e2.value[1]))
-      );
+      searchOrdered = Map.fromEntries(searchUnordered.entries.toList()
+        ..sort((e1, e2) => e1.value[1].compareTo(e2.value[1])));
       searchOrdered.forEach((key, value) {
         search.add(value.first);
       });
-      if(search.length == 0){
+      if (search.length == 0) {
         emit(AppEmptySearchState());
       }
       emit(AppLoadingState());
-    }).catchError((error) {
-    });
+    }).catchError((error) {});
   }
 
   ///---------- change search item ---------
 
   List values = ['name', 'profession'];
   String searchItem = 'profession';
-  void changeSearchItem(value){
+  void changeSearchItem(value) {
     searchItem = value;
     emit(AppChangeSearchItemState());
   }
@@ -993,7 +961,7 @@ class AppCubit extends Cubit<AppState> {
     emit(change());
   }
 
-  void updateProfileDate({
+  void updateProfileData({
     String? name,
     String? location,
     String? profession,
@@ -1031,9 +999,9 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: true,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
-          sentRequests: model.sentRequests??{},
-          receivedRequests: model.receivedRequests??{},
-          notificationList: model.notificationList??{},
+          sentRequests: model.sentRequests ?? {},
+          receivedRequests: model.receivedRequests ?? {},
+          notificationList: model.notificationList ?? {},
         );
         if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
@@ -1067,9 +1035,9 @@ class AppCubit extends Cubit<AppState> {
           hasProfession: false,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
-          sentRequests: model.sentRequests??{},
-          receivedRequests: model.receivedRequests??{},
-          notificationList: model.notificationList??{},
+          sentRequests: model.sentRequests ?? {},
+          receivedRequests: model.receivedRequests ?? {},
+          notificationList: model.notificationList ?? {},
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -1094,10 +1062,11 @@ class AppCubit extends Cubit<AppState> {
     required String lat2,
     required String long2,
   }) {
-    HaversineDistance g = HaversineDistance(4,5,6,7);
-    LatLng from=LatLng(double.parse(lat1) , double.parse(long1));
-    LatLng to=LatLng(double.parse(lat2) , double.parse(long2));
-    double distance = g.haversine(from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
+    HaversineDistance g = HaversineDistance(4, 5, 6, 7);
+    LatLng from = LatLng(double.parse(lat1), double.parse(long1));
+    LatLng to = LatLng(double.parse(lat2), double.parse(long2));
+    double distance = g.haversine(
+        from.latitude, from.longitude, to.latitude, to.longitude, Unit.KM);
     return distance;
   }
 
@@ -1111,7 +1080,6 @@ class AppCubit extends Cubit<AppState> {
     required bool isClickable,
     required String? navigateTo,
   }) {
-
     var newNotificationList = notificationList;
     newNotificationList!.addAll({
       notificationId.toString(): {
@@ -1125,11 +1093,12 @@ class AppCubit extends Cubit<AppState> {
         .collection('person')
         .doc(id.toString())
         .update({'notificationList': newNotificationList})
-        .then((value) {
-    })
-        .catchError((e) {
-      print(e.toString());
-    });
+        .then((value) {})
+        .catchError((e) {});
   }
-}
 
+  ///---------------------requests checker---------------------
+
+  void requestsChecker()
+  {}
+}
