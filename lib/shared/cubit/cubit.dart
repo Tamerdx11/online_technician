@@ -86,19 +86,22 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get data for report person ----------
 
-  void createReprotedUser(
-      {required String notes,
+  void createReprotedUser({
+    required String notes,
       required String reportedUId,
       required String senderUId,
+      required String dateReport,
       required String reportedUsername,
       required String senderUsername,
-      required BuildContext context}) {
+      required BuildContext context
+      }) {
     ReportModel newReport = ReportModel(
       notes: notes,
       reportedUId: reportedUId,
       senderUId: senderUId,
       reportedUsername: reportedUsername,
       senderUsername: senderUsername,
+      dateReport: dateReport,
     );
     FirebaseFirestore.instance
         .collection('reports')
@@ -118,7 +121,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------- main layout navigation ----------
+  ///---------- main layout navigation --------------
 
   int currentIndex = 0;
   List<Widget> screens = [
