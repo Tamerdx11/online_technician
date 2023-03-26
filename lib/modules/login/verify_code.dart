@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
-import 'package:pinput/pin_put/pin_put.dart';
+import 'package:pinput/pinput.dart';
 import '../../layout/home_layout.dart';
 import '../../shared/components/components.dart';
 import '../../shared/cubit/cubit.dart';
@@ -90,27 +90,28 @@ class verifyCodeScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0,),
-                        PinPut(
-                              fieldsCount: 6,
-                              textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
+
+                        Pinput(
+                              defaultPinTheme: defaultPinTheme,
+                              followingPinTheme: defaultPinTheme,
+                              focusedPinTheme: defaultPinTheme,
+                              submittedPinTheme: defaultPinTheme.copyWith(
+                                decoration: defaultPinTheme.decoration!.copyWith(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
                               ),
-                              eachFieldHeight: 30,
-                              eachFieldWidth: 30,
-                              eachFieldPadding:const EdgeInsets.all(5),
                               focusNode: _pintptofoucus,
                               controller: AppLoginCubit.get(context).pintotpcontrol,
-                              cursorColor: Colors.white,
-                              cursorHeight: 15,
-                              submittedFieldDecoration: PinOtpDeco1,
-                              selectedFieldDecoration: PinOtpDeco,
-                              followingFieldDecoration: PinOtpDeco,
-                              onSubmit: (pin) {
+                              onCompleted:  (pin) {
                               AppLoginCubit.get(context).checkCode(
                                   id: AppLoginCubit.verify.toString(),
                                   code: AppLoginCubit.get(context).pintotpcontrol.text);
-                            }
+                              print('hoooosansalkjflkasjflkfjslkfdasjlkasdfjkljsfaljf');
+                              },
+                          length: 6,
+                          androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
+
                         ),
                         const SizedBox(height: 20,),
                         Row(

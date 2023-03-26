@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
+import 'package:pinput/pinput.dart';
 
 class AppLoginCubit extends Cubit<AppLoginState> {
   AppLoginCubit() : super(AppLoginInitialState());
@@ -21,7 +22,8 @@ class AppLoginCubit extends Cubit<AppLoginState> {
     FirebaseAuth.instance
         .verifyPhoneNumber(
           phoneNumber: '+2$phone',
-          verificationCompleted: (PhoneAuthCredential credential) {
+          verificationCompleted: (PhoneAuthCredential credential) async{
+            pintotpcontrol.setText(credential.smsCode.toString());
             showToast(text: "تم ارسال الكود, يرجي فحص البريد الخاص بك", state: ToastState.SUCCESS);
           },
           verificationFailed: (FirebaseAuthException e) {

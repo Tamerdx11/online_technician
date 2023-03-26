@@ -594,7 +594,7 @@ packages:
       name: pinput
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.2"
+    version: "2.2.21"
   platform:
     dependency: "direct main"
     description:
@@ -698,6 +698,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smart_auth:
+    dependency: transitive
+    description:
+      name: smart_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8"
   smooth_page_indicator:
     dependency: "direct main"
     description:
@@ -797,5 +804,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: "2.18.1"
+  dart: "2.18.5"
   flutter: ">=3.0.0"

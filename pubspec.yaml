@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '2.18.1'
+  sdk: '2.18.5'
 
 # >=2.18.2 <3.0.0  by sayed
 # 2.18.5 by sherif
@@ -64,7 +64,7 @@ dependencies:
   carousel_slider: ^4.1.1
   dots_indicator: ^2.1.0
   popup_banner: ^1.0.0
-  pinput: ^1.2.0
+  pinput: ^2.2.21
   badges: ^3.0.2
   flutter_launcher_icons: "^0.11.0"
   flutter_holo_date_picker: ^1.1.0

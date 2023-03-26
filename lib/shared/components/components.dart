@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
+import 'package:pinput/pinput.dart';
 
 ///---------- customized button ----------
 
@@ -340,3 +341,16 @@ const BoxDecoration PinOtpDeco1 = BoxDecoration(
   color: Colors.red,
   shape: BoxShape.circle,
 );
+
+final defaultPinTheme = PinTheme(
+  width: 50,
+  height: 50,
+  textStyle: const TextStyle(
+    fontSize: 22,
+    color: Colors.white,
+  ),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(30),color: Colors.black,
+  ),
+);
+
