@@ -44,6 +44,8 @@ class FeedsScreen extends StatelessWidget {
                   return const Center(child: Text('error 404'));
                 }
                 if (snapshot.hasData) {
+                  ///================checker=============
+                  AppCubit.get(context).requestsChecker();
                   return Column(
                     children: [
                       const SizedBox(

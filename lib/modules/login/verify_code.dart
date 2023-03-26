@@ -41,7 +41,7 @@ class verifyCodeScreen extends StatelessWidget {
                 CacheHelper.savaData(key: 'uId', value: state.uid.toString());
                 CacheHelper.savaData(key: 'hasProfession', value: value.data()!['hasProfession']);
                 Timer(const Duration(seconds: 3), () {
-                  showToast(text: 'مرحبا بعودتك', state: ToastState.WELCOME);
+                  showToast(text: 'مرحبا بعودتك', state: ToastState.SUCCESS);
                   navigateToAndFinish(context, AppLayout());
                 });
               }
@@ -56,7 +56,7 @@ class verifyCodeScreen extends StatelessWidget {
                 child: Center(
                   child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0,right: 20.0),
@@ -90,28 +90,25 @@ class verifyCodeScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20.0,),
-
                         Pinput(
                               defaultPinTheme: defaultPinTheme,
                               followingPinTheme: defaultPinTheme,
                               focusedPinTheme: defaultPinTheme,
                               submittedPinTheme: defaultPinTheme.copyWith(
                                 decoration: defaultPinTheme.decoration!.copyWith(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.redAccent,
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
                               focusNode: _pintptofoucus,
                               controller: AppLoginCubit.get(context).pintotpcontrol,
                               onCompleted:  (pin) {
-                              AppLoginCubit.get(context).checkCode(
+                                AppLoginCubit.get(context).checkCode(
                                   id: AppLoginCubit.verify.toString(),
                                   code: AppLoginCubit.get(context).pintotpcontrol.text);
-                              print('hoooosansalkjflkasjflkfjslkfdasjlkasdfjkljsfaljf');
                               },
                           length: 6,
-                          androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
-
+                          androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
                         ),
                         const SizedBox(height: 20,),
                         Row(

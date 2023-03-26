@@ -15,7 +15,6 @@ import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
 
-
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   messagesNumber++;
   // showToast(text: "new notification", state: ToastState.SUCCESS);

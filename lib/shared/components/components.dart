@@ -343,14 +343,16 @@ const BoxDecoration PinOtpDeco1 = BoxDecoration(
 );
 
 final defaultPinTheme = PinTheme(
-  width: 50,
-  height: 50,
+  width: 40,
+  height: 40,
   textStyle: const TextStyle(
-    fontSize: 22,
+    fontSize: 18,
     color: Colors.white,
+    fontWeight: FontWeight.bold
   ),
   decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(30),color: Colors.black,
+    borderRadius: BorderRadius.circular(30),
+    color: Colors.black87,
   ),
 );
 

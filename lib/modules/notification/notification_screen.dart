@@ -46,16 +46,13 @@ class NotificationScreen extends StatelessWidget {
 
                   return InkWell(
                     onTap: () {
-                      print(AppCubit.get(context).currentIndex);
                       if(map[map.keys.toList()[index]]['isClickable'] == true)
                         {
                           if(map[map.keys.toList()[index]]['navigateTo'] == 'SentRequestsScreen') {
                             AppCubit.get(context).changeButtonNav(2);
-                            print(AppCubit.get(context).currentIndex);
                           }
                           else if(map[map.keys.toList()[index]]['navigateTo'] == 'ReceivedRequestsScreen') {
                             AppCubit.get(context).changeButtonNav(3);
-                            print(AppCubit.get(context).currentIndex);
                           }
                         }
                     },
@@ -74,14 +71,13 @@ class NotificationScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                       map[map.keys.toList()[index]]['text'].toString(),
-                                      maxLines: 3,
-                                      softWrap: true,
+                                      maxLines: 5,
+                                    overflow: TextOverflow.ellipsis,
                                     textDirection: TextDirection.ltr,
                                     style: const TextStyle(
                                       color: Colors.black87,
-                                      overflow: TextOverflow.ellipsis,
                                       fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.bold,
 
                                     ),
                                   ),

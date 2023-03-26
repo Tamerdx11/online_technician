@@ -553,16 +553,16 @@ class AppCubit extends Cubit<AppState> {
           DioHelper.sendFcmMessage(
             title: 'المجتمع المهني',
             message:
-                'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا الي ${user2.name}',
+                'تم أنتهاء الموعد المحدد لأحد طلبات العمل التي قمت بإرسالها مسبقا الي ${model.name}',
             token: user2.token.toString(),
           );
           pushNotification(
             id: userId,
             notificationList: user2.notificationList,
-            notificationId: '6$userId',
-            text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
+            notificationId: '6$uId',
+            text: 'تم الانتهاء الموعد المحدد لأحد الطلبات المرسلة',
             isClickable: true,
-            navigateTo: "ReceivedRequestsScreen",
+            navigateTo: "SendRequestsScreen",
           );
         } else if (isAccepted == false && isRejected == true) {
           changeReceivedRequestStates(
@@ -581,7 +581,8 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: true,
               rated: isRated,
-              rejected: isRejected);
+              rejected: isRejected,
+          );
         }
       }
     }).catchError((error) {});
@@ -692,12 +693,10 @@ class AppCubit extends Cubit<AppState> {
               accepted: isAccepted,
               done: false,
               rated: isRated,
-              rejected: isRejected);
+              rejected: isRejected,
+          );
         }
         if (isAccepted == true && isRejected == false && isRated == false) {
-          showToast(
-              text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
-              state: ToastState.WORNING);
           pushNotification(
             id: uId,
             text: 'تم الانتهاء من أحد الطلبات التي قمت بإرسالها',
@@ -1103,5 +1102,8 @@ class AppCubit extends Cubit<AppState> {
   ///---------------------requests checker---------------------
 
   void requestsChecker()
-  {}
+  {
+    print('=================================cecker========================');
+    print(model.sentRequests.keys);
+  }
 }
