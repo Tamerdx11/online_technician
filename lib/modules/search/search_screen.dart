@@ -5,6 +5,8 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 
+import '../../shared/styles/colors.dart';
+
 // ignore: must_be_immutable
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class SearchScreen extends StatelessWidget {
         var data = AppCubit.get(context).search;
         var cubit = AppCubit.get(context);
         return Scaffold(
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: background_color,
           body: Padding(
             padding: const EdgeInsets.only(top: 45.0),
             child: Column(
@@ -143,7 +145,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -161,7 +163,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -179,7 +181,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -197,7 +199,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -215,7 +217,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -233,7 +235,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -251,7 +253,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -269,7 +271,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -287,7 +289,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -305,7 +307,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -323,7 +325,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -341,7 +343,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -359,7 +361,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -377,7 +379,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -395,7 +397,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -413,7 +415,7 @@ class SearchScreen extends StatelessWidget {
                         padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -428,10 +430,10 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding:const  EdgeInsets.only(right: 5,bottom: 10,left: 5),
+                        padding:const EdgeInsets.only(right: 5,bottom: 10,left: 5),
                         child: Container(
                           height: 32.0,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.black87),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: header_color),
                           child: TextButton(onPressed: (){
                             data =[];
                             cubit.changeSearchItem('profession');
@@ -450,7 +452,7 @@ class SearchScreen extends StatelessWidget {
                 ),
                 Expanded(child: searchResultsBuilder(data, context)),
                 if(data.isEmpty)
-                  result?const Center(child: LinearProgressIndicator()):
+                  result? Center(child: LinearProgressIndicator(color: header_color, backgroundColor: background_color,)):
                   const Center(child: Padding(
                     padding: EdgeInsets.only(bottom: 50.0),
                     child: Text(

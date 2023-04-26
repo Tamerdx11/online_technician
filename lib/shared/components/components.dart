@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -88,8 +89,18 @@ Widget defaultFormText({
 
 Future navigateTo(context, widget) => Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => widget,
+      // MaterialPageRoute(
+      //   builder: (context) => widget,
+      // ),
+      PageRouteBuilder(
+        transitionDuration:const Duration(milliseconds: 1500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+            return ScaleTransition(scale: animation, child: child, alignment: Alignment.center,);
+          },
+          pageBuilder: (context, animation, secondaryAnimation){
+            return widget;
+          },
       ),
     );
 

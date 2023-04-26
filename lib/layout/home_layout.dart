@@ -11,6 +11,7 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import '../modules/login/login_screen.dart';
 
 // ignore: must_be_immutable
@@ -31,10 +32,10 @@ class AppLayout extends StatelessWidget {
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
-          backgroundColor: HexColor('#FAF7F0'),
+          backgroundColor: background_color,
           drawer: cubit.currentIndex == 0
               ? Drawer(
-                  backgroundColor: HexColor('#ebebeb'),
+                  backgroundColor: background_color,
                   elevation: 40,
                   width: 200.0,
                   child: ListView(
@@ -43,7 +44,7 @@ class AppLayout extends StatelessWidget {
                       DrawerHeader(
                         curve: Curves.bounceInOut,
                         decoration: BoxDecoration(
-                          color: HexColor('#0A81AB'),
+                          color: header_color,
                         ),
                         child: Column(
                           children: [
@@ -94,7 +95,7 @@ class AppLayout extends StatelessWidget {
                         child: Container(
                           height: .5,
                           width: double.infinity,
-                          color: Colors.grey,
+                          color: header_color,
                         ),
                       ),
                       ListTile(
@@ -121,7 +122,7 @@ class AppLayout extends StatelessWidget {
                         child: Container(
                           height: .5,
                           width: double.infinity,
-                          color: Colors.grey,
+                          color: header_color,
                         ),
                       ),
                       ListTile(
@@ -148,7 +149,7 @@ class AppLayout extends StatelessWidget {
                         child: Container(
                           height: .5,
                           width: double.infinity,
-                          color: Colors.grey,
+                          color: header_color,
                         ),
                       ),
                       ListTile(
@@ -185,7 +186,7 @@ class AppLayout extends StatelessWidget {
                         child: Container(
                           height: .5,
                           width: double.infinity,
-                          color: Colors.grey,
+                          color: header_color,
                         ),
                       ),
                     ],
@@ -194,7 +195,7 @@ class AppLayout extends StatelessWidget {
               : null,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: HexColor('#0A81AB'),
+            backgroundColor: header_color,
             elevation: 3.0,
             centerTitle: true,
             title: Text(
@@ -232,7 +233,7 @@ class AppLayout extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.search_rounded,
-                    color: Colors.white70,
+                    color: Colors.white,
                     size: 30.0,
                   ),
                 ),
@@ -257,9 +258,9 @@ class AppLayout extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        child:const  Icon(
+                        child:const Icon(
                           Icons.chat,
-                          color: Colors.white70,
+                          color: Colors.white,
                           size: 30.0,
                         ),
                       ),
@@ -281,7 +282,7 @@ class AppLayout extends StatelessWidget {
                       onPressed: () {
                         navigateTo(context, NewPostScreen());
                       },
-                      backgroundColor: HexColor('#0A81AB').withOpacity(0.60),
+                      backgroundColor: HexColor('#78b7b7').withOpacity(0.60),
                       child: const Icon(
                           Icons.add_rounded,
                           size: 30.0,
@@ -293,7 +294,7 @@ class AppLayout extends StatelessWidget {
               : null,
           bottomNavigationBar: BottomNavigationBar(
             elevation: 2.0,
-            selectedItemColor: HexColor('#0A81AB'),
+            selectedItemColor: header_color,
             type: BottomNavigationBarType.fixed,
             currentIndex: cubit.currentIndex,
             onTap: (index) {

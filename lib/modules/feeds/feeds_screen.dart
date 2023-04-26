@@ -10,6 +10,7 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../google_map2/GoogleMaps2.dart';
 
@@ -26,12 +27,13 @@ class FeedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
 
         return Container(
-          color:  HexColor('#FAF7F0'),
+          color:  background_color,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: StreamBuilder(
@@ -44,15 +46,15 @@ class FeedsScreen extends StatelessWidget {
                   return const Center(child: Text('error 404'));
                 }
                 if (snapshot.hasData) {
-                  ///================checker=============
                   AppCubit.get(context).requestsChecker();
+
                   return Column(
                     children: [
                       const SizedBox(
                         height: 13.0,
                       ),
                       ListView.separated(
-                        padding:const EdgeInsets.symmetric(horizontal: 7.0),
+                        padding:const EdgeInsets.symmetric(horizontal: 1.0),
                         itemCount: snapshot.data!.docs.length,
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
@@ -63,6 +65,7 @@ class FeedsScreen extends StatelessWidget {
                                     value == true ? trueLikes++ : trueLikes,
                               );
                           return Card(
+                            color: post_color,
                             shape: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
                                 borderSide: const BorderSide(
@@ -85,7 +88,7 @@ class FeedsScreen extends StatelessWidget {
                                         itemBuilder: (BuildContext context)=> [
                                           const PopupMenuItem(
                                             value: MenuValuesMyPosts.delete,
-                                            child: Text('حذف البوست'),
+                                            child: Text('حذف'),
                                           ),
                                         ],
                                         onSelected: (value) async {
@@ -93,7 +96,7 @@ class FeedsScreen extends StatelessWidget {
                                             case MenuValuesMyPosts.delete:
                                               await FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
                                                       (onvalue) async {
-                                                    showToast(text: 'تم الحذف', state: ToastState.SUCCESS);
+                                                    showToast(text: ' تم الحذف بنجاح', state: ToastState.SUCCESS);
                                                       }
                                               );
                                               for(int i=0;i<snapshot.data!.docs[index]['postImages'].toString().length;i++) {

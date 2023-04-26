@@ -6,6 +6,7 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 // ignore: must_be_immutable
 class NewPostScreen extends StatelessWidget {
@@ -20,10 +21,10 @@ class NewPostScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = AppCubit.get(context).model;
         return Scaffold(
-          backgroundColor: HexColor('#FAF7F0'),
+          backgroundColor: background_color,
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: HexColor('#0A81AB'),
+              backgroundColor: header_color,
               elevation: 3.0,
               title:const Text(
                   "إضافة بوست",

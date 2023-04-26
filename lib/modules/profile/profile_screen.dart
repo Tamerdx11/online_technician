@@ -13,6 +13,7 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 import '../send_request_to_tech/send_request_to_tech_screen.dart';
 enum MenuValue{
@@ -22,6 +23,7 @@ enum MenuValue{
 enum MenuValuesMyPostsProfile {
   delete,
 }
+
 class ProfileScreen extends StatelessWidget {
   String id;
   String name;
@@ -39,10 +41,10 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) {
 
         return Scaffold(
-          backgroundColor: HexColor('#F9F9F9'),
+          backgroundColor: background_color,
             appBar: defaultAppBar(
               context: context,
-              color: HexColor('#1d2021'),
+              color: header_color,
               textColor: Colors.white,
               elevation: 2.0,
               arrowColor: Colors.white,
@@ -74,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
                 },
                     icon:const Icon(
                       Icons.whatsapp_outlined,
-                      color: Colors.greenAccent,
+                      color: Colors.white,
                       size: 35.0,
                     ),
                 )
@@ -382,7 +384,7 @@ class ProfileScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 13.0, bottom: 13.0, right: 8.0),
                             child: Card(
-                              color: HexColor('#1d2021'),
+                              color: header_color,
                               margin:const EdgeInsets.all(0),
                               elevation: 5.0,
                               shape: OutlineInputBorder(

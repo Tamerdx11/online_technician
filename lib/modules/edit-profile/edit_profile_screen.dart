@@ -6,6 +6,7 @@ import 'package:online_technician/modules/google_map/google_map.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
@@ -58,7 +59,6 @@ class EditProfileScreen extends StatelessWidget {
         bool hasProfession = AppCubit.get(context).hasProfession;
         var userModel = AppCubit.get(context).model;
         var profileImage = AppCubit.get(context).profileImage;
-        var coverImage = AppCubit.get(context).coverImage;
         var idCardImage = AppCubit.get(context).idCardImage;
         nameController.text = userModel!.name.toString();
         locationController.text = userModel.location.toString();
@@ -83,17 +83,10 @@ class EditProfileScreen extends StatelessWidget {
           image_profile = FileImage(profileImage);
         }
 
-        ImageProvider image_cover;
-        if (coverImage == null) {
-          image_cover = NetworkImage('${userModel.coverImage}');
-        } else {
-          image_cover = FileImage(coverImage);
-        }
-
         return Scaffold(
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: background_color,
           appBar: AppBar(
-            backgroundColor: HexColor('#1d2021'),
+            backgroundColor: header_color,
             title:const Center(
               child: Text(
                 'تعديل الحساب',

@@ -41,18 +41,20 @@ class SentRequestsScreen extends StatelessWidget {
                   shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if(map[map.keys.toList()[index]]['isDone'] == false){
-                      AppCubit.get(context).sendRequestsChecker(
-                        isAccepted: map[map.keys.toList()[index]]['isAccepted'],
-                        isRejected: map[map.keys.toList()[index]]['isRejected'],
-                        isRated: map[map.keys.toList()[index]]['isRated'],
-                        isDeadline: map[map.keys.toList()[index]]['isDeadline'],
-                        userId: map.keys.toList()[index].toString(),
-                        day: map[map.keys.toList()[index]]['deadline'][2],
-                        month: map[map.keys.toList()[index]]['deadline'][1],
-                        year: map[map.keys.toList()[index]]['deadline'][0],
-                      );
-                    }
+
+                    // if(map[map.keys.toList()[index]]['isDone'] == false)
+                    // {
+                    //   AppCubit.get(context).sendRequestsChecker(
+                    //     isAccepted: map[map.keys.toList()[index]]['isAccepted'],
+                    //     isRejected: map[map.keys.toList()[index]]['isRejected'],
+                    //     isRated: map[map.keys.toList()[index]]['isRated'],
+                    //     isDeadline: map[map.keys.toList()[index]]['isDeadline'],
+                    //     userId: map.keys.toList()[index].toString(),
+                    //     day: map[map.keys.toList()[index]]['deadline'][2],
+                    //     month: map[map.keys.toList()[index]]['deadline'][1],
+                    //     year: map[map.keys.toList()[index]]['deadline'][0],
+                    //   );
+                    // }
 
                     return Card(
                       elevation: 3.0,

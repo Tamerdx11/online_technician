@@ -8,6 +8,7 @@ import 'package:online_technician/modules/register/cubit/states.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import '../google_map/google_map.dart';
 
 // ignore: must_be_immutable
@@ -40,11 +41,11 @@ class RegisterScreen extends StatelessWidget {
           }
 
           return Scaffold(
-            backgroundColor: HexColor('#ebebeb'),
+            backgroundColor: background_color,
             appBar: defaultAppBar(
               context: context,
               title: " بيانات التسجيل ",
-              color: HexColor('#80b0c8'),
+              color: header_color,
             ),
             body: Center(
               child: SingleChildScrollView(
@@ -159,7 +160,7 @@ class RegisterScreen extends StatelessWidget {
                         ConditionalBuilder(
                           condition: state is! AppRegisterLoadingState,
                           builder: (context) => defaultButton(
-                            color: HexColor('#78b7b7'),
+                            color: header_color,
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 AppRegisterCubit.get(context).userRegister(

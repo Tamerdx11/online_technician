@@ -588,7 +588,7 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
-  ///***request deadline check***
+  /// -------------------- request deadline check --------------------
 
   bool checkRequestDeadline({
     required int day,
@@ -618,7 +618,7 @@ class AppCubit extends Cubit<AppState> {
     return false;
   }
 
-  ///***** change my received requests to deadlined *****
+  /// -------------------- change my received requests to deadlined --------------------
 
   void changeReceivedRequestStates({
     required String? userId,
@@ -882,19 +882,6 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  /// ------------pick background image-------------
-
-  File? coverImage = null;
-  Future<void> getCoverImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      coverImage = File(pickedFile.path);
-      emit(AppCoverImagePickedSuccessState());
-    } else {
-      emit(AppCoverImagePickedErrorState());
-    }
-  }
-
   /// ---------- upload id card image ----------/// upload images /////////////////
 
   String? uploadedIdCardImage;
@@ -935,26 +922,6 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///----------upload cover image----------
-
-  String? uploadedCoverImage;
-  void uploadCoverImage() {
-    emit(AppUserUpdateLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/$uId$uId')
-        .putFile(coverImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        uploadedCoverImage = value;
-      }).catchError((error) {
-        emit(AppUploadCoverImageErrorState());
-      });
-    }).catchError((error) {
-      emit(AppUploadCoverImageErrorState());
-    });
-  }
-
   ///----------  update profile data ----------//
 
   String? profession = 'نقاش';
@@ -973,9 +940,6 @@ class AppCubit extends Cubit<AppState> {
   }) {
     if (profileImage != null) {
       uploadProfileImage();
-    }
-    if (coverImage != null) {
-      uploadCoverImage();
     }
     if (idCardImage != null) {
       uploadIdCardImage();
@@ -997,7 +961,6 @@ class AppCubit extends Cubit<AppState> {
           token: model.token,
           profession: profession,
           userImage: uploadedProfileImage ?? model?.userImage.toString(),
-          coverImage: uploadedCoverImage ?? model?.coverImage.toString(),
           hasProfession: true,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
           longitude: longitude != 0 ? longitude.toString() : model.longitude,
@@ -1032,7 +995,6 @@ class AppCubit extends Cubit<AppState> {
           token: model.token,
           chatList: model.chatList,
           userImage: uploadedProfileImage ?? model?.userImage,
-          coverImage: uploadedCoverImage ?? model?.coverImage,
           uId: uId,
           hasProfession: false,
           latitude: latitude != 0 ? latitude.toString() : model.latitude,
@@ -1103,7 +1065,38 @@ class AppCubit extends Cubit<AppState> {
 
   void requestsChecker()
   {
-    print('=================================cecker========================');
-    print(model.sentRequests.keys);
+    for(int i=0 ; i<model.sentRequests.length;i++)
+    {
+      if(model.sentRequests[model.sentRequests.keys.toList()[i]]['isDone'] == false)
+      {
+        sendRequestsChecker(
+          isAccepted: model.sentRequests[model.sentRequests.keys.toList()[i]]['isAccepted'],
+          isRejected: model.sentRequests[model.sentRequests.keys.toList()[i]]['isRejected'],
+          isRated: model.sentRequests[model.sentRequests.keys.toList()[i]]['isRated'],
+          isDeadline: model.sentRequests[model.sentRequests.keys.toList()[i]]['isDeadline'],
+          userId: model.sentRequests.keys.toList()[i].toString(),
+          day: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][2],
+          month: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][1],
+          year: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][0],
+        );
+      }
+    }
+
+    for(int j = 0 ; j<model.receivedRequests.length ; j++)
+    {
+      if(model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isDone'] == false)
+      {
+        receivedRequestsChecker(
+          isAccepted: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isAccepted'],
+          isRejected: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isRejected'],
+          isRated: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isRated'],
+          isDeadline: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isDeadline'],
+          userId: model.receivedRequests.keys.toList()[j].toString(),
+          day: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][2],
+          month: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][1],
+          year: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][0],
+        );
+      }
+    }
   }
 }

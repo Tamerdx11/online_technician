@@ -7,6 +7,7 @@ import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 class ChatsScreen extends StatelessWidget {
   const ChatsScreen({super.key});
@@ -21,7 +22,7 @@ class ChatsScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           appBar: AppBar(
               centerTitle: true,
-              backgroundColor: HexColor('#0A81AB'),
+              backgroundColor: header_color,
               elevation: 3.0,
               title:const Text("المحادثات",
                   style: TextStyle(
@@ -51,8 +52,6 @@ class ChatsScreen extends StatelessWidget {
                 Map map = snapshot.data!.data()?['chatList'];
                 Map chatData = Map.fromEntries(map.entries.toList()
                   ..sort((e1, e2) => e2.value[1].compareTo(e1.value[1])));
-                print('=======================chat=====================');
-                print(map.length);
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),

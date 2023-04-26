@@ -110,8 +110,6 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       notificationList: {},
       latitude: latitude.toString(),
       longitude: longitude.toString(),
-      coverImage:
-          'https://img.freepik.com/premium-photo/tool-working-with-equipment_231794-3282.jpg?w=740',
     );
 
     Timer(const Duration(seconds: 5),() {

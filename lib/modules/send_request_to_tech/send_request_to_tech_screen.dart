@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 // ignore: must_be_immutable
 class SendRequestToTechScreen extends StatelessWidget {
@@ -43,7 +43,7 @@ class SendRequestToTechScreen extends StatelessWidget {
         var cubit = AppCubit.get(context);
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: background_color,
           appBar: AppBar(
             elevation: 1.0,
             title: Row(
@@ -61,23 +61,23 @@ class SendRequestToTechScreen extends StatelessWidget {
                 Text(
                   'طلب عمل الي $name',
                   style: const TextStyle(
-                      color: Colors.black87, fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             centerTitle: true,
-            backgroundColor: Colors.white,
+            backgroundColor: header_color,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(
                 Icons.arrow_back,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
           ),
           body: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0),
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -190,7 +190,7 @@ class SendRequestToTechScreen extends StatelessWidget {
                     },
                     text: ' إرسال الطلب ',
                     size: 17.0,
-                    color: Colors.black87,
+                    color: header_color,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),

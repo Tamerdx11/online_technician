@@ -9,6 +9,7 @@ import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 // ignore: must_be_immutable
 class ChatDetailsScreen extends StatelessWidget {
@@ -46,9 +47,9 @@ class ChatDetailsScreen extends StatelessWidget {
           builder: (context, state) {
 
             return Scaffold(
-              backgroundColor: HexColor('#ebebeb'),
+              backgroundColor: background_color,
               appBar: AppBar(
-                backgroundColor: HexColor('#78b7b7'),
+                backgroundColor: header_color,
                 elevation: 3.0,
                 centerTitle: false,
                 leading: IconButton(

@@ -2,7 +2,6 @@ import 'package:online_technician/models/person.dart';
 
 class UserModel extends PersonModel {
   String? phone;
-  String? coverImage;
   String? token;
   bool? hasProfession;
   String? latitude;
@@ -19,7 +18,6 @@ class UserModel extends PersonModel {
     Map<String, dynamic>? notificationList,
     this.phone,
     this.token,
-    this.coverImage,
     this.hasProfession,
     this.latitude,
     this.longitude,
@@ -46,7 +44,6 @@ class UserModel extends PersonModel {
           notificationList: json['notificationList'],
         ) {
     phone = json['phone'];
-    coverImage = json['coverImage'];
     latitude = json['latitude'];
     longitude = json['longitude'];
     hasProfession = json['hasProfession'];
@@ -56,7 +53,6 @@ class UserModel extends PersonModel {
   Map<String, dynamic> toMap() {
     return {
       'phone': phone,
-      'coverImage': coverImage,
       'hasProfession': hasProfession,
       'name': name,
       'uId': uId,
