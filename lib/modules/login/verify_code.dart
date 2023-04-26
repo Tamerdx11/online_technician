@@ -64,7 +64,7 @@ class verifyCodeScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: const [
                               Text(
-                                  'يرجي إدخال رمز التحقق',
+                                  'يرجي أنتظار رمز التحقق',
                                   style: TextStyle(
                                       color:Colors.black,
                                       fontSize: 25.0,
@@ -111,20 +111,26 @@ class verifyCodeScreen extends StatelessWidget {
                           androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
                         ),
                         const SizedBox(height: 20,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            TextButton(
-                              onPressed: (){
-                                AppLoginCubit.get(context).userLogin(phone: phoneNumber);
-                              },
-                              child:const Text(
-                                  "إعادة ارسال الرمز",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: (){
+                                    AppLoginCubit.get(context).userLogin(phone: phoneNumber);
+                                  },
+                                  child:const Text(
+                                      "إعادة ارسال الرمز",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),),
+                                ),
+                                const Text(' في حالة عدم استلام رمز التحقيق '),
+                              ],
                             ),
-                            const Text(' في حالة عدم استلام رمز التحقيق '),
+                            const Text('يرجي الأنتظار 5 ثوان علي الأقل قبل اعادة الأرسال ', style: TextStyle(fontSize: 12.0),),
                           ],
                         ),
                       ],

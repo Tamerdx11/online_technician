@@ -82,69 +82,72 @@ class ProfileScreen extends StatelessWidget {
                 )
               ],
             ),
-            body: SingleChildScrollView(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('person')
-                    .doc(id)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('error 404'));
-                  }
-                  if (snapshot.hasData){
-                    name = snapshot.data!.data()!['name'];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 4.0, left: 4.0, top: 16.0),
-                          child: Card(
-                            color: Colors.white,
-                            margin:const EdgeInsets.all(0),
-                            elevation: 10.0,
-                            shape:const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(20.0),
-                                topLeft: Radius.circular(20.0),
-                                bottomLeft: Radius.circular(20.0),
-                                topRight: Radius.circular(20.0),
+            body: Container(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('person')
+                      .doc(id)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('error 404'));
+                    }
+                    if (snapshot.hasData){
+                      name = snapshot.data!.data()!['name'];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 0.0, left: 0.0, top: 16.0),
+                            child: Card(
+                              color: Colors.white,
+                              margin:const EdgeInsets.all(0),
+                              elevation: 10.0,
+                              shape:const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(20.0),
+                                  topLeft: Radius.circular(20.0),
+                                  bottomLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Colors.black54,
+                                  width: 0.2,
+                                ),
                               ),
-                              borderSide: BorderSide(
-                                color: Colors.black54,
-                                width: 0.2,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(height:25.0),
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 35.0,
-                                    ),
-                                    Container(
-                                      width: 110.0,
-                                      height: 110.0,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(snapshot
-                                              .data!
-                                              .data()!['userImage']
-                                              .toString()),
-                                          fit: BoxFit.fill,
-                                        ),
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(12.0)
-                                        )
+                              child: Column(
+                                children: [
+                                  const SizedBox(height:25.0),
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        width: 35.0,
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
+                                      Container(
+                                        width: 110.0,
+                                        height: 110.0,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(snapshot
+                                                .data!
+                                                .data()!['userImage']
+                                                .toString()),
+                                            fit: BoxFit.fill,
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(12.0)
+                                          )
+                                        ),
+                                      ),
+                                      const SizedBox(width: 60.0,),
+                                      Column(
                                         children: [
                                           Text(
                                             snapshot.data!
@@ -241,15 +244,13 @@ class ProfileScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                if(snapshot.data!.data()!['hasProfession'] == true)
-                                  Center(
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 25.0, right: 25.0),
-                                      child: Expanded(
+                                    ],
+                                  ),
+                                  if(snapshot.data!.data()!['hasProfession'] == true)
+                                    Center(
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 25.0, right: 25.0),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
@@ -274,512 +275,512 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      if(snapshot.data!.data()!['hasProfession'] == true)
-                                        Expanded(
-                                        child: Column(
-                                          children:  [
-                                            Text(
-                                              'تقييم المهارة',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: HexColor('#864879'),
-                                                fontSize: 18.0,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if(snapshot.data!.data()!['hasProfession'] == true)
+                                          Column(
+                                            children:  [
+                                              Text(
+                                                'تقييم المهارة',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: HexColor('#864879'),
+                                                  fontSize: 18.0,
+                                                ),
                                               ),
-                                            ),
-                                            const Text(
-                                              '7.9',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.orange,
-                                                fontSize: 20.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () async {
-                                      await AppCubit.get(context).getUser(
-                                      snapshot.data!.data()!['uId'].toString());
-                                      CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                      CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                      CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                      CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
-                                      CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
-                                      CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
-                                      navigateTo(context, GoogleMaps2());
-                                      },
-                                        child: Container(
-                                          width: 40,
-                                          height: 47.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: HexColor('#1d2021'),
-                                          ),
-                                          child: Icon(
-                                            Icons.location_on,
-                                            color: Colors.redAccent.withOpacity(0.8),
-                                            size: 25.0,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5.0,),
-                                      if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20.0),
-                                            color: HexColor('#1d2021'),
-                                          ),
-                                          child: MaterialButton(
-                                            onPressed: () {
-                                              ///navigation here
-                                              navigateTo(context, SendRequestToTechScreen(
-                                                id: id,
-                                                name: snapshot.data!.data()!['name'],
-                                                profession: snapshot.data!.data()!['profession'],
-                                                token: snapshot.data!.data()!['token'],
-                                                receivedRequests: snapshot.data!.data()!['receivedRequests'],
-                                                userImage: snapshot.data!.data()!['userImage'],
-                                                latitude: snapshot.data!.data()!['latitude'],
-                                                longitude:  snapshot.data!.data()!['longitude'],
-                                                location: snapshot.data!.data()!['location'],
-                                              ));
-                                            },
-                                            child: Row(
-                                              children:const [
-                                                Icon(
-                                                  Icons.work_history,
+                                              const Text(
+                                                '7.9',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                   color: Colors.orange,
-                                                  size: 25.0,
+                                                  fontSize: 20.0,
                                                 ),
-                                                SizedBox(width: 8.0,),
-                                                Text(
-                                                  'طلب للعمل',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.white,
-                                                    fontSize: 15.0,
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
+                                            ],
+                                          ),
+                                        if(snapshot.data!.data()!['hasProfession'] == true)
+                                          const SizedBox(width: 30.0,),
+                                        InkWell(
+                                          onTap: () async {
+                                        await AppCubit.get(context).getUser(
+                                        snapshot.data!.data()!['uId'].toString());
+                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
+                                        navigateTo(context, GoogleMaps2());
+                                        },
+                                          child: Container(
+                                            width: 40,
+                                            height: 47.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20),
+                                              color: HexColor('#1d2021'),
                                             ),
-
+                                            child: Icon(
+                                              Icons.location_on,
+                                              color: Colors.redAccent.withOpacity(0.8),
+                                              size: 25.0,
+                                            ),
                                           ),
                                         ),
-                                      const SizedBox(width: 25.0,)
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        if(snapshot.data!.data()!['hasProfession'] == true)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 13.0, bottom: 13.0, right: 8.0),
-                            child: Card(
-                              color: header_color,
-                              margin:const EdgeInsets.all(0),
-                              elevation: 5.0,
-                              shape: OutlineInputBorder(
-                                borderRadius:const BorderRadius.only(
-                                  topLeft: Radius.circular(80.0),
-                                  bottomLeft: Radius.circular(80.0),
-                                  topRight: Radius.circular(80.0),
-                                  bottomRight: Radius.circular(80.0),
-                                ),
-                                borderSide: BorderSide(
-                                  color: HexColor('#1d2021'),
-                                  width: 0.05,
-                                ),
-                              ),
-                              child:const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
-                                child:  Text(
-                                    'أعمال سابقة',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white
-                                  ),
-                                ),
-                              ),
-
-                            ),
-                          ),
-
-                        const SizedBox(height: 15.0,),
-                        StreamBuilder(
-                          stream:  FirebaseFirestore.instance
-                              .collection('posts')
-                              .where("uId", isEqualTo: id).snapshots(),
-                          builder: (context, snapshot) {
-
-                            if (snapshot.hasError) {
-                              return const Center(child: Text('error 404'));
-                            }
-                            if(snapshot.hasData){
-                              return ListView.separated(
-                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  int trueLikes = 0;
-                                  snapshot.data!.docs[index].data()['likes'].forEach(
-                                        (key, value) =>
-                                    value == true ? trueLikes++ : trueLikes,
-                                  );
-                                  return Card(
-                                  shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                      color: Colors.black,
-                                      width: 0.05,
-                                    ),),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  elevation: 3.0,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                        child: Row(
-                                          children: [
-                                            snapshot.data!.docs[index]
-                                                .data()['uId'] == uId ?
-                                            PopupMenuButton<MenuValuesMyPostsProfile>(
-                                              itemBuilder: (BuildContext context)=> [
-                                                const PopupMenuItem(
-                                                  value: MenuValuesMyPostsProfile.delete,
-                                                  child: Text('حذف البوست'),
-                                                ),
-                                              ],
-                                              onSelected: (value) async {
-                                                switch(value){
-                                                  case MenuValuesMyPostsProfile.delete:
-                                                    await FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
-                                                            (onvalue) async {
-                                                          showToast(text: 'تم الحذف', state: ToastState.SUCCESS);
-                                                        }
-                                                    );
-                                                    for(int i=0;i<snapshot.data!.docs[index]['postImages'].toString().length;i++) {
-                                                      await FirebaseStorage.instance
-                                                          .refFromURL(snapshot.data!
-                                                          .docs[index]['postImages']['$i'])
-                                                          .delete()
-                                                          .then((value) {
-                                                        print(snapshot.data!
-                                                            .docs[index]['postImages']['$i']);
-                                                      });
-                                                    }
-                                                }
+                                        const SizedBox(width: 5.0,),
+                                        if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              color: HexColor('#1d2021'),
+                                            ),
+                                            child: MaterialButton(
+                                              onPressed: () {
+                                                ///navigation here
+                                                navigateTo(context, SendRequestToTechScreen(
+                                                  id: id,
+                                                  name: snapshot.data!.data()!['name'],
+                                                  profession: snapshot.data!.data()!['profession'],
+                                                  token: snapshot.data!.data()!['token'],
+                                                  receivedRequests: snapshot.data!.data()!['receivedRequests'],
+                                                  userImage: snapshot.data!.data()!['userImage'],
+                                                  latitude: snapshot.data!.data()!['latitude'],
+                                                  longitude:  snapshot.data!.data()!['longitude'],
+                                                  location: snapshot.data!.data()!['location'],
+                                                ));
                                               },
-                                              icon: const Icon(
-                                                Icons.more_horiz,
-                                              ),
-                                              position: PopupMenuPosition.under,
-                                            )
-                                                :Row(
-                                              children: [
-                                                InkWell(
-                                                  child: PopupMenuButton<MenuValue>(itemBuilder: (BuildContext context)=>[
-                                                    const PopupMenuItem(value: MenuValue.report, child: Text("ابلاغ")),
-                                                  ],
-                                                    onSelected: (value){
-                                                      switch (value){
-                                                        case MenuValue.report:
-                                                          navigateTo(context, ReportScreen(
-                                                            reportUserId:snapshot.data!.docs[index].data()['uId'] ,
-                                                            reportUsername: snapshot.data!.docs[index].data()['name'],
-                                                          ));
-                                                          break;
-                                                      }
-                                                    },
-                                                    position: PopupMenuPosition.under,
-                                                    icon: const Icon(Icons.more_horiz,size: 25),
-                                                  ),
-
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    AppCubit.get(context)
-                                                        .goToChatDetails(
-                                                      snapshot.data!.docs[index].data()['uId'],
-                                                      context,
-                                                    );
-                                                  },
-                                                  child: Icon(
-                                                    Icons.whatsapp_rounded,
-                                                    color: HexColor('#7FB77E'),
-                                                    size: 27.0,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    AppCubit.get(context).getUser(snapshot
-                                                        .data!.docs[index]
-                                                        .data()['uId']).then((value){
-                                                      navigateTo(context, const GoogleMaps2());
-                                                    });
-                                                    CacheHelper.savaData(
-                                                        key: 'latitude1',
-                                                        value: AppCubit.get(context).model.latitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'longitude1',
-                                                        value: AppCubit.get(context).model.longitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'name1',
-                                                        value: AppCubit.get(context).model.name);
-                                                    CacheHelper.savaData(
-                                                        key: 'latitude2',
-                                                        value:
-                                                        AppCubit.get(context).user?.latitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'longitude2',
-                                                        value:
-                                                        AppCubit.get(context).user?.longitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'name2',
-                                                        value: AppCubit.get(context).user?.name);
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.location_on_outlined,
-                                                    color: Colors.black54,
-                                                    size: 27.0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                      snapshot.data!.docs[index].data()['name'].toString(),
-                                                      style: const TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 15,
-                                                      ),
-                                                      textDirection:
-                                                      TextDirection.rtl,
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                          snapshot.data!.docs[index].data()['location'].toString(),
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .caption!
-                                                              .copyWith(
-                                                            color: Colors.grey,
-                                                            height: 1.6,
-                                                          ),
-                                                          textDirection:
-                                                          TextDirection.rtl,
-                                                        ),
-                                                        const Icon(
-                                                          Icons.where_to_vote,
-                                                          color: Colors.grey,
-                                                          size: 17.0,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                          snapshot.data!.docs[index].data()['dateTime'].toString(),
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .caption!
-                                                              .copyWith(
-                                                            height: 1.6,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            CircleAvatar(
-                                              radius: 21.2,
-                                              backgroundColor: Colors.black,
-                                              child: CircleAvatar(
-                                                radius: 21.0,
-                                                backgroundImage: NetworkImage(
-                                                  snapshot.data!.docs[index].data()['userImage'].toString(),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 80.0, right: 5.0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 0.1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 10.0,
-                                          right: 10.0,
-                                          top: 5.0,
-                                          bottom: 20.0,
-                                        ),
-                                        child: Text(
-                                          snapshot.data!.docs[index].data()['postText'].toString(),
-                                          style:const TextStyle(
-                                            fontSize: 15,
-                                          ),
-                                          textDirection: TextDirection.rtl,
-                                          maxLines: 5,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      if (snapshot.data!.docs[index].data()['postImages']!.isNotEmpty)
-                                        CarouselSlider.builder(
-                                          itemCount: snapshot.data!.docs[index].data()['postImages'].length,
-                                          itemBuilder: (BuildContext context,
-                                              int itemIndex,
-                                              int pageViewIndex) =>
-                                              InkWell(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                        snapshot.data!.docs[index].data()['postImages']!['$itemIndex']
-                                                            .toString(),
-                                                      ),
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  ),
-                                                  width: double.infinity,
-                                                ),
-                                                onTap: () async {
-                                                  await showDialog(
-                                                    context: context,
-                                                    builder: (context) => Dialog(
-                                                        insetPadding:
-                                                        const EdgeInsets.symmetric(
-                                                            horizontal: 5.0),
-                                                        insetAnimationCurve:
-                                                        Curves.easeInOut,
-                                                        insetAnimationDuration:
-                                                        const Duration(
-                                                            milliseconds: 1500),
-                                                        child: Container(
-                                                          height: 400.0,
-                                                          decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                snapshot.data!.docs[index].data()['postImages']!['$itemIndex']
-                                                                    .toString(),
-                                                              ),
-                                                              fit: BoxFit.fill,
-                                                            ),
-                                                          ),
-                                                        )),
-                                                  );
-                                                },
-                                              ),
-                                          options: CarouselOptions(
-                                            enlargeCenterPage: true,
-                                            viewportFraction: 0.85,
-                                            autoPlay: false,
-                                            aspectRatio: 1.0,
-                                            height: 300,
-                                            enableInfiniteScroll: false,
-                                          ),
-                                        ),
-                                      const SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                vertical: 5.0,
-                                                horizontal: 10.0,
-                                              ),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    '${trueLikes} من الأشخاص أعجبهم هذا... ',
-                                                    textDirection: TextDirection.rtl,
-                                                    style:const TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 11.0,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 3,
-                                                  ),
+                                                children:const [
                                                   Icon(
-                                                    Icons.favorite,
-                                                    color: HexColor('#F48484'),
-                                                    size: 27.0,
+                                                    Icons.work_history,
+                                                    color: Colors.orange,
+                                                    size: 25.0,
+                                                  ),
+                                                  SizedBox(width: 8.0,),
+                                                  Text(
+                                                    'طلب للعمل',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w900,
+                                                      color: Colors.white,
+                                                      fontSize: 15.0,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
+
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                    ],
+                                        const SizedBox(width: 25.0,)
+                                      ],
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if(snapshot.data!.data()!['hasProfession'] == true)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 13.0, bottom: 13.0, right: 8.0),
+                              child: Card(
+                                color: header_color,
+                                margin:const EdgeInsets.all(0),
+                                elevation: 5.0,
+                                shape: OutlineInputBorder(
+                                  borderRadius:const BorderRadius.only(
+                                    topLeft: Radius.circular(80.0),
+                                    bottomLeft: Radius.circular(80.0),
+                                    topRight: Radius.circular(80.0),
+                                    bottomRight: Radius.circular(80.0),
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: HexColor('#1d2021'),
+                                    width: 0.05,
+                                  ),
+                                ),
+                                child:const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
+                                  child:  Text(
+                                      'أعمال سابقة',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                ),
+
+                              ),
+                            ),
+
+                          const SizedBox(height: 15.0,),
+                          StreamBuilder(
+                            stream:  FirebaseFirestore.instance
+                                .collection('posts')
+                                .where("uId", isEqualTo: id).snapshots(),
+                            builder: (context, snapshot) {
+
+                              if (snapshot.hasError) {
+                                return const Center(child: Text('error 404'));
+                              }
+                              if(snapshot.hasData){
+                                return ListView.separated(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    int trueLikes = 0;
+                                    snapshot.data!.docs[index].data()['likes'].forEach(
+                                          (key, value) =>
+                                      value == true ? trueLikes++ : trueLikes,
+                                    );
+                                    return Card(
+                                    shape: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.black,
+                                        width: 0.05,
+                                      ),),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    elevation: 3.0,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                          child: Row(
+                                            children: [
+                                              snapshot.data!.docs[index]
+                                                  .data()['uId'] == uId ?
+                                              PopupMenuButton<MenuValuesMyPostsProfile>(
+                                                itemBuilder: (BuildContext context)=> [
+                                                  const PopupMenuItem(
+                                                    value: MenuValuesMyPostsProfile.delete,
+                                                    child: Text('حذف البوست'),
+                                                  ),
+                                                ],
+                                                onSelected: (value) async {
+                                                  switch(value){
+                                                    case MenuValuesMyPostsProfile.delete:
+                                                      await FirebaseFirestore.instance.collection('posts').doc(snapshot.data!.docs[index].id).delete().then(
+                                                              (onvalue) async {
+                                                            showToast(text: 'تم الحذف', state: ToastState.SUCCESS);
+                                                          }
+                                                      );
+                                                      for(int i=0;i<snapshot.data!.docs[index]['postImages'].toString().length;i++) {
+                                                        await FirebaseStorage.instance
+                                                            .refFromURL(snapshot.data!
+                                                            .docs[index]['postImages']['$i'])
+                                                            .delete()
+                                                            .then((value) {
+                                                          print(snapshot.data!
+                                                              .docs[index]['postImages']['$i']);
+                                                        });
+                                                      }
+                                                  }
+                                                },
+                                                icon: const Icon(
+                                                  Icons.more_horiz,
+                                                ),
+                                                position: PopupMenuPosition.under,
+                                              )
+                                                  :Row(
+                                                children: [
+                                                  InkWell(
+                                                    child: PopupMenuButton<MenuValue>(itemBuilder: (BuildContext context)=>[
+                                                      const PopupMenuItem(value: MenuValue.report, child: Text("ابلاغ")),
+                                                    ],
+                                                      onSelected: (value){
+                                                        switch (value){
+                                                          case MenuValue.report:
+                                                            navigateTo(context, ReportScreen(
+                                                              reportUserId:snapshot.data!.docs[index].data()['uId'] ,
+                                                              reportUsername: snapshot.data!.docs[index].data()['name'],
+                                                            ));
+                                                            break;
+                                                        }
+                                                      },
+                                                      position: PopupMenuPosition.under,
+                                                      icon: const Icon(Icons.more_horiz,size: 25),
+                                                    ),
+
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      AppCubit.get(context)
+                                                          .goToChatDetails(
+                                                        snapshot.data!.docs[index].data()['uId'],
+                                                        context,
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      Icons.whatsapp_rounded,
+                                                      color: HexColor('#7FB77E'),
+                                                      size: 27.0,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      AppCubit.get(context).getUser(snapshot
+                                                          .data!.docs[index]
+                                                          .data()['uId']).then((value){
+                                                        navigateTo(context, const GoogleMaps2());
+                                                      });
+                                                      CacheHelper.savaData(
+                                                          key: 'latitude1',
+                                                          value: AppCubit.get(context).model.latitude);
+                                                      CacheHelper.savaData(
+                                                          key: 'longitude1',
+                                                          value: AppCubit.get(context).model.longitude);
+                                                      CacheHelper.savaData(
+                                                          key: 'name1',
+                                                          value: AppCubit.get(context).model.name);
+                                                      CacheHelper.savaData(
+                                                          key: 'latitude2',
+                                                          value:
+                                                          AppCubit.get(context).user?.latitude);
+                                                      CacheHelper.savaData(
+                                                          key: 'longitude2',
+                                                          value:
+                                                          AppCubit.get(context).user?.longitude);
+                                                      CacheHelper.savaData(
+                                                          key: 'name2',
+                                                          value: AppCubit.get(context).user?.name);
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.location_on_outlined,
+                                                      color: Colors.black54,
+                                                      size: 27.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        snapshot.data!.docs[index].data()['name'].toString(),
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 15,
+                                                        ),
+                                                        textDirection:
+                                                        TextDirection.rtl,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                        children: [
+                                                          Text(
+                                                            snapshot.data!.docs[index].data()['location'].toString(),
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .caption!
+                                                                .copyWith(
+                                                              color: Colors.grey,
+                                                              height: 1.6,
+                                                            ),
+                                                            textDirection:
+                                                            TextDirection.rtl,
+                                                          ),
+                                                          const Icon(
+                                                            Icons.where_to_vote,
+                                                            color: Colors.grey,
+                                                            size: 17.0,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                        children: [
+                                                          Text(
+                                                            snapshot.data!.docs[index].data()['dateTime'].toString(),
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .caption!
+                                                                .copyWith(
+                                                              height: 1.6,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              CircleAvatar(
+                                                radius: 21.2,
+                                                backgroundColor: Colors.black,
+                                                child: CircleAvatar(
+                                                  radius: 21.0,
+                                                  backgroundImage: NetworkImage(
+                                                    snapshot.data!.docs[index].data()['userImage'].toString(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 80.0, right: 5.0),
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: 0.1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10.0,
+                                            right: 10.0,
+                                            top: 5.0,
+                                            bottom: 20.0,
+                                          ),
+                                          child: Text(
+                                            snapshot.data!.docs[index].data()['postText'].toString(),
+                                            style:const TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                            textDirection: TextDirection.rtl,
+                                            maxLines: 5,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        if (snapshot.data!.docs[index].data()['postImages']!.isNotEmpty)
+                                          CarouselSlider.builder(
+                                            itemCount: snapshot.data!.docs[index].data()['postImages'].length,
+                                            itemBuilder: (BuildContext context,
+                                                int itemIndex,
+                                                int pageViewIndex) =>
+                                                InkWell(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          snapshot.data!.docs[index].data()['postImages']!['$itemIndex']
+                                                              .toString(),
+                                                        ),
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                    width: double.infinity,
+                                                  ),
+                                                  onTap: () async {
+                                                    await showDialog(
+                                                      context: context,
+                                                      builder: (context) => Dialog(
+                                                          insetPadding:
+                                                          const EdgeInsets.symmetric(
+                                                              horizontal: 5.0),
+                                                          insetAnimationCurve:
+                                                          Curves.easeInOut,
+                                                          insetAnimationDuration:
+                                                          const Duration(
+                                                              milliseconds: 1500),
+                                                          child: Container(
+                                                            height: 400.0,
+                                                            decoration: BoxDecoration(
+                                                              image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                  snapshot.data!.docs[index].data()['postImages']!['$itemIndex']
+                                                                      .toString(),
+                                                                ),
+                                                                fit: BoxFit.fill,
+                                                              ),
+                                                            ),
+                                                          )),
+                                                    );
+                                                  },
+                                                ),
+                                            options: CarouselOptions(
+                                              enlargeCenterPage: true,
+                                              viewportFraction: 0.85,
+                                              autoPlay: false,
+                                              aspectRatio: 1.0,
+                                              height: 300,
+                                              enableInfiniteScroll: false,
+                                            ),
+                                          ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                  vertical: 5.0,
+                                                  horizontal: 10.0,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      '${trueLikes} من الأشخاص أعجبهم هذا... ',
+                                                      textDirection: TextDirection.rtl,
+                                                      style:const TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 11.0,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 3,
+                                                    ),
+                                                    Icon(
+                                                      Icons.favorite,
+                                                      color: HexColor('#F48484'),
+                                                      size: 27.0,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                    },
+                                  separatorBuilder: (context, index) => const SizedBox(height: 3.0,),
+                                  itemCount: snapshot.data!.docs.length,
                                 );
-                                  },
-                                separatorBuilder: (context, index) => const SizedBox(height: 3.0,),
-                                itemCount: snapshot.data!.docs.length,
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
                               );
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20.0,),
-                      ],
+                            },
+                          ),
+                          const SizedBox(height: 20.0,),
+                        ],
+                      );
+                    }
+                    return const Center(
+                      child: LinearProgressIndicator(
+                        color: Colors.grey,
+                        backgroundColor: Colors.grey,
+                      ),
                     );
-                  }
-                  return const Center(
-                    child: LinearProgressIndicator(
-                      color: Colors.grey,
-                      backgroundColor: Colors.grey,
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
             ),
         );
