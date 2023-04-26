@@ -282,7 +282,7 @@ class AppLayout extends StatelessWidget {
                       onPressed: () {
                         navigateTo(context, NewPostScreen());
                       },
-                      backgroundColor: HexColor('#78b7b7').withOpacity(0.60),
+                      backgroundColor: header_color.withOpacity(0.60),
                       child: const Icon(
                           Icons.add_rounded,
                           size: 30.0,
