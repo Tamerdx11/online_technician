@@ -275,6 +275,83 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                  if(snapshot.data!.data()!['positive']!=""&&snapshot.data!.data()!['neutral']!=""&&snapshot.data!.data()!['negative']!="")
+                                    Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
+                                    child: Column(
+                                      children:  [
+                                        const Center(
+                                          child: Text(
+                                            'التقييم',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.black,
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children:  [
+                                            Text(
+                                              ' ممتاز: ${snapshot.data!
+                                                  .data()!['positive']
+                                                  .toString()} تقييم',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.black,
+                                                fontSize: 18.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children:  [
+                                            Text(
+                                              ' عادي: ${snapshot.data!
+                                                  .data()!['neutral']
+                                                  .toString()} تقييم',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.black,
+                                                fontSize: 18.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children:  [
+                                            Text(
+                                              ' سيئ: ${snapshot.data!
+                                                  .data()!['negative']
+                                                  .toString()} تقييم',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.black,
+                                                fontSize: 18.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+                                  )
+                                  else
+                                    Column(
+                                      children:  const [
+                                                  Center(
+                                                    child: Text(
+                                                      'لم يتلقي طلبات عمل لا يوجد تقييم',
+                                                      style: TextStyle(
+                                                      fontWeight: FontWeight.w900,
+                                                      color: Colors.black,
+                                                      fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
                                     child: Row(

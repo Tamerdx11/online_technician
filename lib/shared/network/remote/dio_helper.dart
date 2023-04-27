@@ -7,10 +7,11 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: 'https://fcm.googleapis.com/fcm/send',
+          baseUrl: 'https://api-inference.huggingface.co',
           receiveDataWhenStatusError: true,
           headers: {
-            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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',
+            "Content-Type": "application/json",
           }),
     );
   }
@@ -29,14 +30,13 @@ class DioHelper {
   }
 
   static Future<Response> postData(
-      {required String url,
+      {
+      required String url,
       Map<String, dynamic>? query,
-      String lang = 'ar',
-      String? token,
-      required Map<String, dynamic> data}) async {
+      required Map<String, dynamic> data
+      }) async {
     dio.options.headers = {
-      'lang': lang,
-      'authorization': token,
+      'Authorization': 'Bearer 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',
     };
     return await dio.post(
       url,

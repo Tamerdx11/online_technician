@@ -144,6 +144,8 @@ class FeedsScreen extends StatelessWidget {
                                                             snapshot.data!.docs[index].data()['uId'],
                                                             context,
                                                     );
+                                                    ///***********************************************
+                                                    //AppCubit.get(context).testapi();
                                                   },
                                                   child: Icon(
                                                     Icons.whatsapp_rounded,

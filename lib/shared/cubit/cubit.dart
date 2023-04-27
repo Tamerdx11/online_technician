@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,6 +28,7 @@ import '../../models/report.dart';
 import '../../modules/login/login_screen.dart';
 import '../../modules/report/report.dart';
 import '../components/components.dart';
+import 'package:http/http.dart' as http;
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -67,6 +69,91 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
+  ///***** API ****
+  var result;
+  double max=0;
+  int indicator=0;
+  int total=0;
+  void testapi(
+  {
+    required String userid,
+    required String text,
+}
+      ){
+    String? positive=tech!.positive;
+    String? neutral=tech!.neutral;
+    String? negative=tech!.negative;
+    emit(apiloading());
+    DioHelper.postData(url: '/models/Ammar-alhaj-ali/arabic-MARBERT-sentiment', data:{'inputs':text},
+    ).then((value) {
+      result=value.data;
+      print(result);
+      for(int i=0;i<3;i++){
+        if(i==0){
+          max=result[0][0]["score"];
+        }
+        else{
+          if(max<result[0][i]["score"]){
+            max=result[0][i]["score"];
+            indicator=i;
+          }
+        }
+      }
+      if(positive==""){
+        positive="0";
+      }
+      if(neutral==""){
+        neutral="0";
+      }
+      if(negative==""){
+        negative="0";
+      }
+      if(result[0][indicator]["label"]=="positive"){
+        print(positive);
+        total=int.parse(positive!)+1;
+      }
+      if(result[0][indicator]["label"]=="neutral"){
+        total=int.parse(neutral!)+1;
+      }
+      if(result[0][indicator]["label"]=="negative"){
+        total=int.parse(negative!)+1;
+      }
+      sendrate(userid: userid, rate: result[0][indicator]["label"], total: total.toString());
+      print(result);
+      print(result[0][indicator]["label"]);
+      print(max);
+      print(total);
+      print(result[0][indicator]["label"]);
+      print(userid);
+      emit(apisuccesstate());
+    }
+    ).catchError((error){
+      print(error.toString());
+    emit(apierrrorstate((error).toString()));
+    });
+  }
+
+  void sendrate
+  (
+  {
+    required String userid,
+    required String rate,
+    required String total,
+  })
+  {
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(userid)
+        .update({rate: total})
+        .then((value) {
+          print('11111111111111111111111111111111111111111111111111111');
+          print(total);
+          print(userid);
+    })
+        .catchError((error) {
+          print('99999999999999999999999999999999999999999999999');
+    });
+  }
   ///-----------get data for chat person----------
 
   void goToChatDetails(String id, BuildContext context) {
@@ -310,6 +397,18 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
+  TechnicianModel? tech;
+  Future<void> getTech(String id) async {
+    await FirebaseFirestore.instance
+        .collection('person')
+        .doc(id)
+        .get()
+        .then((value) {
+      tech = TechnicianModel.fromJson(value.data());
+      emit(AppGetAllUsersSuccessState());
+    }).catchError((error) {});
+  }
+
   ///---------- send message ----------
 
   List<MessageModel> messages = [];
@@ -473,7 +572,7 @@ class AppCubit extends Cubit<AppState> {
         'isRejected': false,
         'isDeadline': false,
         'isRated': false,
-        'isDone': false
+        'isDone': false,
       }
     });
 

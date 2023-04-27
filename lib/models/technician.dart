@@ -5,6 +5,9 @@ class TechnicianModel extends UserModel {
   String? nationalId;
   String? idCardPhoto;
   String? profession;
+  String? positive;
+  String? neutral;
+  String? negative;
 
   TechnicianModel({
     String? name,
@@ -24,6 +27,9 @@ class TechnicianModel extends UserModel {
     this.profession,
     this.nationalId,
     this.idCardPhoto,
+    this.positive,
+    this.neutral,
+    this.negative,
   }) : super(
             name: name,
             uId: uId,
@@ -60,6 +66,9 @@ class TechnicianModel extends UserModel {
     profession = json['profession'];
     nationalId = json['nationalId'];
     idCardPhoto = json['idCardPhoto'];
+    positive = json['positive'];
+    neutral = json['neutral'];
+    negative = json['negative'];
   }
 
   @override

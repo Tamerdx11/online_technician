@@ -136,3 +136,13 @@ class AppChangeStatusState extends AppState{}
 
 class change extends AppState{}
 
+class apisuccesstate extends AppState{}
+
+class apierrrorstate extends AppState{
+  final String error;
+  apierrrorstate(this.error);
+}
+
+class apiloading extends AppState{}
+
+
