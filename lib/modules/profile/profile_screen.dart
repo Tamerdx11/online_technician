@@ -48,38 +48,25 @@ class ProfileScreen extends StatelessWidget {
               textColor: Colors.white,
               elevation: 2.0,
               arrowColor: Colors.white,
-              title: 'صفحة شخصية',
+              title: 'الصفحة شخصية',
               actions: [
-                id == CacheHelper.getData(key: 'uId')?
+                if(id == CacheHelper.getData(key: 'uId'))
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: OutlinedButton(
+                    child: TextButton(
                       onPressed: () {
                         navigateTo(context, EditProfileScreen());
                         },
-                      child: Text(
+                      child:const Text(
                         'تعديل',
                         style: TextStyle(
-                            color: HexColor('#A5E1AD'),
+                            color: Colors.blueAccent,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
+                            fontSize: 19.0,
                         ),
                       ),
                     ),
-                  )
-                    :IconButton(
-                    onPressed: (){
-                  AppCubit.get(context).goToChatDetails(
-                    id.toString(),
-                    context,
-                  );
-                },
-                    icon:const Icon(
-                      Icons.whatsapp_outlined,
-                      color: Colors.white,
-                      size: 35.0,
-                    ),
-                )
+                  ),
               ],
             ),
             body: Container(
@@ -101,11 +88,11 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(right: 0.0, left: 0.0, top: 16.0),
+                            padding: const EdgeInsets.only(right: 20.0, left: 20.0, top: 20.0),
                             child: Card(
                               color: Colors.white,
                               margin:const EdgeInsets.all(0),
-                              elevation: 10.0,
+                              elevation: 8.0,
                               shape:const OutlineInputBorder(
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(20.0),
@@ -114,21 +101,21 @@ class ProfileScreen extends StatelessWidget {
                                   topRight: Radius.circular(20.0),
                                 ),
                                 borderSide: BorderSide(
-                                  color: Colors.black54,
-                                  width: 0.2,
+                                  color: Colors.white,
+                                  width: 0.6,
                                 ),
                               ),
                               child: Column(
                                 children: [
                                   const SizedBox(height:25.0),
-                                  Row(
+                                  Column(
                                     children: [
                                       const SizedBox(
                                         width: 35.0,
                                       ),
                                       Container(
-                                        width: 110.0,
-                                        height: 110.0,
+                                        width: 100.0,
+                                        height: 100.0,
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                             image: NetworkImage(snapshot
@@ -138,15 +125,15 @@ class ProfileScreen extends StatelessWidget {
                                             fit: BoxFit.fill,
                                           ),
                                           border: Border.all(
-                                            color: Colors.black,
-                                            width: 1.0,
+                                            color: Colors.black87,
+                                            width: 0.5,
                                           ),
                                           borderRadius: const BorderRadius.all(
-                                            Radius.circular(12.0)
+                                            Radius.circular(100.0)
                                           )
                                         ),
                                       ),
-                                      const SizedBox(width: 60.0,),
+                                      const SizedBox(height: 4.0,),
                                       Column(
                                         children: [
                                           Text(
@@ -154,10 +141,10 @@ class ProfileScreen extends StatelessWidget {
                                                 .data()!['name']
                                                 .toString(),
                                             maxLines: 1,
-                                            style: TextStyle(
+                                            style:const TextStyle(
                                               fontWeight: FontWeight.w900,
-                                              fontSize: 20.0,
-                                              color: HexColor('#864879'),
+                                              fontSize: 23.0,
+                                              color: Colors.black87,
                                               overflow: TextOverflow.clip,
                                             ),
                                           ),
@@ -175,11 +162,11 @@ class ProfileScreen extends StatelessWidget {
                                                         color: Colors.black54,
                                                         fontStyle: FontStyle.italic
                                                     )),
-                                                const SizedBox(width: 3.0,),
-                                                const Icon(
+                                                const SizedBox(width: 5.0,),
+                                                Icon(
                                                   Icons.handyman_sharp,
                                                   size: 18.0,
-                                                  color: Colors.black87,
+                                                  color: header_color,
                                                 ),
                                               ],
                                             ),
@@ -246,13 +233,292 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(height: 15.0,),
+                                  if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
+                                    Center(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              AppCubit.get(context).goToChatDetails(
+                                                id.toString(),
+                                                context,
+                                              );
+                                            },
+                                            child: Container(
+                                              width: 50,
+                                              height: 47.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(20),
+                                                color: header_color,
+                                              ),
+                                              child:const Icon(
+                                                Icons.whatsapp_sharp,
+                                                color: Colors.white,
+                                                size: 25.0,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8.0,),
+                                          InkWell(
+                                            onTap: () async {
+                                              await AppCubit.get(context).getUser(
+                                                  snapshot.data!.data()!['uId'].toString());
+                                              CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
+                                              CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
+                                              CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
+                                              CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
+                                              CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
+                                              CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
+                                              navigateTo(context, GoogleMaps2());
+                                            },
+                                            child: Container(
+                                              width: 50,
+                                              height: 47.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(20),
+                                                color: header_color,
+                                              ),
+                                              child:const Icon(
+                                                Icons.location_on,
+                                                color: Colors.white,
+                                                size: 25.0,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8.0,),
+                                          Container(
+                                            width: 180.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              color: header_color,
+                                            ),
+                                            child: MaterialButton(
+                                              onPressed: () {
+                                                ///navigation here
+                                                navigateTo(context, SendRequestToTechScreen(
+                                                  id: id,
+                                                  name: snapshot.data!.data()!['name'],
+                                                  profession: snapshot.data!.data()!['profession'],
+                                                  token: snapshot.data!.data()!['token'],
+                                                  receivedRequests: snapshot.data!.data()!['receivedRequests'],
+                                                  userImage: snapshot.data!.data()!['userImage'],
+                                                  latitude: snapshot.data!.data()!['latitude'],
+                                                  longitude:  snapshot.data!.data()!['longitude'],
+                                                  location: snapshot.data!.data()!['location'],
+                                                ));
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children:const [
+                                                  Icon(
+                                                    Icons.work_history,
+                                                    color: Colors.white,
+                                                    size: 25.0,
+                                                  ),
+                                                  SizedBox(width: 18.0,),
+                                                  Text(
+                                                    'طلب للعمل',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w900,
+                                                      color: Colors.white,
+                                                      fontSize: 15.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if(snapshot.data!.data()!['positive'].toString().isNotEmpty || snapshot.data!.data()!['neutral'].toString().isNotEmpty || snapshot.data!.data()!['negative'].toString().isEmpty)
+                                    Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children:  [
+                                        const SizedBox(height: 12.0,),
+                                        const Text(
+                                          'تقييمات الأعمال السابقة',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.black87,
+                                            fontSize: 14.0,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5.0,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const Spacer(),
+                                            Card(
+                                              color: HexColor('#A4D0A4'),
+                                              shape:const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(20.0),
+                                                  topLeft: Radius.circular(20.0),
+                                                  bottomLeft: Radius.circular(20.0),
+                                                  topRight: Radius.circular(20.0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  color: Colors.lightGreen,
+                                                  width: 0.2,
+                                                ),
+                                              ),
+                                              elevation: 8.0,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children:  [
+                                                    const Text(
+                                                      ' ممتاز ',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 10.0,),
+                                                    Text(
+                                                      ' ${snapshot.data!
+                                                          .data()!['positive']
+                                                          .toString().isNotEmpty?snapshot.data!
+                                                          .data()!['positive']
+                                                          .toString():"0"} ',
+                                                      style:const TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Card(
+                                              color: HexColor('#F3E99F'),
+                                              shape:const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(20.0),
+                                                  topLeft: Radius.circular(20.0),
+                                                  bottomLeft: Radius.circular(20.0),
+                                                  topRight: Radius.circular(20.0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  color: Colors.yellowAccent,
+                                                  width: 0.2,
+                                                ),
+                                              ),
+                                              elevation: 8.0,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children:  [
+                                                    const Text(
+                                                      ' جيد ',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 10.0,),
+                                                    Text(
+                                                      ' ${snapshot.data!
+                                                          .data()!['neutral']
+                                                          .toString().isNotEmpty?snapshot.data!
+                                                          .data()!['neutral']
+                                                          .toString():"0"}',
+                                                      style:const TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Card(
+                                              color: HexColor('#FF6D60'),
+                                              shape:const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.circular(20.0),
+                                                  topLeft: Radius.circular(20.0),
+                                                  bottomLeft: Radius.circular(20.0),
+                                                  topRight: Radius.circular(20.0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  color: Colors.redAccent,
+                                                  width: 0.2,
+                                                ),
+                                              ),
+                                              elevation: 8.0,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children:  [
+                                                    const Text(
+                                                      ' سيئ',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 10.0,),
+                                                    Text(
+                                                      '${snapshot.data!
+                                                          .data()!['negative']
+                                                          .toString().isNotEmpty?snapshot.data!
+                                                          .data()!['negative']
+                                                          .toString():"0"} ',
+                                                      style:const TextStyle(
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                          ],
+                                        )
+
+                                      ],
+                                    ),
+                                  )
+                                  else
+                                    const Padding(
+                                      padding:  EdgeInsets.only( top: 12.0),
+                                      child:  Center(
+                                        child: Text(
+                                          'لم يتم تقييمه بعد',
+                                          style: TextStyle(
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.black87,
+                                          fontSize: 15.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   if(snapshot.data!.data()!['hasProfession'] == true)
                                     Center(
                                       child: Padding(
                                         padding:
-                                        const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 25.0, right: 25.0),
+                                        const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               overflow: TextOverflow.clip,
@@ -275,184 +541,6 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  if(snapshot.data!.data()!['positive']!=""&&snapshot.data!.data()!['neutral']!=""&&snapshot.data!.data()!['negative']!="")
-                                    Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-                                    child: Column(
-                                      children:  [
-                                        const Center(
-                                          child: Text(
-                                            'التقييم',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w900,
-                                              color: Colors.black,
-                                              fontSize: 18.0,
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children:  [
-                                            Text(
-                                              ' ممتاز: ${snapshot.data!
-                                                  .data()!['positive']
-                                                  .toString()} تقييم',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children:  [
-                                            Text(
-                                              ' عادي: ${snapshot.data!
-                                                  .data()!['neutral']
-                                                  .toString()} تقييم',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children:  [
-                                            Text(
-                                              ' سيئ: ${snapshot.data!
-                                                  .data()!['negative']
-                                                  .toString()} تقييم',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                      ],
-                                    ),
-                                  )
-                                  else
-                                    Column(
-                                      children:  const [
-                                                  Center(
-                                                    child: Text(
-                                                      'لم يتلقي طلبات عمل لا يوجد تقييم',
-                                                      style: TextStyle(
-                                                      fontWeight: FontWeight.w900,
-                                                      color: Colors.black,
-                                                      fontSize: 15.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        if(snapshot.data!.data()!['hasProfession'] == true)
-                                          Column(
-                                            children:  [
-                                              Text(
-                                                'تقييم المهارة',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: HexColor('#864879'),
-                                                  fontSize: 18.0,
-                                                ),
-                                              ),
-                                              const Text(
-                                                '7.9',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.orange,
-                                                  fontSize: 20.0,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        if(snapshot.data!.data()!['hasProfession'] == true)
-                                          const SizedBox(width: 30.0,),
-                                        InkWell(
-                                          onTap: () async {
-                                        await AppCubit.get(context).getUser(
-                                        snapshot.data!.data()!['uId'].toString());
-                                        CacheHelper.savaData(key: 'latitude1', value: AppCubit.get(context).model.latitude);
-                                        CacheHelper.savaData(key: 'longitude1', value: AppCubit.get(context).model.longitude);
-                                        CacheHelper.savaData(key: 'name1', value: AppCubit.get(context).model.name);
-                                        CacheHelper.savaData(key: 'latitude2', value: AppCubit.get(context).user?.latitude);
-                                        CacheHelper.savaData(key: 'longitude2', value: AppCubit.get(context).user?.longitude);
-                                        CacheHelper.savaData(key: 'name2', value: AppCubit.get(context).user?.name);
-                                        navigateTo(context, GoogleMaps2());
-                                        },
-                                          child: Container(
-                                            width: 40,
-                                            height: 47.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
-                                              color: HexColor('#1d2021'),
-                                            ),
-                                            child: Icon(
-                                              Icons.location_on,
-                                              color: Colors.redAccent.withOpacity(0.8),
-                                              size: 25.0,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 5.0,),
-                                        if(snapshot.data!.data()!['hasProfession'] == true && snapshot.data!.data()!['uId'] != AppCubit.get(context).model.uId)
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              color: HexColor('#1d2021'),
-                                            ),
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                                ///navigation here
-                                                navigateTo(context, SendRequestToTechScreen(
-                                                  id: id,
-                                                  name: snapshot.data!.data()!['name'],
-                                                  profession: snapshot.data!.data()!['profession'],
-                                                  token: snapshot.data!.data()!['token'],
-                                                  receivedRequests: snapshot.data!.data()!['receivedRequests'],
-                                                  userImage: snapshot.data!.data()!['userImage'],
-                                                  latitude: snapshot.data!.data()!['latitude'],
-                                                  longitude:  snapshot.data!.data()!['longitude'],
-                                                  location: snapshot.data!.data()!['location'],
-                                                ));
-                                              },
-                                              child: Row(
-                                                children:const [
-                                                  Icon(
-                                                    Icons.work_history,
-                                                    color: Colors.orange,
-                                                    size: 25.0,
-                                                  ),
-                                                  SizedBox(width: 8.0,),
-                                                  Text(
-                                                    'طلب للعمل',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w900,
-                                                      color: Colors.white,
-                                                      fontSize: 15.0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-
-                                            ),
-                                          ),
-                                        const SizedBox(width: 25.0,)
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -490,7 +578,6 @@ class ProfileScreen extends StatelessWidget {
 
                               ),
                             ),
-
                           const SizedBox(height: 15.0,),
                           StreamBuilder(
                             stream:  FirebaseFirestore.instance

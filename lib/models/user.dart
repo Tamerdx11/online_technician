@@ -12,6 +12,9 @@ class UserModel extends PersonModel {
     String? uId,
     String? userImage,
     String? location,
+    String? positive,
+    String? neutral,
+    String? negative,
     Map<String, dynamic>? chatList,
     Map<String, dynamic>? sentRequests,
     Map<String, dynamic>? receivedRequests,
@@ -29,8 +32,10 @@ class UserModel extends PersonModel {
             location: location,
             receivedRequests: receivedRequests,
             sentRequests: sentRequests,
-            notificationList: notificationList
-  );
+            notificationList: notificationList,
+            positive: positive,
+            negative: negative,
+            neutral: neutral);
 
   UserModel.fromJson(Map<String, dynamic>? json)
       : super(
@@ -42,6 +47,9 @@ class UserModel extends PersonModel {
           sentRequests: json['sentRequests'],
           receivedRequests: json['receivedRequests'],
           notificationList: json['notificationList'],
+          positive: json['positive'],
+          negative: json['negative'],
+          neutral: json['neutral'],
         ) {
     phone = json['phone'];
     latitude = json['latitude'];
@@ -65,6 +73,9 @@ class UserModel extends PersonModel {
       'sentRequests': sentRequests,
       'receivedRequests': receivedRequests,
       'notificationList': notificationList,
+      'positive': positive,
+      'negative': negative,
+      'neutral': neutral
     };
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:online_technician/models/technician.dart';
 import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
@@ -312,9 +313,12 @@ class SentRequestsScreen extends StatelessWidget {
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.green,),
                                         child: MaterialButton(
                                           onPressed: () {
-                                            /// *** *** ss تقييم
+                                            AppCubit.get(context).getTech(map.keys.toList()[index].toString());
+                                            TechnicianModel? model = AppCubit.get(context).tech;
                                             navigateTo(context, feddbackscreen(
                                               id: map.keys.toList()[index].toString(),
+                                              Tech:model,
+                                                deadline: map[map.keys.toList()[index]]['deadline']
                                             ));
                                           },
                                           child:const Text(

@@ -6,6 +6,7 @@ import 'package:online_technician/modules/login/cubit/states.dart';
 import 'package:online_technician/modules/login/verify_code.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class LoginScreen extends StatelessWidget {
           var cubit = AppLoginCubit.get(context);
 
           return Scaffold(
-            backgroundColor: HexColor('#ebebeb'),
+            backgroundColor: background_color,
             body: Center(
               child: SingleChildScrollView(
                 child: Padding(
@@ -85,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                             height: 30.0,
                           ),
                            defaultButton(
-                             color: HexColor('#78b7b7'),
+                             color: header_color,
                               function: () {
                                 if (formKey.currentState!.validate()){
                                 cubit.userLogin(phone: phoneController.text);

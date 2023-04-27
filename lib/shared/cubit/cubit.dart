@@ -51,9 +51,9 @@ class AppCubit extends Cubit<AppState> {
       } else {
         CacheHelper.savaData(key: 'hasProfession', value: false);
         model = UserModel.fromJson(value.data());
+
         emit(AppGetUserSuccessState());
       }
-      requestsChecker();
       FirebaseMessaging.instance.getToken().then((token) {
         if (model.token.toString() != token.toString()) {
           FirebaseFirestore.instance
@@ -71,54 +71,57 @@ class AppCubit extends Cubit<AppState> {
 
   ///***** API ****
   var result;
-  double max=0;
-  int indicator=0;
-  int total=0;
-  void testapi(
-  {
+  double max = 0;
+  int indicator = 0;
+  int total = 0;
+
+  void testApi({
     required String userid,
     required String text,
-}
-      ){
-    String? positive=tech!.positive;
-    String? neutral=tech!.neutral;
-    String? negative=tech!.negative;
+  }) {
+    String? positive = tech!.positive;
+    String? neutral = tech!.neutral;
+    String? negative = tech!.negative;
     emit(apiloading());
-    DioHelper.postData(url: '/models/Ammar-alhaj-ali/arabic-MARBERT-sentiment', data:{'inputs':text},
+    DioHelper.postData(
+      url: '/models/Ammar-alhaj-ali/arabic-MARBERT-sentiment',
+      data: {'inputs': text},
     ).then((value) {
-      result=value.data;
+      result = value.data;
       print(result);
-      for(int i=0;i<3;i++){
-        if(i==0){
-          max=result[0][0]["score"];
-        }
-        else{
-          if(max<result[0][i]["score"]){
-            max=result[0][i]["score"];
-            indicator=i;
+      for (int i = 0; i < 3; i++) {
+        if (i == 0) {
+          max = result[0][0]["score"];
+        } else {
+          if (max < result[0][i]["score"]) {
+            max = result[0][i]["score"];
+            indicator = i;
           }
         }
       }
-      if(positive==""){
-        positive="0";
+      if (positive == "") {
+        positive = "0";
       }
-      if(neutral==""){
-        neutral="0";
+      if (neutral == "") {
+        neutral = "0";
       }
-      if(negative==""){
-        negative="0";
+      if (negative == "") {
+        negative = "0";
       }
-      if(result[0][indicator]["label"]=="positive"){
+      if (result[0][indicator]["label"] == "positive") {
         print(positive);
-        total=int.parse(positive!)+1;
+        total = int.parse(positive!) + 1;
       }
-      if(result[0][indicator]["label"]=="neutral"){
-        total=int.parse(neutral!)+1;
+      if (result[0][indicator]["label"] == "neutral") {
+        total = int.parse(neutral!) + 1;
       }
-      if(result[0][indicator]["label"]=="negative"){
-        total=int.parse(negative!)+1;
+      if (result[0][indicator]["label"] == "negative") {
+        total = int.parse(negative!) + 1;
       }
-      sendrate(userid: userid, rate: result[0][indicator]["label"], total: total.toString());
+      sendRate(
+          userid: userid,
+          rate: result[0][indicator]["label"],
+          total: total.toString());
       print(result);
       print(result[0][indicator]["label"]);
       print(max);
@@ -126,34 +129,29 @@ class AppCubit extends Cubit<AppState> {
       print(result[0][indicator]["label"]);
       print(userid);
       emit(apisuccesstate());
-    }
-    ).catchError((error){
+    }).catchError((error) {
       print(error.toString());
-    emit(apierrrorstate((error).toString()));
+      emit(apierrrorstate((error).toString()));
     });
   }
 
-  void sendrate
-  (
-  {
+  void sendRate({
     required String userid,
     required String rate,
     required String total,
-  })
-  {
+  }) {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userid)
-        .update({rate: total})
-        .then((value) {
-          print('11111111111111111111111111111111111111111111111111111');
-          print(total);
-          print(userid);
-    })
-        .catchError((error) {
-          print('99999999999999999999999999999999999999999999999');
+        .update({rate: total}).then((value) {
+      print('11111111111111111111111111111111111111111111111111111');
+      print(total);
+      print(userid);
+    }).catchError((error) {
+      print('99999999999999999999999999999999999999999999999');
     });
   }
+
   ///-----------get data for chat person----------
 
   void goToChatDetails(String id, BuildContext context) {
@@ -173,15 +171,14 @@ class AppCubit extends Cubit<AppState> {
 
   ///---------- get data for report person ----------
 
-  void createReprotedUser({
-    required String notes,
+  void createReportedUser(
+      {required String notes,
       required String reportedUId,
       required String senderUId,
       required String dateReport,
       required String reportedUsername,
       required String senderUsername,
-      required BuildContext context
-      }) {
+      required BuildContext context}) {
     ReportModel newReport = ReportModel(
       notes: notes,
       reportedUId: reportedUId,
@@ -619,7 +616,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///-------------------------------------- Received requests checker ---------------------------------
+  ///------------- Received requests checker -------------------
 
   void receivedRequestsChecker({
     required bool isAccepted,
@@ -674,20 +671,20 @@ class AppCubit extends Cubit<AppState> {
               rejected: isRejected);
         } else if (isAccepted == false && isRejected == false) {
           changeReceivedRequestStates(
-              senderRequests: user2.sentRequests,
-              userId: userId,
-              deadline: true,
-              accepted: isAccepted,
-              done: true,
-              rated: isRated,
-              rejected: isRejected,
+            senderRequests: user2.sentRequests,
+            userId: userId,
+            deadline: true,
+            accepted: isAccepted,
+            done: true,
+            rated: isRated,
+            rejected: isRejected,
           );
         }
       }
     }).catchError((error) {});
   }
 
-  /// -------------------- request deadline check --------------------
+  /// ----------------- request deadline check -----------------
 
   bool checkRequestDeadline({
     required int day,
@@ -717,7 +714,7 @@ class AppCubit extends Cubit<AppState> {
     return false;
   }
 
-  /// -------------------- change my received requests to deadlined --------------------
+  /// ------------ change my received requests to deadlined --------------
 
   void changeReceivedRequestStates({
     required String? userId,
@@ -765,7 +762,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///-------------------------------------- Send requests checker ---------------------------------
+  ///--------------- Send requests checker ------------------
 
   void sendRequestsChecker({
     required bool isAccepted,
@@ -786,13 +783,13 @@ class AppCubit extends Cubit<AppState> {
       if (checkRequestDeadline(day: day, month: month, year: year)) {
         if (isDeadline == false) {
           changeSendRequestStates(
-              techReceivedRequests: tech.receivedRequests,
-              userId: userId,
-              deadline: true,
-              accepted: isAccepted,
-              done: false,
-              rated: isRated,
-              rejected: isRejected,
+            techReceivedRequests: tech.receivedRequests,
+            userId: userId,
+            deadline: true,
+            accepted: isAccepted,
+            done: false,
+            rated: isRated,
+            rejected: isRejected,
           );
         }
         if (isAccepted == true && isRejected == false && isRated == false) {
@@ -827,7 +824,7 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
-  ///***** change my send requests to deadlined *****
+  /// ------------- change my send requests to deadlined ----------
 
   void changeSendRequestStates({
     required String? userId,
@@ -840,7 +837,7 @@ class AppCubit extends Cubit<AppState> {
   }) {
     emit(AppSendingRequestState());
 
-    ///------fix send my requests-------
+    /// ------------- fix send my requests -------------
     Map<String, dynamic>? sentRequests = model.sentRequests;
     sentRequests![userId]['isDeadline'] = deadline;
     sentRequests[userId]['isAccepted'] = accepted;
@@ -857,9 +854,9 @@ class AppCubit extends Cubit<AppState> {
           emit(AppErrorSendingState());
         });
 
-    ///------fix tech requests------
-    Map<String, dynamic>? techReceivedRequests2 = techReceivedRequests;
-    techReceivedRequests2![uId.toString()]['isDeadline'] = deadline;
+    /// ------------- fix tech requests ---------------
+    Map<String, dynamic> techReceivedRequests2 = techReceivedRequests!;
+    techReceivedRequests2[uId.toString()]['isDeadline'] = deadline;
     techReceivedRequests2[uId.toString()]['isAccepted'] = accepted;
     techReceivedRequests2[uId.toString()]['isRejected'] = rejected;
     techReceivedRequests2[uId.toString()]['isRated'] = rated;
@@ -937,7 +934,7 @@ class AppCubit extends Cubit<AppState> {
     }).catchError((error) {});
   }
 
-  ///---------- change search item ---------
+  /// -------------------- change search item -----------------
 
   List values = ['name', 'profession'];
   String searchItem = 'profession';
@@ -946,7 +943,7 @@ class AppCubit extends Cubit<AppState> {
     emit(AppChangeSearchItemState());
   }
 
-  ///------------ has profession change ---------------
+  /// ------------------ has profession change ---------------
 
   late bool hasProfession = model.hasProfession;
   void checkboxChange(value) {
@@ -967,7 +964,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  /// ------------pick imageProfile-------------
+  /// --------------- pick imageProfile ---------------
 
   File? profileImage = null;
 
@@ -981,7 +978,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  /// ---------- upload id card image ----------/// upload images /////////////////
+  /// ---------- upload id card image ----------
 
   String? uploadedIdCardImage;
   void uploadIdCardImage() {
@@ -1021,7 +1018,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///----------  update profile data ----------//
+  ///----------  update profile data ----------
 
   String? profession = 'نقاش';
   void changeValue(String? value) {
@@ -1066,6 +1063,9 @@ class AppCubit extends Cubit<AppState> {
           sentRequests: model.sentRequests ?? {},
           receivedRequests: model.receivedRequests ?? {},
           notificationList: model.notificationList ?? {},
+          positive: model.positive??"",
+          neutral: model.neutral??"",
+          negative: model.negative??"",
         );
         if (idCardImage == null && model?.idCardPhoto == null) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
@@ -1101,6 +1101,9 @@ class AppCubit extends Cubit<AppState> {
           sentRequests: model.sentRequests ?? {},
           receivedRequests: model.receivedRequests ?? {},
           notificationList: model.notificationList ?? {},
+          positive: model.positive??"",
+          neutral: model.neutral??"",
+          negative: model.negative??"",
         );
         FirebaseFirestore.instance
             .collection('person')
@@ -1117,7 +1120,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  ///---------------------get distance ----------------------
+  /// ------------------ get distance -------------------
 
   double getDistance({
     required String lat1,
@@ -1133,7 +1136,7 @@ class AppCubit extends Cubit<AppState> {
     return distance;
   }
 
-  ///---------- push notification ----------
+  /// --------------- push notification -------------
 
   void pushNotification({
     required String? id,
@@ -1160,40 +1163,56 @@ class AppCubit extends Cubit<AppState> {
         .catchError((e) {});
   }
 
-  ///---------------------requests checker---------------------
+  ///------------------requests checker------------------
 
-  void requestsChecker()
-  {
-    for(int i=0 ; i<model.sentRequests.length;i++)
-    {
-      if(model.sentRequests[model.sentRequests.keys.toList()[i]]['isDone'] == false)
-      {
+  void requestsChecker() {
+    for (int i = 0; i < model.sentRequests.length; i++) {
+      if (model.sentRequests[model.sentRequests.keys.toList()[i]]['isDone'] ==
+          false) {
         sendRequestsChecker(
-          isAccepted: model.sentRequests[model.sentRequests.keys.toList()[i]]['isAccepted'],
-          isRejected: model.sentRequests[model.sentRequests.keys.toList()[i]]['isRejected'],
-          isRated: model.sentRequests[model.sentRequests.keys.toList()[i]]['isRated'],
-          isDeadline: model.sentRequests[model.sentRequests.keys.toList()[i]]['isDeadline'],
+          isAccepted: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['isAccepted'],
+          isRejected: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['isRejected'],
+          isRated: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['isRated'],
+          isDeadline: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['isDeadline'],
           userId: model.sentRequests.keys.toList()[i].toString(),
-          day: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][2],
-          month: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][1],
-          year: model.sentRequests[model.sentRequests.keys.toList()[i]]['deadline'][0],
+          day: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['deadline'][2],
+          month: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['deadline'][1],
+          year: model.sentRequests[model.sentRequests.keys.toList()[i]]
+              ['deadline'][0],
         );
       }
     }
 
-    for(int j = 0 ; j<model.receivedRequests.length ; j++)
-    {
-      if(model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isDone'] == false)
-      {
+    for (int j = 0; j < model.receivedRequests.length; j++) {
+      if (model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+              ['isDone'] ==
+          false) {
         receivedRequestsChecker(
-          isAccepted: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isAccepted'],
-          isRejected: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isRejected'],
-          isRated: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isRated'],
-          isDeadline: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['isDeadline'],
+          isAccepted:
+              model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+                  ['isAccepted'],
+          isRejected:
+              model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+                  ['isRejected'],
+          isRated:
+              model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+                  ['isRated'],
+          isDeadline:
+              model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+                  ['isDeadline'],
           userId: model.receivedRequests.keys.toList()[j].toString(),
-          day: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][2],
-          month: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][1],
-          year: model.receivedRequests[model.receivedRequests.keys.toList()[j]]['deadline'][0],
+          day: model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+              ['deadline'][2],
+          month: model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+              ['deadline'][1],
+          year: model.receivedRequests[model.receivedRequests.keys.toList()[j]]
+              ['deadline'][0],
         );
       }
     }

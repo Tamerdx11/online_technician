@@ -180,6 +180,10 @@ class ChatDetailsScreen extends StatelessWidget {
                                   text: messageController.text,
                                   token: userModel.token.toString(),
                                 );
+                                listViewScrollController.animateTo(
+                                    listViewScrollController.position.maxScrollExtent,
+                                    curve: Curves.easeInOut,
+                                    duration: const Duration(milliseconds: 500));
                                 messageController.clear();
                               },
                               icon:const Icon(

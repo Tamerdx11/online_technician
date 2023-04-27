@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +33,11 @@ class AppLayout extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = AppCubit.get(context);
+        Timer(const Duration(seconds: 10), () {
+          AppCubit.get(context).requestsChecker();
+        });
+
+
         return Scaffold(
           backgroundColor: background_color,
           drawer: cubit.currentIndex == 0
@@ -275,7 +282,7 @@ class AppLayout extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                      left: 25,
+                      left: 30,
                     ),
                     child: FloatingActionButton(
                       elevation: 10.0,

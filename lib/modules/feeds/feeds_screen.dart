@@ -46,7 +46,7 @@ class FeedsScreen extends StatelessWidget {
                   return const Center(child: Text('error 404'));
                 }
                 if (snapshot.hasData) {
-                  AppCubit.get(context).requestsChecker();
+                  //AppCubit.get(context).requestsChecker();
 
                   return Column(
                     children: [
@@ -513,7 +513,7 @@ class FeedsScreen extends StatelessWidget {
                 return const Center(
                     child: LinearProgressIndicator(
                   color: Colors.teal,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.lightGreenAccent,
                 ),
                 );
               },

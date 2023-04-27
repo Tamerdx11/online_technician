@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 import '../../models/user.dart';
 import '../../shared/components/components.dart';
@@ -31,13 +32,13 @@ class ReportScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: HexColor('#ebebeb'),
-            elevation: 0,
+            backgroundColor: header_color,
+            elevation: 8.0,
             centerTitle: true,
             title: const Text("إبلاغ", style: TextStyle(color: Colors.black)),
             foregroundColor: Colors.black,
           ),
-          backgroundColor: HexColor('#ebebeb'),
+          backgroundColor: background_color,
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -83,7 +84,7 @@ class ReportScreen extends StatelessWidget {
                         text: "ابلاغ",
                         function: () {
                           if (formKey.currentState!.validate()) {
-                            AppCubit.get(context).createReprotedUser(
+                            AppCubit.get(context).createReportedUser(
                               dateReport:'${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
                               reportedUId: reportUserId,
                               reportedUsername: reportUsername,
@@ -96,7 +97,7 @@ class ReportScreen extends StatelessWidget {
                         },
                         size: 17.0,
                         isUpperCase: true,
-                        color: Colors.black,
+                        color: header_color,
                         width: 100,
                       ),
                     ],

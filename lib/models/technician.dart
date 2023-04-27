@@ -5,9 +5,6 @@ class TechnicianModel extends UserModel {
   String? nationalId;
   String? idCardPhoto;
   String? profession;
-  String? positive;
-  String? neutral;
-  String? negative;
 
   TechnicianModel({
     String? name,
@@ -20,6 +17,9 @@ class TechnicianModel extends UserModel {
     String? latitude,
     String? longitude,
     String? token,
+    String? positive,
+    String? neutral,
+    String? negative,
     Map<String, dynamic>? sentRequests,
     Map<String, dynamic>? receivedRequests,
     Map<String, dynamic>? notificationList,
@@ -27,9 +27,6 @@ class TechnicianModel extends UserModel {
     this.profession,
     this.nationalId,
     this.idCardPhoto,
-    this.positive,
-    this.neutral,
-    this.negative,
   }) : super(
             name: name,
             uId: uId,
@@ -43,8 +40,10 @@ class TechnicianModel extends UserModel {
             token: token,
             receivedRequests: receivedRequests,
             sentRequests: sentRequests,
-            notificationList: notificationList
-  );
+            notificationList: notificationList,
+            positive: positive,
+            negative: negative,
+            neutral: neutral);
 
   TechnicianModel.fromJson(Map<String, dynamic>? json)
       : super(
@@ -61,6 +60,9 @@ class TechnicianModel extends UserModel {
           sentRequests: json['sentRequests'],
           receivedRequests: json['receivedRequests'],
           notificationList: json['notificationList'],
+          positive: json['positive'],
+          negative: json['negative'],
+          neutral: json['neutral'],
         ) {
     bio = json['bio'];
     profession = json['profession'];
@@ -91,6 +93,9 @@ class TechnicianModel extends UserModel {
       'sentRequests': sentRequests,
       'receivedRequests': receivedRequests,
       'notificationList': notificationList,
+      'positive': positive,
+      'negative': negative,
+      'neutral': neutral
     };
   }
 }

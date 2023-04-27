@@ -7,6 +7,9 @@ class PersonModel{
   Map<String, dynamic>? notificationList;
   Map<String, dynamic>? sentRequests;
   Map<String, dynamic>? receivedRequests;
+  String? positive;
+  String? neutral;
+  String? negative;
 
   PersonModel({
     this.name,
@@ -16,7 +19,10 @@ class PersonModel{
     this.chatList,
     this.sentRequests,
     this.receivedRequests,
-    this.notificationList
+    this.notificationList,
+    this.positive,
+    this.neutral,
+    this.negative
   });
 
 }

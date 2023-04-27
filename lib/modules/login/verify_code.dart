@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:online_technician/modules/login/cubit/cubit.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import 'package:pinput/pinput.dart';
 import '../../layout/home_layout.dart';
 import '../../shared/components/components.dart';
@@ -50,7 +51,7 @@ class verifyCodeScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: HexColor('#ebebeb'),
+            backgroundColor: background_color,
               body: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
@@ -96,7 +97,7 @@ class verifyCodeScreen extends StatelessWidget {
                               focusedPinTheme: defaultPinTheme,
                               submittedPinTheme: defaultPinTheme.copyWith(
                                 decoration: defaultPinTheme.decoration!.copyWith(
-                                  color: Colors.redAccent,
+                                  color: header_color,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
@@ -130,7 +131,7 @@ class verifyCodeScreen extends StatelessWidget {
                                 const Text(' في حالة عدم استلام رمز التحقيق '),
                               ],
                             ),
-                            const Text('يرجي الأنتظار 5 ثوان علي الأقل قبل اعادة الأرسال ', style: TextStyle(fontSize: 12.0),),
+                            const Text('يرجي الأنتظار 15 ثانية علي الأقل قبل إعادة الأرسال ', style: TextStyle(fontSize: 12.0),),
                           ],
                         ),
                       ],
