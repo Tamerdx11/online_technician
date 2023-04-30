@@ -25,11 +25,11 @@ class feddbackscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-        if (state is apierrrorstate || state is apiloading) {
+        if (state is apierrrorstate) {
           showToast(text: "خطأ في الاتصال حاول مرة اخري", state: ToastState.ERROR);
         }
         if (state is apisuccesstate) {
-          showToast(text: "تم التقييم بنجاح", state: ToastState.SUCCESS);
+          showToast(text: "تم ارسال تقييمك بنجاح", state: ToastState.SUCCESS);
           AppCubit.get(context).changeSendRequestStates(
             userId: id,
             techReceivedRequests: Tech?.receivedRequests,

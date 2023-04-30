@@ -41,7 +41,7 @@ class DioHelper {
     return await dio.post(
       url,
       queryParameters: query,
-      data: data,
+      data: data['inputs'],
     );
   }
 

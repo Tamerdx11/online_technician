@@ -85,10 +85,16 @@ class AppCubit extends Cubit<AppState> {
     emit(apiloading());
     DioHelper.postData(
       url: '/models/Ammar-alhaj-ali/arabic-MARBERT-sentiment',
-      data: {'inputs': text},
+      data: {"inputs": text},
     ).then((value) {
       result = value.data;
+      print("========================text====================");
+      print(text);
+      print("=====================================================test API====================");
       print(result);
+      print("-------------------------------------------best result-------------------------");
+      print(result[0][indicator]["label"]);
+      print(result[0][0]["score"]);
       for (int i = 0; i < 3; i++) {
         if (i == 0) {
           max = result[0][0]["score"];
@@ -122,6 +128,7 @@ class AppCubit extends Cubit<AppState> {
           userid: userid,
           rate: result[0][indicator]["label"],
           total: total.toString());
+      print("=====================================================test API 2====================");
       print(result);
       print(result[0][indicator]["label"]);
       print(max);
@@ -855,12 +862,12 @@ class AppCubit extends Cubit<AppState> {
         });
 
     /// ------------- fix tech requests ---------------
-    Map<String, dynamic> techReceivedRequests2 = techReceivedRequests!;
-    techReceivedRequests2[uId.toString()]['isDeadline'] = deadline;
-    techReceivedRequests2[uId.toString()]['isAccepted'] = accepted;
-    techReceivedRequests2[uId.toString()]['isRejected'] = rejected;
-    techReceivedRequests2[uId.toString()]['isRated'] = rated;
-    techReceivedRequests2[uId.toString()]['isDone'] = done;
+    Map<String, dynamic>? techReceivedRequests2 = techReceivedRequests;
+    techReceivedRequests2?[uId.toString()]['isDeadline'] = deadline;
+    techReceivedRequests2?[uId.toString()]['isAccepted'] = accepted;
+    techReceivedRequests2?[uId.toString()]['isRejected'] = rejected;
+    techReceivedRequests2?[uId.toString()]['isRated'] = rated;
+    techReceivedRequests2?[uId.toString()]['isDone'] = done;
 
     FirebaseFirestore.instance
         .collection('person')
