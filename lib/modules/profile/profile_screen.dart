@@ -52,17 +52,22 @@ class ProfileScreen extends StatelessWidget {
               actions: [
                 if(id == CacheHelper.getData(key: 'uId'))
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: TextButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
+                    child: MaterialButton(
+                      elevation: 4.0,
+                      color: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                      ),
                       onPressed: () {
                         navigateTo(context, EditProfileScreen());
                         },
                       child:const Text(
                         'تعديل',
                         style: TextStyle(
-                            color: Colors.blueAccent,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 19.0,
+                            fontSize: 17.0,
                         ),
                       ),
                     ),
@@ -523,8 +528,8 @@ class ProfileScreen extends StatelessWidget {
                                             Text(
                                               overflow: TextOverflow.clip,
                                               snapshot.data!.data()!['bio'].toString(),
-                                              style: TextStyle(
-                                                color: HexColor('#864879'),
+                                              style: const TextStyle(
+                                                color: Colors.blueGrey,
                                                 fontSize: 15.0,
                                                 fontWeight: FontWeight.bold,
                                                 overflow: TextOverflow.ellipsis,
@@ -670,57 +675,6 @@ class ProfileScreen extends StatelessWidget {
                                                       icon: const Icon(Icons.more_horiz,size: 25),
                                                     ),
 
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      AppCubit.get(context)
-                                                          .goToChatDetails(
-                                                        snapshot.data!.docs[index].data()['uId'],
-                                                        context,
-                                                      );
-                                                    },
-                                                    child: Icon(
-                                                      Icons.whatsapp_rounded,
-                                                      color: HexColor('#7FB77E'),
-                                                      size: 27.0,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      AppCubit.get(context).getUser(snapshot
-                                                          .data!.docs[index]
-                                                          .data()['uId']).then((value){
-                                                        navigateTo(context, const GoogleMaps2());
-                                                      });
-                                                      CacheHelper.savaData(
-                                                          key: 'latitude1',
-                                                          value: AppCubit.get(context).model.latitude);
-                                                      CacheHelper.savaData(
-                                                          key: 'longitude1',
-                                                          value: AppCubit.get(context).model.longitude);
-                                                      CacheHelper.savaData(
-                                                          key: 'name1',
-                                                          value: AppCubit.get(context).model.name);
-                                                      CacheHelper.savaData(
-                                                          key: 'latitude2',
-                                                          value:
-                                                          AppCubit.get(context).user?.latitude);
-                                                      CacheHelper.savaData(
-                                                          key: 'longitude2',
-                                                          value:
-                                                          AppCubit.get(context).user?.longitude);
-                                                      CacheHelper.savaData(
-                                                          key: 'name2',
-                                                          value: AppCubit.get(context).user?.name);
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.location_on_outlined,
-                                                      color: Colors.black54,
-                                                      size: 27.0,
-                                                    ),
                                                   ),
                                                 ],
                                               ),

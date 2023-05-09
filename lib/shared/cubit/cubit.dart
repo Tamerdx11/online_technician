@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_technician/models/message.dart';
@@ -16,7 +14,6 @@ import 'package:online_technician/models/user.dart';
 import 'package:online_technician/modules/chat_details/chat_details_screen.dart';
 import 'package:online_technician/modules/feeds/feeds_screen.dart';
 import 'package:online_technician/modules/google_map2/GoogleMaps2.dart';
-import 'package:online_technician/modules/search/search_screen.dart';
 import 'package:online_technician/modules/sent_requests/sent_requests_screen.dart';
 import 'package:online_technician/modules/received_requests/received_requests_screen.dart';
 import 'package:online_technician/modules/notification/notification_screen.dart';
@@ -25,10 +22,7 @@ import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
 import 'package:online_technician/shared/network/remote/dio_helper.dart';
 import '../../models/report.dart';
-import '../../modules/login/login_screen.dart';
-import '../../modules/report/report.dart';
 import '../components/components.dart';
-import 'package:http/http.dart' as http;
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
@@ -88,13 +82,6 @@ class AppCubit extends Cubit<AppState> {
       data: {"inputs": text},
     ).then((value) {
       result = value.data;
-      print("========================text====================");
-      print(text);
-      print("=====================================================test API====================");
-      print(result);
-      print("-------------------------------------------best result-------------------------");
-      print(result[0][indicator]["label"]);
-      print(result[0][0]["score"]);
       for (int i = 0; i < 3; i++) {
         if (i == 0) {
           max = result[0][0]["score"];
@@ -128,13 +115,6 @@ class AppCubit extends Cubit<AppState> {
           userid: userid,
           rate: result[0][indicator]["label"],
           total: total.toString());
-      print("=====================================================test API 2====================");
-      print(result);
-      print(result[0][indicator]["label"]);
-      print(max);
-      print(total);
-      print(result[0][indicator]["label"]);
-      print(userid);
       emit(apisuccesstate());
     }).catchError((error) {
       print(error.toString());
@@ -150,15 +130,20 @@ class AppCubit extends Cubit<AppState> {
     FirebaseFirestore.instance
         .collection('person')
         .doc(userid)
-        .update({rate: total}).then((value) {
-      print('11111111111111111111111111111111111111111111111111111');
-      print(total);
-      print(userid);
-    }).catchError((error) {
+        .update({rate: total}).then((value) {})
+        .catchError((error) {
       print('99999999999999999999999999999999999999999999999');
     });
   }
 
+  /// ------------------ contactus -----------------------
+
+  void ContatcUs(){
+    emit(SendingFeedbackState());
+    Timer(const Duration(seconds: 2), () {
+      emit(FeedbackSentSuccessState());
+    });
+  }
   ///-----------get data for chat person----------
 
   void goToChatDetails(String id, BuildContext context) {

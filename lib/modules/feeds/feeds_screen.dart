@@ -144,8 +144,6 @@ class FeedsScreen extends StatelessWidget {
                                                             snapshot.data!.docs[index].data()['uId'],
                                                             context,
                                                     );
-                                                    ///***********************************************
-                                                    //AppCubit.get(context).testapi();
                                                   },
                                                   child: Icon(
                                                     Icons.whatsapp_rounded,
@@ -155,40 +153,6 @@ class FeedsScreen extends StatelessWidget {
                                                 ),
                                                 const SizedBox(
                                                   width: 5,
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    AppCubit.get(context).getUser(snapshot
-                                                            .data!.docs[index]
-                                                            .data()['uId']).then((value){
-                                                      navigateTo(context, const GoogleMaps2());
-                                                    });
-                                                    CacheHelper.savaData(
-                                                        key: 'latitude1',
-                                                        value: AppCubit.get(context).model.latitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'longitude1',
-                                                        value: AppCubit.get(context).model.longitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'name1',
-                                                        value: AppCubit.get(context).model.name);
-                                                    CacheHelper.savaData(
-                                                        key: 'latitude2',
-                                                        value:
-                                                        AppCubit.get(context).user?.latitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'longitude2',
-                                                        value:
-                                                        AppCubit.get(context).user?.longitude);
-                                                    CacheHelper.savaData(
-                                                        key: 'name2',
-                                                        value: AppCubit.get(context).user?.name);
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.location_on_outlined,
-                                                    color: Colors.black54,
-                                                    size: 27.0,
-                                                  ),
                                                 ),
                                               ],
                                             ),

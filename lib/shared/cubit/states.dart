@@ -145,4 +145,8 @@ class apierrrorstate extends AppState{
 
 class apiloading extends AppState{}
 
+class SendingFeedbackState extends AppState{}
+
+class FeedbackSentSuccessState extends AppState{}
+
 

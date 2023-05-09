@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:online_technician/modules/ContactUs/ContactUsScreen.dart';
 import 'package:online_technician/modules/chats/chats_screen.dart';
 import 'package:online_technician/modules/new-post/new_post_screen.dart';
 import 'package:online_technician/modules/profile/profile_screen.dart';
@@ -109,33 +108,6 @@ class AppLayout extends StatelessWidget {
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.star_outlined,color: Colors.amber,),
-                            SizedBox(width: 3.0,),
-                            Text(
-                              'قيم البرنامج ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: Container(
-                          height: .5,
-                          width: double.infinity,
-                          color: header_color,
-                        ),
-                      ),
-                      ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
                             Icon(Icons.headset_mic_outlined,color: Colors.black54,),
                             SizedBox(width: 3.0,),
                             Text(
@@ -149,6 +121,7 @@ class AppLayout extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
+                          navigateTo(context, ContactUsScreen());
                         },
                       ),
                       Padding(
