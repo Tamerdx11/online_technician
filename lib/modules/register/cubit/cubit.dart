@@ -72,18 +72,19 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
     }
 
     emit(AppRegisterLoadingState());
+    Timer(const Duration(seconds: 3), () {
       FirebaseMessaging.instance.getToken().then((token) {
-        print("===============================token=================");
-        print(token.toString());
-          createUser(
-            name: name,
-            userImage: imageUrl,
-            token: token.toString(),
-            phone: phone,
-            uId: uId,);
+        createUser(
+          name: name,
+          userImage: imageUrl,
+          token: token.toString(),
+          phone: phone,
+          uId: uId,);
         CacheHelper.savaData(key: 'uId', value: uId.toString());
         CacheHelper.savaData(key: 'token', value: token.toString());
       }).catchError((error) {});
+    });
+
 
   }
 
@@ -110,9 +111,12 @@ class AppRegisterCubit extends Cubit<AppRegisterState> {
       notificationList: {},
       latitude: latitude.toString(),
       longitude: longitude.toString(),
+      negative: "",
+      neutral: "",
+      positive: "",
     );
 
-    Timer(const Duration(seconds: 5),() {
+    Timer(const Duration(seconds: 3),() {
       FirebaseFirestore.instance
           .collection("person")
           .doc(uId)

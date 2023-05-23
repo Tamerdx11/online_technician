@@ -339,7 +339,7 @@ class ProfileScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                  if(snapshot.data!.data()!['positive'].toString().isNotEmpty || snapshot.data!.data()!['neutral'].toString().isNotEmpty || snapshot.data!.data()!['negative'].toString().isEmpty)
+                                  if((snapshot.data!.data()!['positive'].toString().isNotEmpty || snapshot.data!.data()!['neutral'].toString().isNotEmpty || snapshot.data!.data()!['negative'].toString().isEmpty) && snapshot.data!.data()!['hasProfession'] == true)
                                     Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 15.0),
                                     child: Column(
@@ -503,7 +503,7 @@ class ProfileScreen extends StatelessWidget {
                                       ],
                                     ),
                                   )
-                                  else
+                                  else if(snapshot.data!.data()!['hasProfession'] == true)
                                     const Padding(
                                       padding:  EdgeInsets.only( top: 12.0),
                                       child:  Center(
@@ -517,6 +517,7 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                  const SizedBox(height: 15.0,),
                                   if(snapshot.data!.data()!['hasProfession'] == true)
                                     Center(
                                       child: Padding(

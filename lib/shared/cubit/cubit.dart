@@ -1081,7 +1081,7 @@ class AppCubit extends Cubit<AppState> {
           bio: bio,
           chatList: model.chatList,
           nationalId: nationalId,
-          idCardPhoto: uploadedIdCardImage ?? model?.idCardPhoto,
+          idCardPhoto: uploadedIdCardImage ?? model?.userImage,
           location: location,
           token: model.token,
           profession: profession,
