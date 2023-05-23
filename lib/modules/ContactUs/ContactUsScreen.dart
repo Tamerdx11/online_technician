@@ -30,8 +30,8 @@ class ContactUsScreen extends StatelessWidget {
             backgroundColor: header_color,
             elevation: 8.0,
             centerTitle: true,
-            title: const Text("تواصل معنا ", style: TextStyle(color: Colors.black,fontSize: 18.0 ),),
-            foregroundColor: Colors.black,
+            title: const Text("تواصل معنا ", style: TextStyle(color: Colors.white,fontSize: 18.0 ),),
+            foregroundColor: Colors.white,
           ),
           backgroundColor:background_color,
           body: SingleChildScrollView(

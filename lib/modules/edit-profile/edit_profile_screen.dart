@@ -108,8 +108,13 @@ class EditProfileScreen extends StatelessWidget {
             ),
             actions: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8.0),
-                child: OutlinedButton(
+                padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+                child: MaterialButton(
+                  elevation: 4.0,
+                  color: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   onPressed: () {
                     AppCubit.get(context).updateProfileData(
                       context: context,
@@ -120,10 +125,10 @@ class EditProfileScreen extends StatelessWidget {
                       profession: dropdownValue,
                     );
                   },
-                  child: Text(
-                    "حفظ التعديلات",
+                  child:const Text(
+                    "حفظ",
                     style: TextStyle(
-                      color: HexColor('#A5E1AD'),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -194,7 +199,7 @@ class EditProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 10.0,
+                    height: 20.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -245,11 +250,8 @@ class EditProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                     child: CheckboxListTile(
                       activeColor: HexColor('#0A81AB'),
                       controlAffinity: ListTileControlAffinity.leading,
@@ -393,7 +395,7 @@ class EditProfileScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            width: 3.0,
+                            width: 5.0,
                           ),
                           const Icon(
                             Icons.info_outline,

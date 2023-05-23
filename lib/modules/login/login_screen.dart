@@ -73,6 +73,9 @@ class LoginScreen extends StatelessWidget {
                               if (value.toString().isEmpty) {
                                 return 'يرجي ادخال رقم الهاتف';
                               }
+                              else if(value.toString().length != 11 || double.tryParse(value) == null) {
+                                return 'يرجي ادخال رقم هاتف صحيح';
+                              }
                               else{
                                 return null;
                               }

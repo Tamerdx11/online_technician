@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 
 class GoogleMaps2 extends StatefulWidget {
  const GoogleMaps2({Key? key}) : super(key: key);
@@ -31,12 +32,12 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.white,
+          backgroundColor: header_color,
           elevation: 3.0,
           title:const Text(
               "المواقع علي الخريطة",
               style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontFamily: 'NotoNaskhArabic',
                   fontWeight: FontWeight.bold,
               ),
@@ -45,7 +46,7 @@ class _GoogleMaps2State extends State<GoogleMaps2> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon:const Icon(Icons.arrow_back_sharp,color: Colors.black,),
+            icon:const Icon(Icons.arrow_back_sharp,color: Colors.white,),
           ),
       ),
       body:  Stack(

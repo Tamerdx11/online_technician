@@ -608,6 +608,43 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
+  ///---------- cancel request to tech ----------
+
+  void cancelRequestToTech({
+    required String? techId,
+    required Map<String, dynamic>? techReceivedRequests,
+  }) {
+    emit(AppCancelingRequestState());
+    getTech(techId.toString());
+    ///------fix my requests-------
+    Map<String, dynamic>? mySendRequests = model.sentRequests;
+    mySendRequests?.remove(techId.toString());
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(uId)
+        .update({'sentRequests': mySendRequests})
+        .then((value) {
+    })
+        .catchError((e) {
+      emit(AppErrorSendingState());
+    });
+
+    ///------fix tech requests------
+    Map<String, dynamic>? receivedRequests = tech?.receivedRequests;
+    receivedRequests?.remove(uId.toString());
+
+    FirebaseFirestore.instance
+        .collection('person')
+        .doc(techId.toString())
+        .update({'receivedRequests': receivedRequests}).then((value) {
+      emit(AppSuccessCancelingState());
+      showToast(text: 'تم الالغاء', state: ToastState.SUCCESS);
+    }).catchError((e) {
+      emit(AppErrorSendingState());
+    });
+  }
+
   ///------------- Received requests checker -------------------
 
   void receivedRequestsChecker({
@@ -1059,7 +1096,7 @@ class AppCubit extends Cubit<AppState> {
           neutral: model.neutral??"",
           negative: model.negative??"",
         );
-        if (idCardImage == null && model?.idCardPhoto == null) {
+        if (idCardImage == null ) {
           showToast(text: 'صورة البطاقة غير موجودة', state: ToastState.ERROR);
           emit(
             AppUserUpdateErrorState(),

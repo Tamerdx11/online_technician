@@ -1,13 +1,10 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:online_technician/shared/components/constants.dart';
-
-import '../../models/user.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../LocationService/LocationService.dart';
 
@@ -34,7 +31,9 @@ class _GoogleMapsState extends State<GoogleMaps> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Goole maps'),
+        title:const Text(' الموقع علي الخريطة', style: TextStyle(color: Colors.white),),
+        backgroundColor: header_color,
+        centerTitle: true,
       ),
       body:  GoogleMap(
         markers: _markers,
@@ -49,13 +48,23 @@ class _GoogleMapsState extends State<GoogleMaps> {
             });
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          _getMyLocation();
-          },
-        child: const Icon(Icons.gps_fixed),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10.0),
+        child: SizedBox(
+          width: 130.0,
+          height: 40.0,
+          child: FloatingActionButton(
+            onPressed: (){
+              _getMyLocation();
+              },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 3.0,
+            child:const Text('تحديد موقعي'),
+          ),
+        ),
       ),
-
     );
   }
 

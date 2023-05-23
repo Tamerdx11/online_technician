@@ -35,23 +35,33 @@ class ReportScreen extends StatelessWidget {
             backgroundColor: header_color,
             elevation: 8.0,
             centerTitle: true,
-            title: const Text("إبلاغ", style: TextStyle(color: Colors.black)),
-            foregroundColor: Colors.black,
+            title: const Text("إبلاغ", style: TextStyle(color: Colors.white)),
+            foregroundColor: Colors.white,
           ),
           backgroundColor: background_color,
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: SingleChildScrollView(
                 child: Form(
                   key: formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      const Text(
+                        'يرجي كتابة سبب الإبلاغ حتي نتمكن من التحقق من الأمر * ',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 30.0,),
                       TextFormField(
                         controller: reportController,
                         textDirection: TextDirection.rtl,
                         decoration: InputDecoration(
-                          hintText: "اكتب ملاحظاتك..",
+                          hintText: "ما الذي تراه غير مقبول؟..",
                           hintTextDirection: TextDirection.rtl,
                           focusColor: Colors.grey,
                           focusedBorder: OutlineInputBorder(
@@ -71,7 +81,7 @@ class ReportScreen extends StatelessWidget {
                         maxLines: 10,
                         validator: (value) {
                           if (value.toString().isEmpty) {
-                            return 'يرجي ادخال ملاحظاتك';
+                            return 'يرجي إدخال إبلاغك';
                           } else {
                             return null;
                           }
@@ -80,25 +90,27 @@ class ReportScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      defaultButton(
-                        text: "ابلاغ",
-                        function: () {
-                          if (formKey.currentState!.validate()) {
-                            AppCubit.get(context).createReportedUser(
-                              dateReport:'${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
-                              reportedUId: reportUserId,
-                              reportedUsername: reportUsername,
-                              senderUId: uId,
-                              senderUsername: AppCubit.get(context).model.name,
-                              notes: reportController.text,
-                              context: context,
-                            );
-                          }
-                        },
-                        size: 17.0,
-                        isUpperCase: true,
-                        color: header_color,
-                        width: 100,
+                      Center(
+                        child: defaultButton(
+                          text: "إرسال الإبلاغ",
+                          function: () {
+                            if (formKey.currentState!.validate()) {
+                              AppCubit.get(context).createReportedUser(
+                                dateReport:'${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} ${DateTime.now().hour}:${DateTime.now().minute}',
+                                reportedUId: reportUserId,
+                                reportedUsername: reportUsername,
+                                senderUId: uId,
+                                senderUsername: AppCubit.get(context).model.name,
+                                notes: reportController.text,
+                                context: context,
+                              );
+                            }
+                          },
+                          size: 17.0,
+                          isUpperCase: true,
+                          color: header_color,
+                          width: 140,
+                        ),
                       ),
                     ],
                   ),

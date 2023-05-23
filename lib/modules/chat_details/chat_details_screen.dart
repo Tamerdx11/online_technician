@@ -104,23 +104,26 @@ class ChatDetailsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          controller: listViewScrollController,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            var message = AppCubit.get(context).messages[index];
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            controller: listViewScrollController,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              var message = AppCubit.get(context).messages[index];
 
-                            if (AppCubit.get(context).model!.uId ==
-                                message.senderId) {
-                              return buildMyMessage(message);
-                            }
-                            return buildMessage(message);
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 15.0,
+                              if (AppCubit.get(context).model!.uId ==
+                                  message.senderId) {
+                                return buildMyMessage(message);
+                              }
+                              return buildMessage(message);
+                            },
+                            separatorBuilder: (context, index) => const SizedBox(
+                              height: 15.0,
+                            ),
+                            itemCount: AppCubit.get(context).messages.length,
                           ),
-                          itemCount: AppCubit.get(context).messages.length,
                         ),
                       ),
                       const SizedBox(height: 20.0,),
@@ -157,7 +160,6 @@ class ChatDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 15.0,),
                           Container(
                             decoration: BoxDecoration(
                               color: HexColor('#78b7b7'),
@@ -181,10 +183,15 @@ class ChatDetailsScreen extends StatelessWidget {
                                   token: userModel.token.toString(),
                                 );
                                 listViewScrollController.animateTo(
-                                    listViewScrollController.position.maxScrollExtent,
+                                    listViewScrollController.position.minScrollExtent,
                                     curve: Curves.easeInOut,
                                     duration: const Duration(milliseconds: 500));
                                 messageController.clear();
+                                listViewScrollController.animateTo(
+                                    listViewScrollController.position.maxScrollExtent,
+                                    curve: Curves.easeInOut,
+                                    duration: const Duration(milliseconds: 500),
+                                );
                               },
                               icon:const Icon(
                                 Icons.send_sharp,

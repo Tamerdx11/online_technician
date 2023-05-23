@@ -75,141 +75,145 @@ class SendRequestToTechScreen extends StatelessWidget {
               ),
             ),
           ),
-          body: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if(state is AppSendingRequestState)
-                    const LinearProgressIndicator(),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                if(state is AppSendingRequestState)
+                  const LinearProgressIndicator(color: Colors.greenAccent),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: SizedBox(
-                          width: 200.0,
-                          child: defaultFormText(
-                            onTap: () {
-                              DatePicker.showSimpleDatePicker(
-                                context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime.parse(
-                                    '${DateTime.now().year + 1}-12-01'),
-                                dateFormat: "dd-MMMM-yyyy",
-                                locale: DateTimePickerLocale.ar,
-                                cancelText: 'ألغاء',
-                                confirmText: 'تم',
-                                titleText: 'حدد التاريخ',
-                                textColor: Colors.blueAccent,
-                                pickerMode: DateTimePickerMode.date,
-                                looping: false,
-                              ).then((value) {
-                                year = value!.year;
-                                month = value.month;
-                                day = value.day;
-                                dateController.text = '$year/$month/$day';
-                              });
-                            },
-                            validate: (value) {
-                              if (value.toString().isEmpty) {
-                                return 'لا يمكنك إرسال طلب عمل بلا تاريخ';
-                              }
-                              return null;
-                            },
-                            controller: dateController,
-                            keyboardType: TextInputType.none,
-                            prefixIcon: const Icon(
-                              Icons.date_range,
-                              color: Colors.black54,
+                      const SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              width: 200.0,
+                              child: defaultFormText(
+                                onTap: () {
+                                  DatePicker.showSimpleDatePicker(
+                                    context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime.parse(
+                                        '${DateTime.now().year + 1}-12-01'),
+                                    dateFormat: "dd-MMMM-yyyy",
+                                    locale: DateTimePickerLocale.ar,
+                                    cancelText: 'ألغاء',
+                                    confirmText: 'تم',
+                                    titleText: 'حدد التاريخ',
+                                    textColor: Colors.blueAccent,
+                                    pickerMode: DateTimePickerMode.date,
+                                    looping: false,
+                                  ).then((value) {
+                                    year = value!.year;
+                                    month = value.month;
+                                    day = value.day;
+                                    dateController.text = '$year/$month/$day';
+                                  });
+                                },
+                                validate: (value) {
+                                  if (value.toString().isEmpty) {
+                                    return 'لا يمكنك إرسال طلب عمل بلا تاريخ';
+                                  }
+                                  return null;
+                                },
+                                controller: dateController,
+                                keyboardType: TextInputType.none,
+                                prefixIcon: const Icon(
+                                  Icons.date_range,
+                                  color: Colors.black54,
+                                ),
+                                label: 'التاريخ',
+                                maxLines: 1,
+                              ),
                             ),
-                            label: 'التاريخ',
-                            maxLines: 1,
                           ),
-                        ),
+                          const SizedBox(width: 35.0,),
+                          const Text(
+                            'تاريخ الإنتهاء من العمل ⓘ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                                fontSize: 16.0),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 35.0,),
+                      const SizedBox(height: 50.0),
                       const Text(
-                        'تاريخ الإنتهاء من العمل ⓘ',
+                        'ⓘ يرجي كتابة بعض التفاصيل لتوضيح العمل الذي يجب علي الحرفي القيام به.',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textDirection: ui.TextDirection.rtl,
+                        softWrap: true,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
-                            fontSize: 16.0),
+                            fontSize: 18.0),
                       ),
+                      const SizedBox(height: 10.0),
+                      defaultFormText(
+                        validate: (value) {
+                          if (value.toString().isEmpty) {
+                            return 'لا يمكنك ارسال طلب عمل بلا تفاصيل';
+                          }
+                          return null;
+                        },
+                        controller: detailsController,
+                        prefixIcon: const Icon(
+                          Icons.edit_note_rounded,
+                          color: Colors.black54,
+                        ),
+                        label: ' التفاصيل... ',
+                        maxLines: 5,
+                      ),
+                      const SizedBox(height: 50.0),
+                      defaultButton(
+                        function: (){
+                          cubit.sendRequestToTech(
+                              techId: id,
+                              profession: profession,
+                              name: name,
+                              image: userImage,
+                              techReceivedRequests: receivedRequests,
+                              fDay: day,
+                              fMonth: month,
+                              fYear: year,
+                              details: detailsController.text,
+                              latitude: latitude,
+                              longitude: longitude,
+                              location: location,
+                              token: token,
+                          );
+                        },
+                        text: ' إرسال الطلب ',
+                        size: 17.0,
+                        color: header_color,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
+                        child: Text(
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          textDirection: ui.TextDirection.rtl,
+                          softWrap: true,
+                          'عند إرسال الطلب الي $name سيتمكن من رؤية تفاصيل هذا الطلب وبأمكانه الموافقة او الرفض وسيتم إعلامك بذلك.',
+                          style:const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                          ),
+
+                        ),
+                      )
                     ],
                   ),
-                  const SizedBox(height: 50.0),
-                  const Text(
-                    'ⓘ يرجي كتابة بعض التفاصيل لتوضيح العمل الذي يجب علي الحرفي القيام به.',
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    textDirection: ui.TextDirection.rtl,
-                    softWrap: true,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        fontSize: 18.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  defaultFormText(
-                    validate: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'لا يمكنك ارسال طلب عمل بلا تفاصيل';
-                      }
-                      return null;
-                    },
-                    controller: detailsController,
-                    prefixIcon: const Icon(
-                      Icons.edit_note_rounded,
-                      color: Colors.black54,
-                    ),
-                    label: ' التفاصيل... ',
-                    maxLines: 5,
-                  ),
-                  const SizedBox(height: 50.0),
-                  defaultButton(
-                    function: (){
-                      cubit.sendRequestToTech(
-                          techId: id,
-                          profession: profession,
-                          name: name,
-                          image: userImage,
-                          techReceivedRequests: receivedRequests,
-                          fDay: day,
-                          fMonth: month,
-                          fYear: year,
-                          details: detailsController.text,
-                          latitude: latitude,
-                          longitude: longitude,
-                          location: location,
-                          token: token,
-                      );
-                    },
-                    text: ' إرسال الطلب ',
-                    size: 17.0,
-                    color: header_color,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
-                    child: Text(
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      textDirection: ui.TextDirection.rtl,
-                      softWrap: true,
-                      'عند إرسال الطلب الي $name سيتمكن من رؤية تفاصيل هذا الطلب وبأمكانه الموافقة او الرفض وسيتم إعلامك بذلك.',
-                      style:const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12.0,
-                        color: Colors.grey,
-                      ),
-
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

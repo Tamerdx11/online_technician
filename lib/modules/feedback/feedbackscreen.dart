@@ -49,8 +49,8 @@ class feddbackscreen extends StatelessWidget {
             backgroundColor: header_color,
             elevation: 8.0,
             centerTitle: true,
-            title: const Text("تقييم جودة العمل", style: TextStyle(color: Colors.black)),
-            foregroundColor: Colors.black,
+            title: const Text("تقييم جودة العمل", style: TextStyle(color: Colors.white)),
+            foregroundColor: Colors.white,
           ),
           backgroundColor:background_color,
           body: SingleChildScrollView(

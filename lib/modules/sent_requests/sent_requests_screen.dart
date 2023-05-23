@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,6 @@ import 'package:online_technician/shared/components/constants.dart';
 import 'package:online_technician/shared/cubit/cubit.dart';
 import 'package:online_technician/shared/cubit/states.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
-
 import '../feedback/feedbackscreen.dart';
 import '../report/report.dart';
 
@@ -45,21 +45,6 @@ class SentRequestsScreen extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-
-                  // if(map[map.keys.toList()[index]]['isDone'] == false)
-                  // {
-                  //   AppCubit.get(context).sendRequestsChecker(
-                  //     isAccepted: map[map.keys.toList()[index]]['isAccepted'],
-                  //     isRejected: map[map.keys.toList()[index]]['isRejected'],
-                  //     isRated: map[map.keys.toList()[index]]['isRated'],
-                  //     isDeadline: map[map.keys.toList()[index]]['isDeadline'],
-                  //     userId: map.keys.toList()[index].toString(),
-                  //     day: map[map.keys.toList()[index]]['deadline'][2],
-                  //     month: map[map.keys.toList()[index]]['deadline'][1],
-                  //     year: map[map.keys.toList()[index]]['deadline'][0],
-                  //   );
-                  // }
-
                   return Card(
                     elevation: 3.0,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -271,6 +256,31 @@ class SentRequestsScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 10.0,),
+                          if(getStatus(isAccepted: map[map.keys.toList()[index]]['isAccepted'], isRejected: map[map.keys.toList()[index]]['isRejected']) == 'في الإنتظار')
+                            Center(
+                            child: Container(
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.redAccent.withOpacity(0.8),),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  AppCubit.get(context).getTech(map.keys.toList()[index].toString());
+                                  Timer(const Duration(seconds: 3), () {
+                                    AppCubit.get(context).cancelRequestToTech(
+                                      techId: map.keys.toList()[index],
+                                      techReceivedRequests: AppCubit.get(context).tech?.receivedRequests,);
+                                  });
+
+                                },
+                                child:const Text(
+                                  'إلغاء الطلب',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                           if(map[map.keys.toList()[index]]['isAccepted']==true && map[map.keys.toList()[index]]['isDeadline']==true && map[map.keys.toList()[index]]['isRated']==false)
                             Center(
                               child: Column(
@@ -293,7 +303,6 @@ class SentRequestsScreen extends StatelessWidget {
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.redAccent,),
                                         child: MaterialButton(
                                           onPressed: () {
-                                            /// *** *** ss ابلاغ
                                             navigateTo(context, ReportScreen(
                                               reportUserId: map[map.keys.toList()[index]]['uId'],
                                               reportUsername: map[map.keys.toList()[index]]['name'],

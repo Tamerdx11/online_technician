@@ -149,4 +149,6 @@ class SendingFeedbackState extends AppState{}
 
 class FeedbackSentSuccessState extends AppState{}
 
+class AppCancelingRequestState extends AppState{}
 
+class AppSuccessCancelingState extends AppState{}

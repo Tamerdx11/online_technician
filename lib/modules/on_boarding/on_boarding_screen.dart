@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_technician/modules/login/login_screen.dart';
 import 'package:online_technician/shared/components/components.dart';
 import 'package:online_technician/shared/network/local/cache_helper.dart';
+import 'package:online_technician/shared/styles/colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class BoardingModel{
@@ -32,17 +33,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     BoardingModel(
         image: 'assets/images/im1.png',
         title:'أهلا بك',
-        body: 'في مجتمعنا المتواضع لعرض وطلب الحِرْف '
+        body: 'في المجتمع المهني لعرض وطلب الحِرْف '
     ),
     BoardingModel(
         image: 'assets/images/im2.jpg',
-        title:'بعد التسجيل ',
-        body: ' يمكنك الحصول علي أمهر الحِرْفيين القريبين منك والذين تم تقييمهم علي أعلي مستوي لضمان الحصول علي أفضل النتائج'
+        title:'هدفنا',
+        body: ''
+            'حصولك علي أمهر الحِرْفيين القريبين منك والذين تم تقييمهم علي أعلي مستوي لضمان الحصول علي أفضل النتائج'
     ),
     BoardingModel(
         image: 'assets/images/m3.png',
-        title:'يمكن أيضا',
-        body: 'للحصول علي حساب مميز خاص بك وعرض مهاراتك والمساهمة في تطوير المجتمع '
+        title:'يمكنك أيضا',
+        body: 'عرض مهاراتك الحِرْفية والمساهمة في تطوير المجتمع من خلال الحصول علي حساب مميز خاص بك '
     ),
   ];
 
@@ -54,9 +56,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         actions: [
-          TextButton(
-              onPressed:submit,
-              child:const Text('تخطي'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+            child: MaterialButton(
+              elevation: 4.0,
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+                onPressed:submit,
+                child:const Text('تخطي', style: TextStyle(color: Colors.white)),
+            ),
           ),
         ],
       ),
@@ -89,9 +99,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   SmoothPageIndicator(
                       controller: boardController,
-                      effect: const ExpandingDotsEffect(
+                      effect: ExpandingDotsEffect(
                         dotColor: Colors.grey,
-                        activeDotColor: Colors.deepOrange,
+                        activeDotColor: header_color,
                         dotHeight: 10.0,
                         expansionFactor: 4,
                         dotWidth: 10.0,
@@ -100,7 +110,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       count: boarding.length,),
                   const Spacer(),
                   FloatingActionButton(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: header_color,
                       onPressed: () {
                         if(isLast){
                           submit();
